@@ -17,7 +17,6 @@ public class UserService {
 
     @Transactional
     public User save(User user){
-        //criptografia de senha
         return userRepository.save(user);
     }
 

@@ -1,6 +1,5 @@
 package com.taptake.backend.model;
 
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -9,7 +8,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_user")
+@Table(name = "Usuario")
 public class User implements Serializable {
 
     @Id
@@ -17,46 +16,34 @@ public class User implements Serializable {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
     @Type(type = "uuid-char")
-    private UUID id;
+    private UUID idUsuario;
 
+
+    @Column(nullable = false)
+    private String nome;
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
-    private String username;
+    private String senha;
 
     @Column(nullable = false)
-    private String password;
+    private String telefone;
 
-    @Column(nullable = false)
-    private String phone;
-
-    @Column(nullable = false)
-    private int points;
-
-
-    public String getPhone() {
-        return phone;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
-    public int getPoints() {
-        return points;
+    public UUID getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    public void setIdUsuario(UUID idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getEmail() {
@@ -67,19 +54,19 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNome() {
+        return nome;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

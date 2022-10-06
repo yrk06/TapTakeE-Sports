@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -19,17 +20,18 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Object> savePerson(@RequestBody UserDTO userDTO){
+        BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
         if(userService.findByEmail(userDTO.getEmail()).isPresent()){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
         }
         var user = new User();
         BeanUtils.copyProperties(userDTO, user);
-        user.setPoints(0);
+        user.setSenha(bc.encode(user.getSenha()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
     }
 
     @GetMapping
-    public ResponseEntity<Object> exemplo(){
+    public ResponseEntity<Object> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
@@ -46,7 +48,7 @@ public class UserController {
     public ResponseEntity<Object> deleteOne(@RequestParam("email") String email){
         Optional<User> userOptional = userService.findByEmail(email);
         if(userOptional.isPresent()){
-            userService.deleteOne(userOptional.get().getId());
+            userService.deleteOne(userOptional.get().getIdUsuario());
 
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(true);
         }
@@ -56,6 +58,7 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<Object> updateOne(@RequestBody UserDTO userDTO, @RequestParam("emal") String email){
+        BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
         Optional<User> userOptional = userService.findByEmail(email);
 
         if(!userOptional.isPresent()){
@@ -63,15 +66,18 @@ public class UserController {
         }
         User newUser = userOptional.get();
 
-        if(userDTO.getUsername()!=newUser.getUsername()){
-            newUser.setUsername(userDTO.getUsername());
+        if(userDTO.getNome()!=newUser.getNome()){
+            newUser.setNome(userDTO.getNome());
         }
-        if(userDTO.getPhone()!=newUser.getPhone()){
-            newUser.setPhone(userDTO.getPhone());
+        if(userDTO.getTelefone()!=newUser.getTelefone()){
+            newUser.setTelefone(userDTO.getTelefone());
+        }
+        if(!bc.matches(userDTO.getSenha(),newUser.getSenha())){
+            newUser.setSenha(bc.encode(userDTO.getSenha()));
         }
         var user = new User();
         BeanUtils.copyProperties(userDTO, user);
-        user.setPoints(0);
+
         return ResponseEntity.status(HttpStatus.OK).body(userService.update(user));
     }
 

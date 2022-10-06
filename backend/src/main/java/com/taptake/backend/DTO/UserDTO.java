@@ -2,28 +2,20 @@ package com.taptake.backend.DTO;
 
 public class UserDTO {
 
+
+    private String nome;
     private String email;
-    private String username;
-    private String password;
+    private String senha;
 
-    private String phone;
+    private String telefone;
 
-    private int points;
 
-    public int getPoints() {
-        return points;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     public String getEmail() {
@@ -34,19 +26,19 @@ public class UserDTO {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNome() {
+        return nome;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }
