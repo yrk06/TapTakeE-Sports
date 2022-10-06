@@ -18,7 +18,7 @@ CREATE TABLE Jogo (
 );
 
 CREATE TABLE TimeUsuario (
-    idTimeUsuario CHAR(36) NOT NULL PRIMARY KEY ,
+    idEquipeUsuario CHAR(36) NOT NULL PRIMARY KEY ,
     idUsuario CHAR(36) NOT NULL,
     FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
     idJogo CHAR(36) NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE Organizacao (
 );
 
 CREATE TABLE Equipe (
-    idTime CHAR(36) NOT NULL PRIMARY KEY ,
+    idEquipe CHAR(36) NOT NULL PRIMARY KEY ,
     idJogo CHAR(36) NOT NULL,
 	FOREIGN KEY(idJogo) REFERENCES Jogo (idJogo),
     nomeTime VARCHAR(255) NOT NULL
@@ -44,7 +44,7 @@ CREATE TABLE Campeonato (
     idCampeonato CHAR(36) NOT NULL PRIMARY KEY ,
     idJogo CHAR(36) NOT NULL,
 	FOREIGN KEY(idJogo) REFERENCES Jogo (idJogo),
-    Nome VARCHAR(255) NOT NULL,
+    nome VARCHAR(255) NOT NULL,
     localCampeonato VARCHAR(255) NOT NULL,
     premiacao DECIMAL(9, 0) NOT NULL
 );
@@ -60,14 +60,14 @@ CREATE TABLE ParticipacaoPartida (
     idParticipacaoPartida CHAR(36) NOT NULL PRIMARY KEY ,
 	idPartida CHAR(36) NOT NULL,
 	FOREIGN KEY(idPartida) REFERENCES Partida (idPartida),
-    idTime CHAR(36) NOT NULL,
-	FOREIGN KEY(idTime) REFERENCES Equipe (idTime)
+    idEquipe CHAR(36) NOT NULL,
+	FOREIGN KEY(idEquipe) REFERENCES Equipe (idEquipe)
 );
 
 CREATE TABLE Jogador (
     idJogador CHAR(36) NOT NULL PRIMARY KEY ,
-    idTime CHAR(36) NOT NULL,
-	FOREIGN KEY(idTime) REFERENCES Equipe (idTime),
+    idEquipe CHAR(36) NOT NULL,
+	FOREIGN KEY(idEquipe) REFERENCES Equipe (idEquipe),
     nome VARCHAR(255) NOT NULL,
     cargo VARCHAR(255) NOT NULL
 
@@ -75,8 +75,8 @@ CREATE TABLE Jogador (
 
 CREATE TABLE JogadorTimeUsuario (
     idJogadorTimeUsuario CHAR(36) NOT NULL PRIMARY KEY ,
-    idTimeUsuario CHAR(36) NOT NULL,
-	FOREIGN KEY(idTimeUsuario) REFERENCES TimeUsuario (idTimeUsuario),
+    idEquipeUsuario CHAR(36) NOT NULL,
+	FOREIGN KEY(idEquipeUsuario) REFERENCES TimeUsuario (idEquipeUsuario),
     idJogador CHAR(36) NOT NULL,
 	FOREIGN KEY(idJogador) REFERENCES Jogador (idJogador)
 );
