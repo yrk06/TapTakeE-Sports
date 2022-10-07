@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateOne(@RequestBody UserDTO userDTO, @RequestParam("emal") String email){
+    public ResponseEntity<Object> updateOne(@RequestBody UserDTO userDTO, @RequestParam("email") String email){
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
         Optional<User> userOptional = userService.findByEmail(email);
 
