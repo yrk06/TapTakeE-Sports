@@ -1,0 +1,36 @@
+FROM jenkins/jenkins:lts
+USER root
+
+RUN apt-get update && apt-get install sudo -y
+RUN usermod -aG sudo jenkins
+
+RUN curl https://download.oracle.com/java/19/latest/jdk-19_linux-aarch64_bin.tar.gz  -o jdk.tar.gz
+RUN mkdir -p /usr/lib/jvm
+RUN tar -zxf jdk.tar.gz -C /usr/lib/jvm/
+RUN update-alternatives --install /opt/java/openjdk/bin/java java /usr/lib/jvm/jdk-19/bin/java 2048 && \
+    update-alternatives --install /opt/java/openjdk/bin/javac javac /usr/lib/jvm/jdk-19/bin/javac 2048 && \
+    update-alternatives --install /opt/java/openjdk/bin/jar jar /usr/lib/jvm/jdk-19/bin/jar 2048
+
+RUN apt-get install maven -y
+
+# install jenkins plugins
+COPY ./jenkins-plugins.txt /usr/share/jenkins/plugins.txt
+RUN jenkins-plugin-cli -f /usr/share/jenkins/plugins.txt
+
+#Update the username and password
+ARG US_PW
+ENV JENKINS_USER admin
+ENV JENKINS_PASS=$US_PW
+
+#id_rsa.pub file will be saved at /root/.ssh/
+RUN ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
+
+# allows to skip Jenkins setup wizard
+ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
+
+# Jenkins runs all grovy files from init.groovy.d dir
+# use this for creating default admin user
+COPY default-user.groovy /usr/share/jenkins/ref/init.groovy.d/
+
+VOLUME /var/jenkins_home
+EXPOSE 8080
