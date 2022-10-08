@@ -19,10 +19,10 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<Object> savePerson(@RequestBody UserDTO userDTO){
+    public ResponseEntity<Object> savePerson(@RequestBody UserDTO userDTO) {
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
-        if(userService.findByEmail(userDTO.getEmail()).isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
+        if (userService.findByEmail(userDTO.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         var user = new User();
         BeanUtils.copyProperties(userDTO, user);
@@ -31,48 +31,37 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAll(){
+    public ResponseEntity<Object> getAll() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
     @GetMapping("/findByEmail")
-    public ResponseEntity<Object> findByEmail(@RequestParam("email") String email){
+    public ResponseEntity<Object> findByEmail(@RequestParam("email") String email) {
         Optional<User> userOptional = userService.findByEmail(email);
-        if(userOptional.isPresent()){
+        if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(userOptional.get());
         }
-        return ResponseEntity.status(HttpStatus.OK).body(false);
-
-    }
-    @DeleteMapping("/delete")
-    public ResponseEntity<Object> deleteOne(@RequestParam("email") String email){
-        Optional<User> userOptional = userService.findByEmail(email);
-        if(userOptional.isPresent()){
-            userService.deleteOne(userOptional.get().getIdUsuario());
-
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(true);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateOne(@RequestBody UserDTO userDTO, @RequestParam("email") String email){
+    public ResponseEntity<Object> updateOne(@RequestBody UserDTO userDTO, @RequestParam("email") String email) {
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
         Optional<User> userOptional = userService.findByEmail(email);
 
-        if(!userOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         User newUser = userOptional.get();
 
-        if(userDTO.getNome()!=newUser.getNome()){
+        if (!userDTO.getNome().equals(newUser.getNome())) {
             newUser.setNome(userDTO.getNome());
         }
-        if(userDTO.getTelefone()!=newUser.getTelefone()){
+        if (!userDTO.getTelefone().equals(newUser.getTelefone())) {
             newUser.setTelefone(userDTO.getTelefone());
         }
-        if(!bc.matches(userDTO.getSenha(),newUser.getSenha())){
+        if (!bc.matches(userDTO.getSenha(), newUser.getSenha())) {
             newUser.setSenha(bc.encode(userDTO.getSenha()));
         }
         var user = new User();
@@ -81,12 +70,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.update(user));
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<Object> deleteOne(@RequestParam("email") String email) {
+        Optional<User> userOptional = userService.findByEmail(email);
+        if (userOptional.isPresent()) {
+            userService.deleteOne(userOptional.get().getIdUsuario());
 
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
-
-
-
-
-
+    }
 
 }
