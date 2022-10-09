@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 public class ResourceBlockedMiddleware implements HandlerInterceptor {
     @Override
@@ -11,7 +12,7 @@ public class ResourceBlockedMiddleware implements HandlerInterceptor {
             HttpServletRequest request,
             HttpServletResponse response,
             Object handler) throws Exception {
-        response.setStatus(401);
+        response.sendError(401);
         return false;
     }
 }
