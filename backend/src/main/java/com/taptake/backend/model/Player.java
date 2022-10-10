@@ -11,9 +11,7 @@ import java.util.UUID;
 @Table(name = "Jogador")
 public class Player implements Serializable {
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Type(type = "uuid-char")
     private UUID idJogador;
 
@@ -22,7 +20,7 @@ public class Player implements Serializable {
     //alterar para foreign key dps quando tiver a parte da equipe criada
     /*
     * @ManyToOne
-    * @JoinColumn(name="idEquipe", referencedColumnName="idEquipe"
+    * @JoinColumn(name="idEquipe", referencedColumnName="idEquipe")
     * private Equipe equipe
     * */
 
