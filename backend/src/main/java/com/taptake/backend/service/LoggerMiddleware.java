@@ -1,7 +1,5 @@
 package com.taptake.backend.service;
 
-import java.util.Enumeration;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

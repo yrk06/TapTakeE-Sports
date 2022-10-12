@@ -1,6 +1,5 @@
 package com.taptake.backend.model;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;

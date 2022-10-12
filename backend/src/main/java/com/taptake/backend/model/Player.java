@@ -1,6 +1,5 @@
 package com.taptake.backend.model;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -15,14 +14,19 @@ public class Player implements Serializable {
     @Type(type = "uuid-char")
     private UUID idJogador;
 
-    @Column(nullable = false)
+    // "Jogador" idEquipe foreign key has been changed from "NOT NULL" into a
+    // possible null
+    // We forgot to implement the Equipe model before these ones
+    // #BlameGabu
+    @Column(nullable = true)
     private UUID idEquipe;
-    //alterar para foreign key dps quando tiver a parte da equipe criada
+    // alterar para foreign key dps quando tiver a parte da equipe criada
     /*
-    * @ManyToOne
-    * @JoinColumn(name="idEquipe", referencedColumnName="idEquipe")
-    * private Equipe equipe
-    * */
+     * @ManyToOne
+     * 
+     * @JoinColumn(name="idEquipe", referencedColumnName="idEquipe")
+     * private Equipe equipe
+     */
 
     @Column(nullable = false)
     private String nome;
