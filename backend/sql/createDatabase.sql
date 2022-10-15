@@ -66,8 +66,8 @@ CREATE TABLE Campeonato (
     premiacao DECIMAL(9, 0) NOT NULL
 );
 
-CREATE TABLE SuporteCampeonato (
-    idSupCampeonato CHAR(36) NOT NULL PRIMARY KEY,
+CREATE TABLE ParticipacaoCampeonato (
+    idParticipacaoCampeonato CHAR(36) NOT NULL PRIMARY KEY,
     idCampeonato CHAR(36) NOT NULL,
     FOREIGN KEY(idCampeonato) REFERENCES Campeonato (idCampeonato),
 	idEquipe CHAR(36) NOT NULL,
