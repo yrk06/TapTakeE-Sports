@@ -63,10 +63,10 @@ public class GameController {
     @DeleteMapping
     public ResponseEntity<?> deleteOne(@RequestParam String id){
         Optional<Game> optionalGame = gameService.findById(UUID.fromString(id));
-        if(optionalGame.isPresent()){
+        if(!optionalGame.isPresent()){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        gameService.deleteOne(UUID.fromString(id));
+        gameService.deleteOne(optionalGame.get());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

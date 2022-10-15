@@ -22,7 +22,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoggerMiddleware());
 
         // Disable this when testing in localhost
-//        registry.addInterceptor(new ResourceBlockedMiddleware()).addPathPatterns("/api/**");
+        registry.addInterceptor(new ResourceBlockedMiddleware()).addPathPatterns("/api/**");
     }
 
     @Override

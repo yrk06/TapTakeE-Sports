@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(classes = GameController.class)
-public class GameControllerTests {
+class GameControllerTests {
 
     @MockBean
     GameService gameService;
@@ -90,7 +90,6 @@ public class GameControllerTests {
 
     @Test
     void updateInvalidPlayer(){
-        Game game = new Game();
         Mockito.when(gameService.findById(any(UUID.class))).thenReturn(Optional.empty());
         GameDTO gameDTO = new GameDTO();
         ResponseEntity<?> re = gameController.update(gameDTO,UUID.randomUUID().toString());
