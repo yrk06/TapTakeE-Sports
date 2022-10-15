@@ -1,6 +1,5 @@
 package com.taptake.backend;
 
-
 import com.taptake.backend.DTO.GameDTO;
 import com.taptake.backend.controller.GameController;
 import com.taptake.backend.model.Game;
@@ -76,7 +75,7 @@ class GameControllerTests {
     }
 
     @Test
-    void updateValidPlayer(){
+    void updateValidGame(){
         Game game = new Game();
         game.setNome("");
         game.setQuantidadeJogadores(0);
@@ -89,24 +88,18 @@ class GameControllerTests {
     }
 
     @Test
-    void updateInvalidPlayer(){
+    void updateInvalidGame(){
         Mockito.when(gameService.findById(any(UUID.class))).thenReturn(Optional.empty());
         GameDTO gameDTO = new GameDTO();
         ResponseEntity<?> re = gameController.update(gameDTO,UUID.randomUUID().toString());
-        assertEquals(HttpStatus.OK,re.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND,re.getStatusCode());
     }
 
     @Test
-    void deletePlayer() {
+    void deleteGame() {
         Mockito.when(gameService.findById(any(UUID.class))).thenReturn(Optional.empty());
         ResponseEntity<?> re = gameController.deleteOne(UUID.randomUUID().toString());
         assertEquals(HttpStatus.NO_CONTENT,re.getStatusCode());
     }
-
-
-
-
-
-
 
 }
