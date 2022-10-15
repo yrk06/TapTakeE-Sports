@@ -2,27 +2,42 @@ CREATE DATABASE TapTakeEsports;
 
 USE TapTakeEsports;
 
+CREATE TABLE Cargo (
+    idCargo CHAR(36) NOT NULL PRIMARY KEY,
+    nome VARCHAR(128) NOT NULL
+);
+
 CREATE TABLE Usuario (
     idUsuario CHAR(36) NOT NULL PRIMARY KEY,
+    idCargo CHAR(36) NOT NULL,
+    FOREIGN KEY (idCargo) REFERENCES Cargo (idCargo), 
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(512) NOT NULL UNIQUE,
     senha VARCHAR(60) NOT NULL,	
     telefone VARCHAR(32) NOT NULL
 );
 
+CREATE TABLE Amigos (
+    idAmigos CHAR(36) NOT NULL PRIMARY KEY,
+    idUsuario CHAR(36) NOT NULL,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
+	idUsuarioAmigo CHAR(36) NOT NULL,
+    FOREIGN KEY (idUsuarioAmigo) REFERENCES Usuario (idUsuario)
+);
+
 CREATE TABLE Jogo (
-    idJogo CHAR(36) NOT NULL PRIMARY KEY ,
+    idJogo CHAR(36) NOT NULL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     tipoJogo VARCHAR(255) NOT NULL,
     quantidadeJogadores INT NOT NULL
 );
 
 CREATE TABLE TimeUsuario (
-    idEquipeUsuario CHAR(36) NOT NULL PRIMARY KEY ,
+    idEquipeUsuario CHAR(36) NOT NULL PRIMARY KEY,
     idUsuario CHAR(36) NOT NULL,
     FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
-    idJogo CHAR(36) NOT NULL,
-	FOREIGN KEY(IdJogo) REFERENCES Jogo (idJogo),
+	idJogo CHAR(36) NOT NULL,
+    FOREIGN KEY(IdJogo) REFERENCES Jogo (idJogo),
     pontos INT NOT NULL
 );
 
@@ -34,14 +49,16 @@ CREATE TABLE Organizacao (
 );
 
 CREATE TABLE Equipe (
-    idEquipe CHAR(36) NOT NULL PRIMARY KEY ,
+    idEquipe CHAR(36) NOT NULL PRIMARY KEY,
     idJogo CHAR(36) NOT NULL,
 	FOREIGN KEY(idJogo) REFERENCES Jogo (idJogo),
+    idOrg CHAR(36) NOT NULL,
+    FOREIGN KEY(idOrg) REFERENCES Organizacao (idOrg),
     nomeTime VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE Campeonato (
-    idCampeonato CHAR(36) NOT NULL PRIMARY KEY ,
+    idCampeonato CHAR(36) NOT NULL PRIMARY KEY,
     idJogo CHAR(36) NOT NULL,
 	FOREIGN KEY(idJogo) REFERENCES Jogo (idJogo),
     nome VARCHAR(255) NOT NULL,
@@ -49,15 +66,24 @@ CREATE TABLE Campeonato (
     premiacao DECIMAL(9, 0) NOT NULL
 );
 
+CREATE TABLE SuporteCampeonato (
+    idSupCampeonato CHAR(36) NOT NULL PRIMARY KEY,
+    idCampeonato CHAR(36) NOT NULL,
+    FOREIGN KEY(idCampeonato) REFERENCES Campeonato (idCampeonato),
+	idEquipe CHAR(36) NOT NULL,
+    FOREIGN KEY(idEquipe) REFERENCES Equipe (idEquipe),
+    pontuacao INT NOT NULL
+);
+
 CREATE TABLE Partida (
-    idPartida CHAR(36) NOT NULL PRIMARY KEY ,
+    idPartida CHAR(36) NOT NULL PRIMARY KEY,
     idCampeonato CHAR(36) NOT NULL,
 	FOREIGN KEY(idCampeonato) REFERENCES Campeonato (idCampeonato)
 );
 
 
 CREATE TABLE ParticipacaoPartida (
-    idParticipacaoPartida CHAR(36) NOT NULL PRIMARY KEY ,
+    idParticipacaoPartida CHAR(36) NOT NULL PRIMARY KEY,
 	idPartida CHAR(36) NOT NULL,
 	FOREIGN KEY(idPartida) REFERENCES Partida (idPartida),
     idEquipe CHAR(36) NOT NULL,
@@ -74,7 +100,7 @@ CREATE TABLE Jogador (
 );
 
 CREATE TABLE JogadorTimeUsuario (
-    idJogadorTimeUsuario CHAR(36) NOT NULL PRIMARY KEY ,
+    idJogadorTimeUsuario CHAR(36) NOT NULL PRIMARY KEY,
     idEquipeUsuario CHAR(36) NOT NULL,
 	FOREIGN KEY(idEquipeUsuario) REFERENCES TimeUsuario (idEquipeUsuario),
     idJogador CHAR(36) NOT NULL,
