@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +44,7 @@ public class ChampionshipControllerTests {
     @Test
     void saveValidChampionship(){
         Mockito.when(cs.findAllByNome(anyString())).thenReturn(new ArrayList<>());
-        Mockito.when(gs.findById(UUID.fromString(anyString()))).thenReturn(Optional.of(new Game()));
+        Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.of(new Game()));
         ChampionshipDTO c = new ChampionshipDTO();
         c.setNome("teste");
         c.setPremiacao(12);
@@ -66,7 +67,7 @@ public class ChampionshipControllerTests {
         championship.setLocalCampeonato("teste");
         lc.add(championship);
         Mockito.when(cs.findAllByNome(anyString())).thenReturn(lc);
-        Mockito.when(gs.findById(UUID.randomUUID())).thenReturn(Optional.of(g));
+        Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.of(g));
         ChampionshipDTO c = new ChampionshipDTO();
         c.setNome("teste");
         c.setPremiacao(12);
@@ -78,14 +79,14 @@ public class ChampionshipControllerTests {
 
     @Test
     void recoverValidChampionshipById(){
-        Mockito.when(cs.findById(UUID.randomUUID())).thenReturn(Optional.of(new Championship()));
+        Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.of(new Championship()));
         UUID validId = UUID.randomUUID();
         ResponseEntity<?> re = cc.findById(validId.toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
     @Test
     void recoverInvalidChampionshipById(){
-        Mockito.when(cs.findById(UUID.randomUUID())).thenReturn(Optional.empty());
+        Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.empty());
         UUID validId = UUID.randomUUID();
         ResponseEntity<?> re = cc.findById(validId.toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
@@ -109,7 +110,7 @@ public class ChampionshipControllerTests {
         c.setNome("teste");
         c.setLocalCampeonato("teste");
         c.setPremiacao(12);
-        Mockito.when(cs.findById(UUID.randomUUID())).thenReturn(Optional.of(c));
+        Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.of(c));
         Mockito.when(gs.findById(validId)).thenReturn(Optional.of(g));
         ChampionshipDTO cd = new ChampionshipDTO();
         cd.setNome("teste");
@@ -129,7 +130,7 @@ public class ChampionshipControllerTests {
         c.setNome("teste");
         c.setLocalCampeonato("teste");
         c.setPremiacao(12);
-        Mockito.when(cs.findById(UUID.randomUUID())).thenReturn(Optional.of(c));
+        Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.of(c));
         Mockito.when(gs.findById(validId)).thenReturn(Optional.of(g));
         ChampionshipDTO cd = new ChampionshipDTO();
         cd.setNome("teste");
