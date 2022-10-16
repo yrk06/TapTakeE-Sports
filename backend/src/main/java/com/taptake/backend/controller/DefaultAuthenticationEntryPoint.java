@@ -17,6 +17,6 @@ public class DefaultAuthenticationEntryPoint implements AuthenticationEntryPoint
             AuthenticationException authException)
             throws IOException, ServletException {
         // 401
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication Failed");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
