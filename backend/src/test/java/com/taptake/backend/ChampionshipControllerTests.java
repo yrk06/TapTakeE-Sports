@@ -121,7 +121,7 @@ public class ChampionshipControllerTests {
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
     @Test
-    void updateInvalidChampionship(){
+    void updateChampionshipInvalidG(){
         UUID validId = UUID.randomUUID();
         Championship c = new Championship();
         Game g= new Game();
@@ -131,6 +131,20 @@ public class ChampionshipControllerTests {
         c.setLocalCampeonato("teste");
         c.setPremiacao(12);
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.of(c));
+        Mockito.when(gs.findById(validId)).thenReturn(Optional.empty());
+        ChampionshipDTO cd = new ChampionshipDTO();
+        cd.setNome("teste");
+        cd.setPremiacao(12);
+        cd.setLocalCampeonato("teste");
+        cd.setIdJogo(validId.toString());
+        ResponseEntity<?> re = cc.update(cd, UUID.randomUUID().toString());
+        assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
+    }
+    @Test
+    void updateChampionshipInvalidC(){
+        UUID validId = UUID.randomUUID();
+        Game g = new Game();
+        Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.empty());
         Mockito.when(gs.findById(validId)).thenReturn(Optional.of(g));
         ChampionshipDTO cd = new ChampionshipDTO();
         cd.setNome("teste");
@@ -138,7 +152,7 @@ public class ChampionshipControllerTests {
         cd.setLocalCampeonato("teste");
         cd.setIdJogo(validId.toString());
         ResponseEntity<?> re = cc.update(cd, UUID.randomUUID().toString());
-        assertEquals(HttpStatus.OK, re.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
 
     @Test

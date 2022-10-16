@@ -73,7 +73,7 @@ public class ChampionshipController {
         }
         Championship savedC = oc.get();
         if(!og.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
         if(!savedC.getGame().getIdJogo().equals(c.getIdJogo())){
