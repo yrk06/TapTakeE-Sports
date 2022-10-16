@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
-@Table(name = "Championship")
+@Table(name = "Campeonato")
 public class Championship implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
