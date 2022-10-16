@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.taptake.backend.controller.DefaultAuthenticationEntryPoint;
 import com.taptake.backend.service.DefaultUserDetailsService;
 
 @Configuration
@@ -22,7 +23,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated() // (4)
                 .and()
                 .formLogin() // (5)
-                // .loginPage() // (5)
+                .loginPage("/login") // (5)
                 .permitAll()
                 .and()
                 .logout() // (6)
@@ -31,6 +32,8 @@ public class SecurityConfig {
                 .httpBasic()
                 .and()
                 .csrf().disable();
+        http.exceptionHandling()
+                .authenticationEntryPoint(new DefaultAuthenticationEntryPoint());
         return http.build();
     }
 
