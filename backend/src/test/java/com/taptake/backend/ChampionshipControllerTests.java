@@ -55,7 +55,7 @@ public class ChampionshipControllerTests {
     }
 
     @Test
-    void saveInalidChampionship(){
+    void saveInvalidChampionship(){
         LinkedList<Championship> lc = new LinkedList<>();
         Game g = new Game();
         UUID id = UUID.randomUUID();
@@ -72,7 +72,7 @@ public class ChampionshipControllerTests {
         c.setNome("teste");
         c.setPremiacao(12);
         c.setLocalCampeonato("teste");
-        c.setIdJogo(UUID.randomUUID().toString());
+        c.setIdJogo(id.toString());
         ResponseEntity<?> re = cc.save(c);
         assertEquals(HttpStatus.CONFLICT, re.getStatusCode());
     }
@@ -89,7 +89,7 @@ public class ChampionshipControllerTests {
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.empty());
         UUID validId = UUID.randomUUID();
         ResponseEntity<?> re = cc.findById(validId.toString());
-        assertEquals(HttpStatus.OK, re.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
 
     @Test
