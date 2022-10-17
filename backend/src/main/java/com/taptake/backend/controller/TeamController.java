@@ -85,7 +85,7 @@ public class TeamController {
     }
 
     @GetMapping("/name")
-    public ResponseEntity<Object> findByNomeTime(@RequestParam String nomeTime){
+    public ResponseEntity<Object> findAllByNomeTime(@RequestParam String nomeTime){
         return ResponseEntity.status(HttpStatus.OK).body(ts.findAllByNomeTime(nomeTime));
     }
 
