@@ -17,22 +17,23 @@ public class MatchService {
     private MatchRepository matchRepository;
 
     @Transactional
-    public Match save(Match match){
+    public Match save(Match match) {
         return matchRepository.save(match);
     }
 
-    public void delete(UUID id){
+    public void delete(UUID id) {
         matchRepository.deleteById(id);
     }
-    public List<Match> findByChampionship(Championship championship){
+
+    public List<Match> findByChampionship(Championship championship) {
         return matchRepository.findByChampionship(championship);
     }
 
-    public Match update(Match match){
+    public Match update(Match match) {
         return matchRepository.save(match);
     }
 
-    public Optional<Match> findById(UUID id){
+    public Optional<Match> findById(UUID id) {
         return matchRepository.findById(id);
     }
 }
