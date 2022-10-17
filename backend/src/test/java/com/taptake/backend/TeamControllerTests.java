@@ -119,7 +119,7 @@ class TeamControllerTests {
     void findByInvalidId(){
         Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.empty());
         ResponseEntity<?> re = teamController.findById(UUID.randomUUID().toString());
-        assertEquals(HttpStatus.CONFLICT, re.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
     @Test
     void findByNomeTime(){
