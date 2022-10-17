@@ -70,7 +70,7 @@ public class TeamController {
     public ResponseEntity<Object> getAllByGame(@RequestParam String idJogo){
         Optional<Game> game = gs.findById(UUID.fromString(idJogo));
         if(!game.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.OK).body(ts.findAllByGame(game.get()));
 
