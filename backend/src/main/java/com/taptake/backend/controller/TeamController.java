@@ -79,7 +79,7 @@ public class TeamController {
     public ResponseEntity<Object> findById(@RequestParam String id){
         Optional<Team> optionalTeam = ts.findById(UUID.fromString(id));
         if(!optionalTeam.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.OK).body(optionalTeam.get());
     }
