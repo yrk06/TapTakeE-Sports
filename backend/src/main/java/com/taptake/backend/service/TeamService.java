@@ -1,5 +1,7 @@
 package com.taptake.backend.service;
 
+import com.taptake.backend.model.Game;
+import com.taptake.backend.model.Organization;
 import com.taptake.backend.model.Team;
 import com.taptake.backend.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,8 @@ public class TeamService {
     public Optional<Team> findById(UUID id){
         return tRep.findById(id);
     }
-    public List<Team> findAllByIdOrg(UUID idOrg){
-        return tRep.findAllByIdOrg(idOrg);
+    public List<Team> findAllByOrg(Organization org){
+        return tRep.findAllByOrg(org);
     }
     public List<Team> findAllByNomeTime(String nomeTime){
         return tRep.findAllByNomeTime(nomeTime);
@@ -41,5 +43,9 @@ public class TeamService {
 
     public List<Team> findAll() {
         return tRep.findAll();
+    }
+
+    public List<Team> findAllByGame(Game game) {
+        return tRep.findAllByGame(game);
     }
 }
