@@ -221,7 +221,7 @@ class TeamControllerTests {
         teamDTO.setIdOrg(idOrg.toString());
         teamDTO.setIdJogo(idJogo.toString());
         ResponseEntity<?> re = teamController.update(teamDTO, UUID.randomUUID().toString());
-        assertEquals(HttpStatus.CONFLICT, re.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
     }
     @Test
     void updateTeamInvalidOrg(){
