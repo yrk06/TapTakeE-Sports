@@ -154,7 +154,7 @@ class TeamControllerTests {
         Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.empty());
         Mockito.when(ts.findAllByGame(any(Game.class))).thenReturn(new LinkedList<>());
         ResponseEntity<?> re = teamController.getAllByGame(UUID.randomUUID().toString());
-        assertEquals(HttpStatus.CONFLICT, re.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
 
     @Test
