@@ -97,6 +97,9 @@ public class TeamController {
         if(!optionalGame.isPresent() || !optionalOrganization.isPresent()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        if (!optionalTeam.isPresent()) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         Team savedTeam = optionalTeam.get();
         if(!teamDTO.getIdJogo().equals(savedTeam.getGame().getIdJogo().toString())){
             savedTeam.setGame(optionalGame.get());
