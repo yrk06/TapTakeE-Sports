@@ -16,8 +16,8 @@ public class Match implements Serializable {
     private UUID idPartida;
 
     @ManyToOne
-    @JoinColumn
-    private UUID idCampeonato;
+    @JoinColumn(name = "idCampeonato")
+    private Championship championship;
 
     public UUID getIdPartida() {
         return idPartida;
@@ -27,11 +27,11 @@ public class Match implements Serializable {
         this.idPartida = idPartida;
     }
 
-    public UUID getIdCampeonato() {
-        return idCampeonato;
+    public Championship getChampionship() {
+        return championship;
     }
 
-    public void setIdCampeonato(UUID idCampeonato) {
-        this.idCampeonato = idCampeonato;
+    public void setChampionship(Championship championship) {
+        this.championship = championship;
     }
 }
