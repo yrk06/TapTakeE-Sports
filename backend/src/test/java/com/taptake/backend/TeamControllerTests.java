@@ -68,7 +68,7 @@ class TeamControllerTests {
         assertEquals(HttpStatus.CONFLICT, re.getStatusCode());
     }
     @Test
-    void saveTeamInvalidGameId(){
+    void saveTeamInvalidOrgId(){
         Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.of(new Game()));
         Mockito.when(os.findById(any(UUID.class))).thenReturn(Optional.empty());
         TeamDTO teamDTO = new TeamDTO();
