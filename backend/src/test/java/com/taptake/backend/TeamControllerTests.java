@@ -263,7 +263,7 @@ class TeamControllerTests {
         teamDTO.setIdOrg(idOrg.toString());
         teamDTO.setIdJogo(idJogo.toString());
         ResponseEntity<?> re = teamController.update(teamDTO, UUID.randomUUID().toString());
-        assertEquals(HttpStatus.CONFLICT, re.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
 
 
