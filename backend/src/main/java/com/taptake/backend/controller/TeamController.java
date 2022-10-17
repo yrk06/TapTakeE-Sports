@@ -95,7 +95,7 @@ public class TeamController {
         Optional<Organization> optionalOrganization = os.findById(UUID.fromString(teamDTO.getIdOrg()));
         Optional<Team> optionalTeam = ts.findById(UUID.fromString(id));
         if(!optionalGame.isPresent() || !optionalOrganization.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         Team savedTeam = optionalTeam.get();
         if(!teamDTO.getIdJogo().equals(savedTeam.getGame().getIdJogo().toString())){
