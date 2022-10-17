@@ -62,7 +62,7 @@ public class TeamController {
     public ResponseEntity<Object> findByOrg(@RequestParam String idOrg){
         Optional<Organization> optionalOrganization= os.findById(UUID.fromString(idOrg));
         if(!optionalOrganization.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.OK).body(ts.findAllByOrg(optionalOrganization.get()));
     }
