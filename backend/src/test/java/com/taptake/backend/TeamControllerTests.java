@@ -139,7 +139,7 @@ class TeamControllerTests {
         Mockito.when(os.findById(any(UUID.class))).thenReturn(Optional.empty());
         Mockito.when(ts.findAllByOrg(any(Organization.class))).thenReturn(new LinkedList<>());
         ResponseEntity<?> re = teamController.findByOrg(UUID.randomUUID().toString());
-        assertEquals(HttpStatus.CONFLICT, re.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
 
     @Test
