@@ -124,7 +124,7 @@ class TeamControllerTests {
     @Test
     void findByNomeTime(){
         Mockito.when(ts.findAllByNomeTime(anyString())).thenReturn(new LinkedList<>());
-        ResponseEntity<?> re = teamController.findByNomeTime("teste");
+        ResponseEntity<?> re = teamController.findAllByNomeTime("teste");
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
     @Test
@@ -262,6 +262,7 @@ class TeamControllerTests {
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setIdOrg(idOrg.toString());
         teamDTO.setIdJogo(idJogo.toString());
+        teamDTO.setNomeTime("teste");
         ResponseEntity<?> re = teamController.update(teamDTO, UUID.randomUUID().toString());
         assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
