@@ -57,7 +57,7 @@ class TeamControllerTests {
     }
 
     @Test
-    void saveTeamInvalidOrgId(){
+    void saveTeamInvalidGameId(){
         Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.empty());
         Mockito.when(os.findById(any(UUID.class))).thenReturn(Optional.of(new Organization()));
         TeamDTO teamDTO = new TeamDTO();
