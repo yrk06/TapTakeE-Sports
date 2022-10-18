@@ -24,7 +24,7 @@ public class MatchService {
     public void delete(UUID id){
         matchRepository.deleteById(id);
     }
-    public List<Match> findByCampeonado(Championship championship){
+    public List<Match> findByChampionship(Championship championship){
         return matchRepository.findByCampeonato(championship);
     }
 

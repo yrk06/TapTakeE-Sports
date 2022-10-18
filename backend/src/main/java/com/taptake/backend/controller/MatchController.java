@@ -43,12 +43,12 @@ public class MatchController {
         return ResponseEntity.status(HttpStatus.OK).body(optionalMatch.get());
     }
     @GetMapping("/champ")
-    public ResponseEntity<Object> findByCampeonato(@RequestParam String idCampeonato){
+    public ResponseEntity<Object> findByChampionship(@RequestParam String idCampeonato){
         Optional<Championship> optionalC = cs.findById(UUID.fromString(idCampeonato));
         if(!optionalC.isPresent()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(matchService.findByCampeonado(optionalC.get()));
+        return ResponseEntity.status(HttpStatus.OK).body(matchService.findByChampionship(optionalC.get()));
     }
 
     @DeleteMapping
