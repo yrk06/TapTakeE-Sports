@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.UUID;
 @Repository
 public interface MatchRepository extends JpaRepository<Match, UUID> {
-    List<Match> findByCampeonato(Championship championship);
+    List<Match> findByChampionship(Championship championship);
 }
