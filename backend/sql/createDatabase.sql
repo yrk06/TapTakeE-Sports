@@ -8,8 +8,8 @@ CREATE TABLE Cargo (
     nome VARCHAR(128) NOT NULL
 );
 
-INSERT INTO Cargo (idCargo, nome) VALUES (1, "Usuário");
-INSERT INTO Cargo (idCargo, nome) VALUES (2, "Admin");
+INSERT INTO Cargo (nome) VALUES ("Usuário");
+INSERT INTO Cargo (nome) VALUES ("Admin");
 
 
 CREATE TABLE Usuario (
@@ -19,7 +19,7 @@ CREATE TABLE Usuario (
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(512) NOT NULL UNIQUE,
     senha VARCHAR(60) NOT NULL,	
-    telefcargoone VARCHAR(32) NOT NULL
+    telefone VARCHAR(32) NOT NULL
 );
 
 CREATE TABLE Amigos (
