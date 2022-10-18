@@ -24,9 +24,9 @@ public class MatchController {
     private ChampionshipService cs;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody MatchDTO matchDTO){
+    public ResponseEntity<Object> save(@RequestBody MatchDTO matchDTO) {
         Optional<Championship> optionalChampionship = cs.findById(UUID.fromString(matchDTO.getIdCampeonato()));
-        if(!optionalChampionship.isPresent()){
+        if (!optionalChampionship.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         var match = new Match();
@@ -35,44 +35,44 @@ public class MatchController {
     }
 
     @GetMapping("/id")
-    public ResponseEntity<Object> findById(@RequestParam String id){
+    public ResponseEntity<Object> findById(@RequestParam String id) {
         Optional<Match> optionalMatch = matchService.findById(UUID.fromString(id));
-        if(!optionalMatch.isPresent()){
+        if (!optionalMatch.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.OK).body(optionalMatch.get());
     }
+
     @GetMapping("/champ")
-    public ResponseEntity<Object> findByChampionship(@RequestParam String id){
+    public ResponseEntity<Object> findByChampionship(@RequestParam String id) {
         Optional<Championship> optionalC = cs.findById(UUID.fromString(id));
-        if(!optionalC.isPresent()){
+        if (!optionalC.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.status(HttpStatus.OK).body(matchService.findByChampionship(optionalC.get()));
     }
 
     @DeleteMapping
-    public ResponseEntity<Object> deleteOne(@RequestParam String id){
+    public ResponseEntity<Object> deleteOne(@RequestParam String id) {
         matchService.delete(UUID.fromString(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping
-    public ResponseEntity<Object> update(@RequestBody MatchDTO matchDTO, @RequestParam String id){
+    public ResponseEntity<Object> update(@RequestBody MatchDTO matchDTO, @RequestParam String id) {
         Optional<Match> optionalMatch = matchService.findById(UUID.fromString(id));
-        if(!optionalMatch.isPresent()){
+        if (!optionalMatch.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         Optional<Championship> optionalC = cs.findById(UUID.fromString(matchDTO.getIdCampeonato()));
-        if(!optionalC.isPresent()){
+        if (!optionalC.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         Match m = optionalMatch.get();
-        if(!optionalMatch.get().getChampionship().getIdCampeonato().toString().equals(matchDTO.getIdCampeonato())){
+        if (!optionalMatch.get().getChampionship().getIdCampeonato().toString().equals(matchDTO.getIdCampeonato())) {
             m.setChampionship(optionalC.get());
         }
         return ResponseEntity.status(HttpStatus.OK).body(matchService.update(m));
     }
-
 
 }
