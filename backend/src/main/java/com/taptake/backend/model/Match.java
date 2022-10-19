@@ -2,6 +2,10 @@ package com.taptake.backend.model;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -10,6 +14,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "Partida")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idPartida")
 public class Match implements Serializable {
 
     @Id
@@ -22,7 +27,7 @@ public class Match implements Serializable {
     private Championship championship;
 
     @ManyToMany
-    @JoinTable(name = "ParticipacaoPartida", joinColumns = @JoinColumn(name = "idEquipe"), inverseJoinColumns = @JoinColumn(name="idPartida", nullable = true))
+    @JoinTable(name = "ParticipacaoPartida", joinColumns = @JoinColumn(name = "idPartida"), inverseJoinColumns = @JoinColumn(name = "idEquipe"))
     private Set<Team> equipes;
 
     public Set<Team> getEquipes() {

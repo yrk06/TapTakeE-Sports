@@ -3,7 +3,6 @@ package com.taptake.backend.controller;
 import com.taptake.backend.DTO.MatchDTO;
 import com.taptake.backend.model.Championship;
 import com.taptake.backend.model.Match;
-import com.taptake.backend.model.MatchParticipation;
 import com.taptake.backend.model.Team;
 import com.taptake.backend.service.ChampionshipService;
 import com.taptake.backend.service.MatchService;
@@ -46,7 +45,8 @@ public class MatchController {
 
         }
         match.setEquipes(teamList);
-        return ResponseEntity.status(HttpStatus.CREATED).body(matchService.save(match));
+        match = matchService.save(match);
+        return ResponseEntity.status(HttpStatus.CREATED).body(match);
     }
 
     @GetMapping("/id")
