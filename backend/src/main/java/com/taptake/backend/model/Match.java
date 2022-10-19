@@ -1,5 +1,6 @@
 package com.taptake.backend.model;
 
+import com.taptake.backend.DRO.MatchDRO;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -34,6 +36,18 @@ public class Match implements Serializable {
         return equipes;
     }
 
+
+    public MatchDRO generateDRO(){
+        MatchDRO matchDRO = new MatchDRO();
+        List<String> teamList = new ArrayList<>();
+        for (Team t : this.equipes){
+            teamList.add(t.getIdEquipe().toString());
+        }
+        matchDRO.setTeamList(teamList);
+        matchDRO.setIdPartida(this.idPartida.toString());
+        matchDRO.setChampionship(this.championship);
+        return matchDRO;
+    }
     public void setEquipes(Set<Team> equipes) {
         this.equipes = equipes;
     }

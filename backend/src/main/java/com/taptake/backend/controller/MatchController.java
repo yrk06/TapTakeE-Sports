@@ -1,5 +1,6 @@
 package com.taptake.backend.controller;
 
+import com.taptake.backend.DRO.MatchDRO;
 import com.taptake.backend.DTO.MatchDTO;
 import com.taptake.backend.model.Championship;
 import com.taptake.backend.model.Match;
@@ -46,16 +47,18 @@ public class MatchController {
         }
         match.setEquipes(teamList);
         match = matchService.save(match);
-        return ResponseEntity.status(HttpStatus.CREATED).body(match);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(match.generateDRO());
     }
 
     @GetMapping("/id")
     public ResponseEntity<Object> findById(@RequestParam String id) {
-        Optional<Match> optionalMatch = matchService.findById(UUID.fromString(id));
-        if (!optionalMatch.isPresent()) {
+        Optional<Match> match = matchService.findById(UUID.fromString(id));
+        if (!match.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(optionalMatch.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body(match.get().generateDRO());
     }
 
     @GetMapping("/champ")
@@ -64,7 +67,13 @@ public class MatchController {
         if (!optionalC.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(matchService.findByChampionship(optionalC.get()));
+
+        List<Match> matchList = matchService.findByChampionship(optionalC.get());
+        List<MatchDRO> matchDROlist = new ArrayList<>();
+        for (Match match : matchList) {
+            matchDROlist.add(match.generateDRO());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(matchDROlist);
     }
 
     @DeleteMapping
@@ -87,7 +96,7 @@ public class MatchController {
         if (!optionalMatch.get().getChampionship().getIdCampeonato().toString().equals(matchDTO.getIdCampeonato())) {
             m.setChampionship(optionalC.get());
         }
-        return ResponseEntity.status(HttpStatus.OK).body(matchService.update(m));
+        return ResponseEntity.status(HttpStatus.OK).body(matchService.update(m).generateDRO());
     }
 
 }
