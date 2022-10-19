@@ -14,11 +14,11 @@ INSERT INTO Cargo (nome) VALUES ("Admin");
 
 CREATE TABLE Usuario (
     idUsuario CHAR(36) NOT NULL PRIMARY KEY,
-    idCargo INT NOT NULL,
-    FOREIGN KEY (idCargo) REFERENCES Cargo (idCargo), 
+    idCargo INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (idCargo) REFERENCES Cargo (idCargo),
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(512) NOT NULL UNIQUE,
-    senha VARCHAR(60) NOT NULL,	
+    senha VARCHAR(60) NOT NULL,
     telefone VARCHAR(32) NOT NULL
 );
 
@@ -76,19 +76,20 @@ CREATE TABLE ParticipacaoCampeonato (
     idCampeonato CHAR(36) NOT NULL,
     FOREIGN KEY(idCampeonato) REFERENCES Campeonato (idCampeonato),
 	idEquipe CHAR(36) NOT NULL,
-    FOREIGN KEY(idEquipe) REFERENCES Equipe (idEquipe),
-    pontuacao INT NOT NULL
+    FOREIGN KEY(idEquipe) REFERENCES Equipe (idEquipe)
+
 );
 
 CREATE TABLE Partida (
     idPartida CHAR(36) NOT NULL PRIMARY KEY,
     idCampeonato CHAR(36) NOT NULL,
-	FOREIGN KEY(idCampeonato) REFERENCES Campeonato (idCampeonato)
+	FOREIGN KEY(idCampeonato) REFERENCES Campeonato (idCampeonato),
+	data DATE NOT NULL
 );
 
-
 CREATE TABLE ParticipacaoPartida (
-    idParticipacaoPartida CHAR(36) NOT NULL PRIMARY KEY,
+    idParticipacaoPartida INT NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY (idParticipacaoPartida),
 	idPartida CHAR(36) NOT NULL,
 	FOREIGN KEY(idPartida) REFERENCES Partida (idPartida),
     idEquipe CHAR(36) NOT NULL,
@@ -109,5 +110,18 @@ CREATE TABLE JogadorTimeUsuario (
     idEquipeUsuario CHAR(36) NOT NULL,
 	FOREIGN KEY(idEquipeUsuario) REFERENCES TimeUsuario (idEquipeUsuario),
     idJogador CHAR(36) NOT NULL,
-	FOREIGN KEY(idJogador) REFERENCES Jogador (idJogador)
+	FOREIGN KEY(idJogador) REFERENCES Jogador (idJogador),
+	dataEntrada DATE NOT NULL,
+	dataSaida DATE
+
+);
+
+CREATE TABLE PerformancePartida(
+    idPerformancePartida INT NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY (idPerformancePartida),
+    idPartida CHAR(36) NOT NULL,
+    FOREIGN KEY (idPartida) REFERENCES Partida(idPartida),
+    idJogador CHAR(36) NOT NULL,
+    FOREIGN KEY (idJogador) REFERENCES Jogador(idJogador),
+    pontuacao INT NOT NULL
 );
