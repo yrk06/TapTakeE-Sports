@@ -21,6 +21,18 @@ public class Match implements Serializable {
     @JoinColumn(name = "idCampeonato")
     private Championship championship;
 
+    @ManyToMany
+    @JoinTable(name = "ParticipacaoPartida", joinColumns = @JoinColumn(name = "idEquipe"), inverseJoinColumns = @JoinColumn(name="idPartida", nullable = true))
+    private Set<Team> equipes;
+
+    public Set<Team> getEquipes() {
+        return equipes;
+    }
+
+    public void setEquipes(Set<Team> equipes) {
+        this.equipes = equipes;
+    }
+
     public UUID getIdPartida() {
         return idPartida;
     }

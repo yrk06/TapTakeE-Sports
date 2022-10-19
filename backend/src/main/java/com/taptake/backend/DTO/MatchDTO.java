@@ -9,6 +9,7 @@ public class MatchDTO {
     private List<String> idEquipes;
 
 
+
     public List<String> getIdEquipes() {
         return idEquipes;
     }

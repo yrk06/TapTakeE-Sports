@@ -13,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/match")
@@ -37,18 +35,18 @@ public class MatchController {
         }
         var match = new Match();
         match.setChampionship(optionalChampionship.get());
-        Match saved = matchService.save(match);
+        Set<Team> teamList = new HashSet<>();
 
         for (String t : matchDTO.getIdEquipes()) {
             Optional<Team> team = ts.findById(UUID.fromString(t));
             if (!team.isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
-            MatchParticipation mp = new MatchParticipation();
-            mp.setMatch(match);
-            mp.setTeam(team.get());
+            teamList.add(team.get());
+
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        match.setEquipes(teamList);
+        return ResponseEntity.status(HttpStatus.CREATED).body(matchService.save(match));
     }
 
     @GetMapping("/id")
