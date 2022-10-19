@@ -3,13 +3,17 @@ package com.taptake.backend.controller;
 import com.taptake.backend.DTO.MatchDTO;
 import com.taptake.backend.model.Championship;
 import com.taptake.backend.model.Match;
+import com.taptake.backend.model.MatchParticipation;
+import com.taptake.backend.model.Team;
 import com.taptake.backend.service.ChampionshipService;
 import com.taptake.backend.service.MatchService;
+import com.taptake.backend.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,6 +26,8 @@ public class MatchController {
 
     @Autowired
     private ChampionshipService cs;
+    @Autowired
+    private TeamService ts;
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody MatchDTO matchDTO) {
@@ -31,7 +37,18 @@ public class MatchController {
         }
         var match = new Match();
         match.setChampionship(optionalChampionship.get());
-        return ResponseEntity.status(HttpStatus.CREATED).body(matchService.save(match));
+        Match saved = matchService.save(match);
+
+        for (String t : matchDTO.getIdEquipes()) {
+            Optional<Team> team = ts.findById(UUID.fromString(t));
+            if (!team.isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+            MatchParticipation mp = new MatchParticipation();
+            mp.setMatch(match);
+            mp.setTeam(team.get());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @GetMapping("/id")
