@@ -1,24 +1,51 @@
 import logo from './logo.svg';
 import './App.css';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Route,
+  useSearchParams,
+} from "react-router-dom";
+
+import Header from './components/Header'
+import HomePageContent from './components/HomePageContent'
+import ErrorPage from './components/ErrorPage'
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RouterProvider router={
+      createBrowserRouter([
+        {
+          path: "/",
+          element: <div>
+            <Header />
+            <HomePageContent />
+          </div>
+        },
+        {
+          path: "/error",
+          element: <ErrorPage />
+        }
+        /*{
+          path: "/error",
+          element: <div>
+            <Header />
+            {{
+              '401': <div>
+                <Header />
+                <UnauthorizedContent />
+              </div>,
+              '404': <div>
+                <Header />
+                <NotFoundContent />
+              </div>,
+            }[useSearchParams()[0].get("error")]}
+            <HomePageContent />
+          </div>
+          }*/
+      ])
+    } />
   );
 }
 
