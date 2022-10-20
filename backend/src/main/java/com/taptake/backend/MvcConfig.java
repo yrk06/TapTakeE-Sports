@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.taptake.backend.service.LoggerMiddleware;
@@ -30,5 +31,13 @@ public class MvcConfig implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/assets/**")
                 .addResourceLocations("classpath:/static/assets/");
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        String spa = "forward:/index.html";
+        registry.addViewController("/").setViewName(spa);
+        registry.addViewController("/{x:[\\w\\-]+}").setViewName(spa);
+        registry.addViewController("/{x:^(?!api$)(?!index.html$)(?!static$)(?!assets$).*$}/**").setViewName(spa);
     }
 }
