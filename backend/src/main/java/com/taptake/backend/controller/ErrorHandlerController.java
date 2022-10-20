@@ -17,10 +17,11 @@ public class ErrorHandlerController implements ErrorController {
 
         switch (resp.getStatus()) {
             case 401:
-                return "error_unauthorized.html";
+                return "/error?error=401";
             case 404:
+                return "/error?error=404";
             default:
-                return "error_not_found.html";
+                return "index.html";
         }
     }
 }
