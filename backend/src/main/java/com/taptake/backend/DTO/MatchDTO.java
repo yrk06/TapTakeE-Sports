@@ -1,5 +1,6 @@
 package com.taptake.backend.DTO;
 
+import java.util.Date;
 import java.util.List;
 
 public class MatchDTO {
@@ -8,7 +9,15 @@ public class MatchDTO {
 
     private List<String> idEquipes;
 
+    private Date data;
 
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
 
     public List<String> getIdEquipes() {
         return idEquipes;

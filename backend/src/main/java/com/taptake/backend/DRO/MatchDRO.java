@@ -2,6 +2,7 @@ package com.taptake.backend.DRO;
 
 import com.taptake.backend.model.Championship;
 
+import java.util.Date;
 import java.util.List;
 
 public class MatchDRO {
@@ -11,8 +12,18 @@ public class MatchDRO {
 
     private List<String> teamList;
 
+    private Date data;
     public String getIdPartida() {
         return idPartida;
+    }
+
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
     }
 
     public void setIdPartida(String idPartida) {

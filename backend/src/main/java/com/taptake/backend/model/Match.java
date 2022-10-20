@@ -9,10 +9,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "Partida")
@@ -32,6 +29,17 @@ public class Match implements Serializable {
     @JoinTable(name = "ParticipacaoPartida", joinColumns = @JoinColumn(name = "idPartida"), inverseJoinColumns = @JoinColumn(name = "idEquipe"))
     private Set<Team> equipes;
 
+    @Column(nullable = false)
+    private Date data;
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
     public Set<Team> getEquipes() {
         return equipes;
     }
@@ -46,6 +54,7 @@ public class Match implements Serializable {
         matchDRO.setTeamList(teamList);
         matchDRO.setIdPartida(this.idPartida.toString());
         matchDRO.setChampionship(this.championship);
+        matchDRO.setData(this.data);
         return matchDRO;
     }
     public void setEquipes(Set<Team> equipes) {
