@@ -36,7 +36,7 @@ public class MatchController {
         var match = new Match();
         match.setChampionship(optionalChampionship.get());
         Set<Team> teamList = new HashSet<>();
-
+        match.setData(matchDTO.getData());
         for (String t : matchDTO.getIdEquipes()) {
             Optional<Team> team = ts.findById(UUID.fromString(t));
             if (!team.isPresent()) {
