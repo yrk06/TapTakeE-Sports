@@ -51,7 +51,7 @@ public class Match implements Serializable {
         for (Team t : this.equipes){
             teamList.add(t.getIdEquipe().toString());
         }
-        matchDRO.setTeamList(teamList);
+        matchDRO.setTeamList(teamList.stream().toList());
         matchDRO.setIdPartida(this.idPartida.toString());
         matchDRO.setChampionship(this.championship);
         matchDRO.setData(this.data);

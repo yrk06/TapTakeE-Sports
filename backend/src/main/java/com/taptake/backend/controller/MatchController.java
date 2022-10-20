@@ -57,8 +57,9 @@ public class MatchController {
         if (!match.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        MatchDRO matchDRO = match.get().generateDRO();
+        return ResponseEntity.status(HttpStatus.OK).body(matchDRO);
 
-        return ResponseEntity.status(HttpStatus.OK).body(match.get().generateDRO());
     }
 
     @GetMapping("/champ")
@@ -96,6 +97,20 @@ public class MatchController {
         if (!optionalMatch.get().getChampionship().getIdCampeonato().toString().equals(matchDTO.getIdCampeonato())) {
             m.setChampionship(optionalC.get());
         }
+        if(!m.getData().equals(matchDTO.getData())){
+            m.setData(matchDTO.getData());
+        }
+        Set<Team> teamSet = m.getEquipes();
+        for(String idTeam : matchDTO.getIdEquipes()){
+            Optional<Team> t = ts.findById(UUID.fromString(idTeam));
+            if(!t.isPresent()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+            if(teamSet.contains(t.get())){
+                teamSet.add(t.get());
+            }
+        }
+        m.setEquipes(teamSet);
         return ResponseEntity.status(HttpStatus.OK).body(matchService.update(m).generateDRO());
     }
 
