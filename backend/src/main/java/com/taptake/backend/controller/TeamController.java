@@ -3,18 +3,18 @@ package com.taptake.backend.controller;
 import com.taptake.backend.DTO.TeamDTO;
 import com.taptake.backend.model.Game;
 import com.taptake.backend.model.Organization;
+import com.taptake.backend.model.Player;
 import com.taptake.backend.model.Team;
 import com.taptake.backend.service.GameService;
 import com.taptake.backend.service.OrganizationService;
+import com.taptake.backend.service.PlayerService;
 import com.taptake.backend.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/team")
@@ -25,6 +25,9 @@ public class TeamController {
 
     @Autowired
     private OrganizationService os;
+
+    @Autowired
+    private PlayerService ps;
 
     @Autowired
     private GameService gs;
@@ -42,10 +45,19 @@ public class TeamController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
             }
         }
+        Set<Player> players = new HashSet<>();
+        for(String idPlayer : teamDTO.getIdJogadores()){
+            Optional<Player> opt = ps.findById(UUID.fromString(idPlayer));
+            if(!opt.isPresent()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+            players.add(opt.get());
+        }
         var team = new Team();
         team.setGame(optionalGame.get());
         team.setOrg(optionalOrganization.get());
         team.setNomeTime(teamDTO.getNomeTime());
+        team.setPlayers(players);
         return ResponseEntity.status(HttpStatus.CREATED).body(ts.save(team));
     }
     @DeleteMapping
@@ -55,7 +67,9 @@ public class TeamController {
     }
     @GetMapping
     public ResponseEntity<Object> getAll(){
+
         return ResponseEntity.status(HttpStatus.OK).body(ts.findAll());
+
     }
 
     @GetMapping("/id/org")
@@ -111,8 +125,15 @@ public class TeamController {
         if(!teamDTO.getNomeTime().equals(savedTeam.getNomeTime())){
             savedTeam.setNomeTime(teamDTO.getNomeTime());
         }
+        Set<Player> newSet = new HashSet<>();
+        for(String s : teamDTO.getIdJogadores()){
+            Optional<Player> opt = ps.findById(UUID.fromString(s));
+            if(!opt.isPresent()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+            newSet.add(opt.get());
+        }
         return ResponseEntity.status(HttpStatus.OK).body(ts.update(savedTeam));
-
     }
 
 }
