@@ -22,7 +22,7 @@ class NotFoundContent extends React.Component {
           </p>
         </div>
         <div className="d-flex justify-content-center">
-          <img src="https://i.kym-cdn.com/photos/images/original/001/043/243/419.gif" />
+          <img src="https://i.kym-cdn.com/photos/images/original/001/043/243/419.gif" alt="John Travolta perdido" />
         </div>
       </div>
     );

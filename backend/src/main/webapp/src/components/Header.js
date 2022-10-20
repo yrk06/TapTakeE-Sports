@@ -14,7 +14,7 @@ class Header extends React.Component {
           }}
         >
           <div className="container-fluid">
-            <a className="navbar-brand d-flex align-items-center" href="#">
+            <a className="navbar-brand d-flex align-items-center" href="/">
               <span
                 className="bs-icon-sm bs-icon-rounded d-flex justify-content-center align-items-center me-2 bs-icon"
                 style={{

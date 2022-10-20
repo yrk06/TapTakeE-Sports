@@ -23,6 +23,7 @@ class UnauthorizedContent extends React.Component {
                 className="mx-auto"
                 src="https://www.pngmart.com/files/22/Mr.-Mime-Pokemon-PNG.gif"
                 width="400px"
+                alt="Mr Mime"
               />
             </div>
           </div>

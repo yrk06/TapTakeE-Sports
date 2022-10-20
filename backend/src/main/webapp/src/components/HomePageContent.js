@@ -22,7 +22,7 @@ class HomePageContent extends React.Component {
           }}
         />
         <div className="d-flex justify-content-center">
-          <img src="/assets/img/5Io0AoD.gif" />
+          <img src="/assets/img/5Io0AoD.gif" alt="Oi Lino" />
         </div>
         <div
           style={{

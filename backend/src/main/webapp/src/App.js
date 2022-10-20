@@ -1,10 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
-  useSearchParams,
 } from "react-router-dom";
 
 import Header from './components/Header'

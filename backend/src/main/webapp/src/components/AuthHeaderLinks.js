@@ -10,12 +10,12 @@ class AuthHeaderLinks extends React.Component {
         }}
       >
         <li className="nav-item">
-          <a className="nav-link active" href="#">
+          <a className="nav-link active" href="/">
             Elenco
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">
+          <a className="nav-link" href="/">
             Próximas Partidas
           </a>
         </li>
