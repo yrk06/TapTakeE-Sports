@@ -14,7 +14,7 @@ INSERT INTO Cargo (nome) VALUES ("Admin");
 
 CREATE TABLE Usuario (
     idUsuario CHAR(36) NOT NULL PRIMARY KEY,
-    idCargo INT NOT NULL DEFAULT 0,
+    idCargo INT NOT NULL DEFAULT 1,
     FOREIGN KEY (idCargo) REFERENCES Cargo (idCargo),
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(512) NOT NULL UNIQUE,
