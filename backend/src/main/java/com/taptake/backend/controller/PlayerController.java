@@ -2,7 +2,9 @@ package com.taptake.backend.controller;
 
 import com.taptake.backend.DTO.PlayerDTO;
 import com.taptake.backend.model.Player;
+import com.taptake.backend.model.Team;
 import com.taptake.backend.service.PlayerService;
+import com.taptake.backend.service.TeamService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,9 @@ public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
+    @Autowired
+    private TeamService ts;
+
     @GetMapping
     public ResponseEntity<?> findById(@RequestParam String id) {
         Optional<Player> player = playerService.findById(UUID.fromString(id));
@@ -32,22 +37,28 @@ public class PlayerController {
     public ResponseEntity<?> save(@RequestBody PlayerDTO playerDTO) {
         Optional<Player> playerOptional = playerService.findByNome(playerDTO.getNome());
         if (playerOptional.isPresent() && playerOptional.get().getCargo() == playerDTO.getCargo()
-                && playerOptional.get().getIdEquipe() == playerDTO.getIdEquipe()) {
+                && playerOptional.get().getTeam().getIdEquipe().toString().equals(playerDTO.getIdEquipe())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+        Optional<Team> team = ts.findById(UUID.fromString(playerDTO.getIdEquipe()));
+        if(!team.isPresent()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         var player = new Player();
-        BeanUtils.copyProperties(playerDTO, player);
+        player.setTeam(team.get());
+        player.setCargo(playerDTO.getCargo());
+        player.setNome(playerDTO.getNome());
         return ResponseEntity.status(HttpStatus.CREATED).body(playerService.save(player));
     }
 
     @DeleteMapping
     public ResponseEntity<?> deleteOne(@RequestParam("id") String id) {
-        UUID PlayerId = UUID.fromString(id);
-        Optional<Player> player = playerService.findById(PlayerId);
-        if (player.isPresent()) {
-            playerService.deleteOne(player.get().getIdJogador());
+        Optional<Player> player = playerService.findById(UUID.fromString(id));
+        if(!player.isPresent()){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
+        playerService.deleteOne(player.get().getIdJogador());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
@@ -67,15 +78,14 @@ public class PlayerController {
         if (!playerDTO.getCargo().equals(newPlayer.getCargo())) {
             newPlayer.setCargo(playerDTO.getCargo());
         }
-
-        if (!playerDTO.getIdEquipe().equals(newPlayer.getIdEquipe())) {
-            newPlayer.setIdEquipe(playerDTO.getIdEquipe());
+        Optional<Team> ot = ts.findById(UUID.fromString(playerDTO.getIdEquipe()));
+        if(!ot.isPresent()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-
-        var player = new Player();
-        BeanUtils.copyProperties(playerDTO, player);
-
-        return ResponseEntity.status(HttpStatus.OK).body(playerService.update(player));
+        if(!userOptional.get().getTeam().getIdEquipe().toString().equals(playerDTO.getIdEquipe())){
+            newPlayer.setTeam(ot.get());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(playerService.update(newPlayer));
     }
 
 }
