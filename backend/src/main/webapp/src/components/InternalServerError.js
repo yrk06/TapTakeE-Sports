@@ -1,6 +1,10 @@
 import React from "react";
 
 class InternalServerError extends React.Component {
+  panic() {
+    alert("SOS, REPITO, SOS!! ISSO NÃO É UM TESTE!!!");
+  }
+
   render() {
     return (
       <div>
@@ -33,10 +37,6 @@ class InternalServerError extends React.Component {
         </div>
       </div>
     );
-  }
-
-  panic() {
-    alert("SOS, REPITO, SOS!! ISSO NÃO É UM TESTE!!!");
   }
 }
 export default InternalServerError;
