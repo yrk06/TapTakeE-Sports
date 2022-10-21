@@ -25,6 +25,8 @@ public class Player implements Serializable {
     @Column(nullable = false)
     private String cargo;
 
+//    PARTICIPAÇOES PARTIDA
+
     public UUID getIdJogador() {
         return idJogador;
     }

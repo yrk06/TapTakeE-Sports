@@ -2,10 +2,9 @@ package com.taptake.backend.controller;
 
 import com.taptake.backend.DRO.MatchDRO;
 import com.taptake.backend.DTO.MatchDTO;
-import com.taptake.backend.model.Championship;
-import com.taptake.backend.model.Match;
-import com.taptake.backend.model.Team;
+import com.taptake.backend.model.*;
 import com.taptake.backend.service.ChampionshipService;
+import com.taptake.backend.service.MatchPerformanceService;
 import com.taptake.backend.service.MatchService;
 import com.taptake.backend.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,9 @@ public class MatchController {
     private ChampionshipService cs;
     @Autowired
     private TeamService ts;
+
+    @Autowired
+    private MatchPerformanceService mps;
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody MatchDTO matchDTO) {
@@ -48,7 +50,24 @@ public class MatchController {
         match.setEquipes(teamList);
         match = matchService.save(match);
 
+        for (Team t : match.getEquipes()){
+            for(Player p : t.getPlayers()){
+                MatchPerformance mp = new MatchPerformance();
+                mp.setMatch(match);
+                mp.setPlayer(p);
+                mp.setPontuacao(0);
+                mps.save(mp);
+            }
+        }
+
+
+
+
+
         return ResponseEntity.status(HttpStatus.CREATED).body(match.generateDRO());
+
+
+
     }
 
     @GetMapping("/id")
@@ -113,5 +132,5 @@ public class MatchController {
         m.setEquipes(teamSet);
         return ResponseEntity.status(HttpStatus.OK).body(matchService.update(m).generateDRO());
     }
-
+//NOVO METODO PARA RETORNAR PERFORMANCE POR PLAYER
 }
