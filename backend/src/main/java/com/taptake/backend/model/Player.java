@@ -4,6 +4,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -26,6 +27,18 @@ public class Player implements Serializable {
     private String cargo;
 
 //    PARTICIPAÇOES PARTIDA
+    @OneToMany
+    @JoinColumn(name = "idPerformancePartida")
+    private Set<MatchPerformance> matchPerformances;
+
+
+    public Set<MatchPerformance> getMatchPerformances() {
+        return matchPerformances;
+    }
+
+    public void setMatchPerformances(Set<MatchPerformance> matchPerformances) {
+        this.matchPerformances = matchPerformances;
+    }
 
     public UUID getIdJogador() {
         return idJogador;
