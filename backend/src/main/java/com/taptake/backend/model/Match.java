@@ -45,6 +45,7 @@ public class Match implements Serializable {
     }
 
 
+// PARTICIPAÇÕES PARTIDA
     public MatchDRO generateDRO(){
         MatchDRO matchDRO = new MatchDRO();
         List<String> teamList = new ArrayList<>();
