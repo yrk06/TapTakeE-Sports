@@ -26,9 +26,6 @@ public class UserTeam implements Serializable {
     @JoinColumn(name = "idJogo")
     private Game game;
 
-    @Column(nullable = false)
-    private int pontos;
-
     public UUID getIdEquipeUsuario() {
         return idEquipeUsuario;
     }

@@ -4,8 +4,6 @@ public class UserTeamDTO {
 
     private String idUsuario;
     private String idJogo;
-    private int pontos;
-
 
     public String getIdUsuario() {
         return idUsuario;
