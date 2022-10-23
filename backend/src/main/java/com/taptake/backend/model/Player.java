@@ -15,10 +15,9 @@ public class Player implements Serializable {
     @Type(type = "uuid-char")
     private UUID idJogador;
 
-
-     @ManyToOne
-     @JoinColumn(name="idEquipe", referencedColumnName="idEquipe")
-     private Team team;
+    @ManyToOne
+    @JoinColumn(name = "idEquipe")
+    private Team team;
 
     @Column(nullable = false)
     private String nome;
@@ -26,11 +25,10 @@ public class Player implements Serializable {
     @Column(nullable = false)
     private String cargo;
 
-//    PARTICIPAÇOES PARTIDA
+    // PARTICIPAÇOES PARTIDA
     @OneToMany
-    @JoinColumn(name = "idPerformancePartida")
+    @JoinColumn(name = "idJogador")
     private Set<MatchPerformance> matchPerformances;
-
 
     public Set<MatchPerformance> getMatchPerformances() {
         return matchPerformances;

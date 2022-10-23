@@ -36,8 +36,8 @@ public class Team implements Serializable {
     private Set<Match> partidas;
 
     @OneToMany
+    @JoinColumn(name = "idEquipe")
     private Set<Player> players;
-
 
     public Set<Player> getPlayers() {
         return players;
