@@ -18,25 +18,28 @@ public class MatchPerformanceService {
     private MatchPerformanceRepository matchPerformanceRepository;
 
     @Transactional
-    public MatchPerformance save(MatchPerformance matchPerformance){
+    public MatchPerformance save(MatchPerformance matchPerformance) {
         return matchPerformanceRepository.save(matchPerformance);
     }
-    public Optional<MatchPerformance> findById(UUID id){
+
+    public Optional<MatchPerformance> findById(UUID id) {
         return matchPerformanceRepository.findById(id);
     }
-    public void delete(UUID id){
+
+    public void delete(UUID id) {
         matchPerformanceRepository.deleteById(id);
     }
-    public MatchPerformance update(MatchPerformance matchPerformance){
+
+    public MatchPerformance update(MatchPerformance matchPerformance) {
         return matchPerformanceRepository.save(matchPerformance);
     }
-    public List<MatchPerformance> findByPlayer(Player p){
+
+    public List<MatchPerformance> findByPlayer(Player p) {
         return matchPerformanceRepository.findByPlayer(p);
     }
 
-    public List<MatchPerformance> findByMatch(Match m){
+    public List<MatchPerformance> findByMatch(Match m) {
         return matchPerformanceRepository.findByMatch(m);
     }
-
 
 }

@@ -5,6 +5,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "PerformancePartida")
 public class MatchPerformance {
+
+    @Id
+    private int idPerformancePartida;
+
     @ManyToOne
     @JoinColumn(name = "idPartida")
     private Match match;
