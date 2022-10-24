@@ -4,9 +4,11 @@ import com.taptake.backend.DTO.TeamDTO;
 import com.taptake.backend.controller.TeamController;
 import com.taptake.backend.model.Game;
 import com.taptake.backend.model.Organization;
+import com.taptake.backend.model.Player;
 import com.taptake.backend.model.Team;
 import com.taptake.backend.service.GameService;
 import com.taptake.backend.service.OrganizationService;
+import com.taptake.backend.service.PlayerService;
 import com.taptake.backend.service.TeamService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,9 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,6 +40,8 @@ class TeamControllerTests {
     @MockBean
     TeamService ts;
 
+    @MockBean
+    PlayerService ps;
     @Autowired
     @InjectMocks
     TeamController teamController;
@@ -48,14 +50,30 @@ class TeamControllerTests {
     void saveValidTeam(){
         Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.of(new Game()));
         Mockito.when(os.findById(any(UUID.class))).thenReturn(Optional.of(new Organization()));
+        Mockito.when(ps.findById(any(UUID.class))).thenReturn(Optional.of(new Player()));
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setIdJogo(UUID.randomUUID().toString());
         teamDTO.setIdOrg(UUID.randomUUID().toString());
         teamDTO.setNomeTime("TESTE");
+        teamDTO.setIdJogadores(new ArrayList<>());
         ResponseEntity<?> re = teamController.save(teamDTO);
         assertEquals(HttpStatus.CREATED, re.getStatusCode());
     }
-
+    @Test
+    void saveTeamInvalidPlayerId(){
+        Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.of(new Game()));
+        Mockito.when(os.findById(any(UUID.class))).thenReturn(Optional.of(new Organization()));
+        Mockito.when(ps.findById(any(UUID.class))).thenReturn(Optional.empty());
+        ArrayList<String> ids = new ArrayList<>();
+        ids.add(UUID.randomUUID().toString());
+        TeamDTO teamDTO = new TeamDTO();
+        teamDTO.setIdJogo(UUID.randomUUID().toString());
+        teamDTO.setIdOrg(UUID.randomUUID().toString());
+        teamDTO.setNomeTime("TESTE");
+        teamDTO.setIdJogadores(ids);
+        ResponseEntity<?> re = teamController.save(teamDTO);
+        assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
+    }
     @Test
     void saveTeamInvalidGameId(){
         Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.empty());
@@ -169,6 +187,7 @@ class TeamControllerTests {
         t.setOrg(org);
         t.setGame(g);
         t.setNomeTime("teste");
+        t.setPlayers(new HashSet<>());
         Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.of(g));
         Mockito.when(os.findById(any(UUID.class))).thenReturn(Optional.of(org));
         Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.of(t));
@@ -176,6 +195,7 @@ class TeamControllerTests {
         teamDTO.setIdOrg(idOrg.toString());
         teamDTO.setIdJogo(idJogo.toString());
         teamDTO.setNomeTime("teste2");
+        teamDTO.setIdJogadores(new ArrayList<>());
         ResponseEntity<?> re = teamController.update(teamDTO, UUID.randomUUID().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
@@ -191,6 +211,7 @@ class TeamControllerTests {
         t.setOrg(org);
         t.setGame(g);
         t.setNomeTime("teste");
+        t.setPlayers(new HashSet<>());
         Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.of(g));
         Mockito.when(os.findById(any(UUID.class))).thenReturn(Optional.of(org));
         Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.of(t));
@@ -198,6 +219,7 @@ class TeamControllerTests {
         teamDTO.setIdOrg(idOrg.toString());
         teamDTO.setIdJogo(idJogo.toString());
         teamDTO.setNomeTime("teste");
+        teamDTO.setIdJogadores(new ArrayList<>());
         ResponseEntity<?> re = teamController.update(teamDTO, UUID.randomUUID().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }

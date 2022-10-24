@@ -3,15 +3,15 @@ package com.taptake.backend.DTO;
 import java.util.UUID;
 
 public class PlayerDTO {
-    private UUID idEquipe;
+    private String idEquipe;
     private String nome;
     private String cargo;
 
-    public UUID getIdEquipe() {
+    public String getIdEquipe() {
         return idEquipe;
     }
 
-    public void setIdEquipe(UUID idEquipe) {
+    public void setIdEquipe(String idEquipe) {
         this.idEquipe = idEquipe;
     }
 

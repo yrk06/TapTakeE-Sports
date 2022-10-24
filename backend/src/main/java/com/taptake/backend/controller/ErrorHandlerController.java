@@ -15,13 +15,11 @@ public class ErrorHandlerController implements ErrorController {
     @GetMapping
     public String error(HttpServletRequest request, HttpServletResponse resp) {
 
-        switch (resp.getStatus()) {
-            case 401:
-                return "/error?error=401";
-            case 404:
-                return "/error?error=404";
-            default:
-                return "index.html";
+        if (request.getParameter("error") == null) {
+            System.out.println("forward:/error?error=" + resp.getStatus());
+            return "redirect:/error?error=" + resp.getStatus();
+        } else {
+            return "index.html";
         }
     }
 }

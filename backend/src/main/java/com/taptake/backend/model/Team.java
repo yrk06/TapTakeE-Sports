@@ -35,6 +35,18 @@ public class Team implements Serializable {
     @ManyToMany(mappedBy = "equipes")
     private Set<Match> partidas;
 
+    @OneToMany
+    @JoinColumn(name = "idEquipe")
+    private Set<Player> players;
+
+    public Set<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Set<Player> players) {
+        this.players = players;
+    }
+
     public Set<Match> getPartidas() {
         return partidas;
     }

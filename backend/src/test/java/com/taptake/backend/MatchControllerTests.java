@@ -3,12 +3,8 @@ package com.taptake.backend;
 
 import com.taptake.backend.DTO.MatchDTO;
 import com.taptake.backend.controller.MatchController;
-import com.taptake.backend.model.Championship;
-import com.taptake.backend.model.Match;
-import com.taptake.backend.model.Team;
-import com.taptake.backend.service.ChampionshipService;
-import com.taptake.backend.service.MatchService;
-import com.taptake.backend.service.TeamService;
+import com.taptake.backend.model.*;
+import com.taptake.backend.service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,6 +34,12 @@ class MatchControllerTests {
 
     @MockBean
     TeamService ts;
+
+    @MockBean
+    MatchPerformanceService mps;
+
+    @MockBean
+    PlayerService ps;
 
     @Autowired
     @InjectMocks
@@ -193,6 +195,44 @@ class MatchControllerTests {
         MatchDTO matchDTO = new MatchDTO();
         matchDTO.setIdCampeonato(id2.toString());
         ResponseEntity<?> re = mc.update(matchDTO,UUID.randomUUID().toString());
+        assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
+    }
+    @Test
+    void updateScoreValid(){
+        Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.of(new Match()));
+        Mockito.when(ps.findById(any(UUID.class))).thenReturn(Optional.of(new Player()));
+        UUID id = UUID.randomUUID();
+        Player p = new Player();
+        p.setIdJogador(id);
+        ArrayList<MatchPerformance> lst = new ArrayList<>();
+        MatchPerformance mp = new MatchPerformance();
+        mp.setPlayer(p);
+        lst.add(mp);
+        Mockito.when(mps.findByMatch(any(Match.class))).thenReturn(lst);
+        ResponseEntity<?> re = mc.recordScore(UUID.randomUUID().toString(), id.toString(), 12);
+        assertEquals(HttpStatus.OK, re.getStatusCode());
+    }
+
+    @Test
+    void updateScoreInvalidMatch(){
+        Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.empty());
+        ResponseEntity<?> re = mc.recordScore(UUID.randomUUID().toString(), UUID.randomUUID().toString(), 12);
+        assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
+    }
+    @Test
+    void updateScoreInvalidPlayer(){
+        Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.of(new Match()));
+        Mockito.when(ps.findById(any(UUID.class))).thenReturn(Optional.empty());
+        ResponseEntity<?> re = mc.recordScore(UUID.randomUUID().toString(), UUID.randomUUID().toString(), 12);
+        assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
+    }
+
+    @Test
+    void updateScorePlayerNotFound(){
+        Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.of(new Match()));
+        Mockito.when(ps.findById(any(UUID.class))).thenReturn(Optional.of(new Player()));
+        Mockito.when(mps.findByMatch(any(Match.class))).thenReturn(new ArrayList<>());
+        ResponseEntity<?> re = mc.recordScore(UUID.randomUUID().toString(), UUID.randomUUID().toString(), 12);
         assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
     }
 
