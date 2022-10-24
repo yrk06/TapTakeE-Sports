@@ -67,6 +67,7 @@ class LoginForm extends React.Component {
                         Login
                       </button>
                     </div>
+                    <a className="text-muted mt-2" href="/cadastrar">Não possui cadastro?</a>
                   </form>
                 </div>
               </div>

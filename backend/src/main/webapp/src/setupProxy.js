@@ -11,7 +11,7 @@ module.exports = function (app) {
     );
     app.use(
         '/login',
-        createProxyMiddleware({
+        createProxyMiddleware((req) => req.method === 'POST', {
             target: 'http://localhost:8090',
             changeOrigin: true,
         })

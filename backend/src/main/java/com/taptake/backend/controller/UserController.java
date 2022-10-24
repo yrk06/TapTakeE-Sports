@@ -3,6 +3,7 @@ package com.taptake.backend.controller;
 import com.taptake.backend.DTO.UserDTO;
 import com.taptake.backend.model.User;
 import com.taptake.backend.service.UserService;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Optional;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/user")
@@ -22,14 +28,21 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<Object> savePerson(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<Object> savePerson(HttpServletRequest request, @RequestBody UserDTO userDTO) {
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
         if (userService.findByEmail(userDTO.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        var user = new User();
+        User user = new User();
         BeanUtils.copyProperties(userDTO, user);
         user.setSenha(bc.encode(user.getSenha()));
+        user = userService.save(user);
+        try {
+            request.login(userDTO.getEmail(), userDTO.getSenha());
+        } catch (ServletException e) {
+            Logger logger = LoggerFactory.getLogger(this.getClass());
+            logger.error("Erro ao authenticar usuário", e);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
     }
 
