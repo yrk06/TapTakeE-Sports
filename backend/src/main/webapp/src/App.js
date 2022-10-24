@@ -10,6 +10,7 @@ import ErrorPage from './components/ErrorPage'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoginForm from './components/LoginForm';
+import SignupForm from './components/SignupForm';
 
 function App() {
   const [signed, setSigned] = useState(0)
@@ -21,45 +22,49 @@ function App() {
     }, []
   )
   return (
-    <RouterProvider router={
-      createBrowserRouter([
-        {
-          path: "/",
-          element: <div>
-            <Header signed={signed} />
-            <HomePageContent />
-          </div>
-        },
-        {
-          path: "/error",
-          element: <ErrorPage />
-        },
-        {
-          path: "/login",
-          element: <div>
-            <Header signed={signed} />
-            <LoginForm />
-          </div>
-        }
-        /*{
-          path: "/error",
-          element: <div>
-            <Header />
-            {{
-              '401': <div>
-                <Header />
-                <UnauthorizedContent />
-              </div>,
-              '404': <div>
-                <Header />
-                <NotFoundContent />
-              </div>,
-            }[useSearchParams()[0].get("error")]}
-            <HomePageContent />
-          </div>
-          }*/
-      ])
-    } />
+    <div>
+      <Header signed={signed} />
+      <RouterProvider router={
+        createBrowserRouter([
+          {
+            path: "/",
+            element: <div>
+
+              <HomePageContent />
+            </div>
+          },
+          {
+            path: "/error",
+            element: <ErrorPage />
+          },
+          {
+            path: "/login",
+            element: <LoginForm />
+          },
+          {
+            path: "/cadastrar",
+            element: <SignupForm />
+          }
+          /*{
+            path: "/error",
+            element: <div>
+              <Header />
+              {{
+                '401': <div>
+                  <Header />
+                  <UnauthorizedContent />
+                </div>,
+                '404': <div>
+                  <Header />
+                  <NotFoundContent />
+                </div>,
+              }[useSearchParams()[0].get("error")]}
+              <HomePageContent />
+            </div>
+            }*/
+        ])
+      } />
+    </div>
   );
 }
 
