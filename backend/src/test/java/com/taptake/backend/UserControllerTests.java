@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import com.taptake.backend.DTO.UserDTO;
 import com.taptake.backend.controller.UserController;
@@ -41,7 +44,9 @@ public class UserControllerTests {
         testUser.setNome("Teste");
         testUser.setSenha("uuuuui");
         testUser.setTelefone("41 99999-9999");
-        ResponseEntity<Object> re = controller.savePerson(testUser);
+
+        HttpServletRequest mhttpsr = Mockito.mock(HttpServletRequest.class);
+        ResponseEntity<Object> re = controller.savePerson(mhttpsr, testUser);
         assertEquals(HttpStatus.CREATED, re.getStatusCode());
     }
 
@@ -53,7 +58,9 @@ public class UserControllerTests {
         testUser.setNome("Teste");
         testUser.setSenha("uuuuui");
         testUser.setTelefone("41 99999-9999");
-        ResponseEntity<Object> re = controller.savePerson(testUser);
+
+        MockHttpServletRequest mhttpsr = new MockHttpServletRequest();
+        ResponseEntity<Object> re = controller.savePerson(mhttpsr, testUser);
         assertEquals(HttpStatus.CONFLICT, re.getStatusCode());
     }
 
