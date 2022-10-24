@@ -12,7 +12,7 @@ class About extends React.Component {
           <img src={historyTapTake} alt="history of TapTake"></img>
         </div>
         <div className="row flex-fill align-items-center">
-          <h2 className="text-center">
+          <h2 className="text-justify">
             O 'TapTake' teve a sua origem na matéria de experiência criativa,
             onde foi desenvolvido um aplicativo com o objetivo de poupar o tempo
             de espera em filas de restaurantes. Após terminar a matéria, tivemos
