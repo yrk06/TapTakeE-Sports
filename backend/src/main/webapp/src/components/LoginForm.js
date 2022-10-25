@@ -18,14 +18,14 @@ class LoginForm extends React.Component {
                 style={{
                   borderStyle: "none",
                   borderRadius: "16px",
-                  background: "rgba(33,37,41,0.81)"
+                  background: "rgba(33,37,41,0.81)",
                 }}
               >
                 <div className="card-body d-flex flex-column align-items-center">
                   <div
                     className="bs-icon-xl bs-icon-circle bs-icon-primary text-primary bs-icon my-4"
                     style={{
-                      background: "var(--gray-dark)"
+                      background: "var(--gray-dark)",
                     }}
                   >
                     <svg
@@ -61,7 +61,7 @@ class LoginForm extends React.Component {
                         className="btn btn-primary d-block w-100"
                         type="submit"
                         style={{
-                          borderColor: "var(--bs-black)"
+                          borderColor: "var(--bs-black)",
                         }}
                       >
                         Login
