@@ -47,7 +47,7 @@ class Header extends React.Component {
               id="navcol-1"
             >
               {
-                this.props.signed ?
+                !this.props.signed ?
                   <AnonHeaderLinks /> :
                   <AuthHeaderLinks />
               }

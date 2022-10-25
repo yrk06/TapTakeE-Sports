@@ -4,6 +4,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -14,25 +15,28 @@ public class Player implements Serializable {
     @Type(type = "uuid-char")
     private UUID idJogador;
 
-    // "Jogador" idEquipe foreign key has been changed from "NOT NULL" into a
-    // possible null
-    // We forgot to implement the Equipe model before these ones
-    // #BlameGabu
-    @Column(nullable = true)
-    private UUID idEquipe;
-    // alterar para foreign key dps quando tiver a parte da equipe criada
-    /*
-     * @ManyToOne
-     * 
-     * @JoinColumn(name="idEquipe", referencedColumnName="idEquipe")
-     * private Equipe equipe
-     */
+    @ManyToOne
+    @JoinColumn(name = "idEquipe")
+    private Team team;
 
     @Column(nullable = false)
     private String nome;
 
     @Column(nullable = false)
     private String cargo;
+
+    // PARTICIPAÇOES PARTIDA
+    @OneToMany
+    @JoinColumn(name = "idJogador")
+    private Set<MatchPerformance> matchPerformances;
+
+    public Set<MatchPerformance> getMatchPerformances() {
+        return matchPerformances;
+    }
+
+    public void setMatchPerformances(Set<MatchPerformance> matchPerformances) {
+        this.matchPerformances = matchPerformances;
+    }
 
     public UUID getIdJogador() {
         return idJogador;
@@ -42,12 +46,12 @@ public class Player implements Serializable {
         this.idJogador = idJogador;
     }
 
-    public UUID getIdEquipe() {
-        return idEquipe;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setIdEquipe(UUID idEquipe) {
-        this.idEquipe = idEquipe;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public String getNome() {

@@ -16,6 +16,13 @@ import Lineup from "./components/Lineup";
 import UpdateForm from "./components/UpdateForm";
 import CreateForm from "./components/CreateForm";
 
+import Header from './components/Header'
+import HomePageContent from './components/HomePageContent'
+import ErrorPage from './components/ErrorPage'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import LoginForm from './components/LoginForm';
+import SignupForm from './components/SignupForm';
 
 function App() {
   const [signed, setSigned] = useState(0);
@@ -29,27 +36,62 @@ function App() {
     getSigned();
   }, []);
   return (
-    <RouterProvider
-      router={createBrowserRouter([
-        {
-          path: "/",
+    <div>
+      <Header signed={signed} />
+      <RouterProvider router={
+        createBrowserRouter([
+          {
+            path: "/",
+            element: <div>
+
+              <HomePageContent />
+            </div>
+          },
+          {
+            path: "/error",
+            element: <ErrorPage />
+          },
+          {
+            path: "/login",
+            element: <LoginForm />
+          },
+          {
+            path: "/cadastrar",
+            element: <SignupForm />
+          },
+          {
+          path: "/UpdateForm",
           element: (
             <div>
               <Header signed={signed} />
-              <HomePageContent />
+              <UpdateForm />
             </div>
           ),
         },
         {
-          path: "/error",
-          element: <ErrorPage />,
-        },
-        {
-          path: "/login",
+          path: "/CreateForm",
           element: (
             <div>
               <Header signed={signed} />
-              <LoginForm />
+              <CreateForm />
+            </div>
+          ),
+        },
+        {
+          path: "/Cast",
+          element: (
+            <div>
+              <Header signed={signed} />
+              <Cast />
+            </div>
+          ),
+        },
+        {
+          path: "/Lineup",
+          element: (
+            <div>
+              <Header signed={signed} />
+              <Lineup />
             </div>
           ),
         },
@@ -89,44 +131,9 @@ function App() {
             </div>
           ),
         },
-        {
-          path: "/Cast",
-          element: (
-            <div>
-              <Header signed={signed} />
-              <Cast />
-            </div>
-          ),
-        },
-        {
-          path: "/Lineup",
-          element: (
-            <div>
-              <Header signed={signed} />
-              <Lineup />
-            </div>
-          ),
-        },
-        {
-          path: "/UpdateForm",
-          element: (
-            <div>
-              <Header signed={signed} />
-              <UpdateForm />
-            </div>
-          ),
-        },
-        {
-          path: "/CreateForm",
-          element: (
-            <div>
-              <Header signed={signed} />
-              <CreateForm />
-            </div>
-          ),
-        },
-      ])}
-    />
+        ])
+      } />
+    </div>
   );
 }
 
