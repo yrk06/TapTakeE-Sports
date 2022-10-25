@@ -21,7 +21,7 @@ public class PlayerUserTeam implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idEquipeUsuario")
-    private UserTeam Userteam;
+    private UserTeam userTeam;
 
     @ManyToOne
     @JoinColumn(name = "idJogador")
@@ -42,11 +42,11 @@ public class PlayerUserTeam implements Serializable {
     }
 
     public UserTeam getUserteam() {
-        return Userteam;
+        return userTeam;
     }
 
     public void setUserteam(UserTeam userteam) {
-        this.Userteam = userteam;
+        this.userTeam = userteam;
     }
 
     public Player getPlayer() {

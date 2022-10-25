@@ -2,6 +2,7 @@ package com.taptake.backend.controller;
 
 import com.taptake.backend.DTO.UserTeamDTO;
 import com.taptake.backend.model.Game;
+import com.taptake.backend.model.Player;
 import com.taptake.backend.model.User;
 
 import com.taptake.backend.model.UserTeam;
@@ -11,8 +12,13 @@ import com.taptake.backend.service.UserTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,20 +35,28 @@ public class UserTeamController {
     @Autowired
     private GameService gameService;
 
-
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody UserTeamDTO userTeamDTO) {
-        Optional<User> optionalUser = userService.findById(UUID.fromString(userTeamDTO.getIdUsuario()));
-        if (optionalUser.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        // Get user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if ((authentication instanceof AnonymousAuthenticationToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+        String currentUserName = authentication.getName();
+
+        // If user is authenticated, the service must find it
+        User user = userService.findByEmail(currentUserName).get();
+
         Optional<Game> optionalGame = gameService.findById(UUID.fromString(userTeamDTO.getIdJogo()));
         if (optionalGame.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        var userTeam = new UserTeam();
-        userTeam.setUser(optionalUser.get());
+        UserTeam userTeam = new UserTeam();
+        userTeam.setUser(user);
         userTeam.setGame(optionalGame.get());
 
         userTeam = userTeamService.save(userTeam);
@@ -69,43 +83,32 @@ public class UserTeamController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-//    @PutMapping
-//    public ResponseEntity<Object> update(@RequestBody UserTeamDTO userTeamDTO, @RequestParam String id) {
-//        Optional<UserTeam> optional_UserTeam = userTeamService.findById(UUID.fromString(id));
-//
-//        if (optional_UserTeam.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//
-//        Optional<User> optional_User = userService.findById(UUID.fromString(userTeamDTO.getIdUsuario()));
-//        if (optional_User.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//
-//        Optional<Game> optional_Game = gameService.findById(UUID.fromString(userTeamDTO.getIdJogo()));
-//        if (optional_Game.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//
-//        UserTeam updateUserTeam = optional_UserTeam.get();
-//
-//        if (!updateUserTeam.getUser().getIdUsuario().equals(optional_User.get().getIdUsuario())){
-//            updateUserTeam.setUser(optional_User.get());
-//        }
-//
-//        if (!updateUserTeam.getGame().getIdJogo().equals(optional_Game.get().getIdJogo())){
-//            updateUserTeam.setGame(optional_Game.get());
-//        }
-//
-//        if (!optional_UserTeam.get().getUser().getIdUsuario().toString().equals(userTeamDTO.getIdUsuario())) {
-//            updateUserTeam.setUser(optional_User.get());
-//        }
-//        if (!optional_UserTeam.get().getGame().getIdJogo().toString().equals(userTeamDTO.getIdJogo())) {
-//            updateUserTeam.setGame(optional_Game.get());
-//        }
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(userTeamService.update(updateUserTeam));
-//
-//    }
+    @PutMapping
+    public ResponseEntity<Object> update(@RequestBody UserTeamDTO userTeamDTO,
+            @RequestParam String id) {
+
+        Optional<UserTeam> optional_UserTeam = userTeamService.findById(UUID.fromString(id));
+
+        if (optional_UserTeam.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        UserTeam updateUserTeam = optional_UserTeam.get();
+
+        if (!updateUserTeam.getGame().getIdJogo().toString().equals(userTeamDTO.getIdJogo())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        if (!updateUserTeam.getUser().getIdUsuario().toString().equals(userTeamDTO.getIdJogo())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        if (userTeamDTO.getPlayers().size() > updateUserTeam.getGame().getQuantidadeJogadores()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(userTeamService.update(updateUserTeam));
+
+    }
 
 }

@@ -1,17 +1,11 @@
 package com.taptake.backend.DTO;
 
+import java.util.List;
+
 public class UserTeamDTO {
 
-    private String idUsuario;
     private String idJogo;
-
-    public String getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(String idUsuario) {
-        this.idUsuario = idUsuario;
-    }
+    private List<String> players;
 
     public String getIdJogo() {
         return idJogo;
@@ -19,6 +13,14 @@ public class UserTeamDTO {
 
     public void setIdJogo(String idJogo) {
         this.idJogo = idJogo;
+    }
+
+    public List<String> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<String> idEquipes) {
+        this.players = idEquipes;
     }
 
 }

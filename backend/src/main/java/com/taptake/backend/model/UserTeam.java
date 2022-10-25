@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -25,6 +26,9 @@ public class UserTeam implements Serializable {
     @OneToOne
     @JoinColumn(name = "idJogo")
     private Game game;
+
+    @OneToMany(mappedBy = "userTeam")
+    private Set<PlayerUserTeam> players;
 
     public UUID getIdEquipeUsuario() {
         return idEquipeUsuario;
@@ -48,6 +52,14 @@ public class UserTeam implements Serializable {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public Set<PlayerUserTeam> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Set<PlayerUserTeam> players) {
+        this.players = players;
     }
 
 }
