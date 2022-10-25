@@ -1,19 +1,16 @@
 import React from "react";
-import historyTapTake from "../assets/historyTapTake.png";
+import logoTapTake from "../assets/logoTapTake.png";
 
 class About extends React.Component {
   render() {
     return (
-      <div
-        className="container d-flex flex-column"
-        style={{ height: " calc(100vh - 82px)" }}
-      >
+      <div className="container d-flex flex-column" style={{ height: " calc(100vh - 82px)" }}>
         <div className="d-flex justify-content-center">
-          <img src={historyTapTake} alt="history of TapTake"></img>
+          <img src={logoTapTake} alt="history of TapTake"></img>
         </div>
         <div className="row flex-fill align-items-center">
           <h2 className="text-justify">
-            O 'TapTake' teve a sua origem na matéria de experiência criativa,
+            &nbsp; &nbsp; O 'TapTake' teve a sua origem na matéria de experiência criativa,
             onde foi desenvolvido um aplicativo com o objetivo de poupar o tempo
             de espera em filas de restaurantes. Após terminar a matéria, tivemos
             o o JIP (Jogos Internos da PUC) e por um equívoco do nosso capitão,
