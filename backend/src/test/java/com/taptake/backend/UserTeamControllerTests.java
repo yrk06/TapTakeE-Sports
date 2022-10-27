@@ -8,14 +8,17 @@ import com.taptake.backend.controller.UserTeamController;
 import com.taptake.backend.model.Game;
 import com.taptake.backend.model.Player;
 import com.taptake.backend.model.PlayerUserTeam;
+import com.taptake.backend.model.Team;
 import com.taptake.backend.model.User;
 import com.taptake.backend.model.UserTeam;
 import com.taptake.backend.service.GameService;
 import com.taptake.backend.service.PlayerService;
+import com.taptake.backend.service.PlayerUserTeamService;
 import com.taptake.backend.service.UserService;
 import com.taptake.backend.service.UserTeamService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -51,6 +54,9 @@ public class UserTeamControllerTests {
 
     @MockBean
     PlayerService playerService;
+
+    @MockBean
+    PlayerUserTeamService playerUserTeamService;
 
     @Autowired
     @InjectMocks
@@ -291,14 +297,7 @@ public class UserTeamControllerTests {
 
         UserTeamDTO userTeamDTO = new UserTeamDTO();
 
-        Player player = new Player();
-        player.setIdJogador(UUID.randomUUID());
-
-        userTeamDTO.setPlayers(new LinkedList<>() {
-            {
-                add(player.getIdJogador().toString());
-            }
-        });
+        
 
         User user = new User();
         Game game = new Game();
@@ -314,10 +313,24 @@ public class UserTeamControllerTests {
 
         userTeamDTO.setIdJogo(game.getIdJogo().toString());
 
+        Player player = new Player();
+        player.setIdJogador(UUID.randomUUID());
+
+        userTeamDTO.setPlayers(new LinkedList<>() {
+            {
+                add(player.getIdJogador().toString());
+            }
+        });
+
+        Team team = new Team();
+        team.setGame(game);
+        player.setTeam(team);
+
 
         Mockito.when(userService.findByEmail(anyString())).thenReturn(Optional.of(user));
         Mockito.when(userTeamService.findById(any(UUID.class))).thenReturn(Optional.of(userTeam));
         Mockito.when(playerService.findById(player.getIdJogador())).thenReturn(Optional.of(player));
+        Mockito.when(playerUserTeamService.save(any(PlayerUserTeam.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
         ResponseEntity<?> re = userTeamController.update(userTeamDTO, userTeam.getIdEquipeUsuario().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
@@ -340,6 +353,13 @@ public class UserTeamControllerTests {
 
         UserTeamDTO userTeamDTO = new UserTeamDTO();
 
+        User user = new User();
+        Game game = new Game();
+        UserTeam userTeam = new UserTeam();
+
+        game.setIdJogo(UUID.randomUUID());
+        game.setQuantidadeJogadores(1);
+
         Player player = new Player();
         player.setIdJogador(UUID.randomUUID());
 
@@ -349,12 +369,9 @@ public class UserTeamControllerTests {
             }
         });
 
-        User user = new User();
-        Game game = new Game();
-        UserTeam userTeam = new UserTeam();
-
-        game.setIdJogo(UUID.randomUUID());
-        game.setQuantidadeJogadores(1);
+        Team team = new Team();
+        team.setGame(game);
+        player.setTeam(team);
 
         userTeam.setUser(user);
         userTeam.setIdEquipeUsuario(UUID.randomUUID());
@@ -455,6 +472,12 @@ public class UserTeamControllerTests {
         game.setIdJogo(UUID.randomUUID());
         game.setQuantidadeJogadores(1);
 
+
+        Team team = new Team();
+        team.setGame(game);
+        player.setTeam(team);
+        player2.setTeam(team);
+
         userTeam.setUser(user);
         userTeam.setIdEquipeUsuario(UUID.randomUUID());
         userTeam.setGame(game);
@@ -470,6 +493,7 @@ public class UserTeamControllerTests {
         Mockito.when(userTeamService.findById(any(UUID.class))).thenReturn(Optional.of(userTeam));
         Mockito.when(playerService.findById(player.getIdJogador())).thenReturn(Optional.of(player));
         Mockito.when(playerService.findById(player2.getIdJogador())).thenReturn(Optional.of(player2));
+        Mockito.when(playerUserTeamService.save(any(PlayerUserTeam.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
         ResponseEntity<?> re = userTeamController.update(userTeamDTO, userTeam.getIdEquipeUsuario().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
