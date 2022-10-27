@@ -3,11 +3,13 @@ package com.taptake.backend.controller;
 import com.taptake.backend.DTO.UserTeamDTO;
 import com.taptake.backend.model.Game;
 import com.taptake.backend.model.Player;
+import com.taptake.backend.model.PlayerUserTeam;
 import com.taptake.backend.model.User;
 
 import com.taptake.backend.model.UserTeam;
 import com.taptake.backend.service.GameService;
 import com.taptake.backend.service.PlayerService;
+import com.taptake.backend.service.PlayerUserTeamService;
 import com.taptake.backend.service.UserService;
 import com.taptake.backend.service.UserTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +39,9 @@ public class UserTeamController {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private PlayerUserTeamService playerUserTeamService;
 
     @Autowired
     private GameService gameService;
@@ -159,19 +165,42 @@ public class UserTeamController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        for (Player p : updateUserTeam.getActivePlayers()) {
-            if (!userTeamDTO.getPlayers().contains(p.getIdJogador().toString())) {
-                updateUserTeam.removeActivePlayer(p);
-            }
-        }
-
         for (String playerid : userTeamDTO.getPlayers()) {
             Optional<Player> optPlayer = playerService.findById(UUID.fromString(playerid));
 
-            if (!optPlayer.isPresent()) {
+            if (!optPlayer.isPresent() || optPlayer.get().getTeam().getGame() != updateUserTeam.getGame()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
-            updateUserTeam.addActivePlayer(optPlayer.get());
+            boolean skip = false;
+            for (PlayerUserTeam pteam : updateUserTeam.getPlayers()) {
+                if (pteam.getPlayer() == optPlayer.get() && pteam.getDataSaida() == null) {
+                    skip = true;
+                    break;
+                }
+            }
+            if (skip)
+                break;
+            PlayerUserTeam newPlayer = new PlayerUserTeam();
+            newPlayer.setDataEntrada(new Date());
+            newPlayer.setDataSaida(null);
+            newPlayer.setPlayer(optPlayer.get());
+            newPlayer.setUserteam(updateUserTeam);
+
+            newPlayer = playerUserTeamService.save(newPlayer);
+            updateUserTeam.getPlayers().add(newPlayer);
+        }
+
+        for (Player p : updateUserTeam.getActivePlayers()) {
+            if (!userTeamDTO.getPlayers().contains(p.getIdJogador().toString())) {
+
+                for (PlayerUserTeam pteam : updateUserTeam.getPlayers()) {
+                    if (pteam.getPlayer() == p && pteam.getDataSaida() == null) {
+                        pteam.setDataSaida(new Date());
+
+                        playerUserTeamService.update(pteam);
+                    }
+                }
+            }
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(userTeamService.update(updateUserTeam));

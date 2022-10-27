@@ -111,7 +111,7 @@ CREATE TABLE JogadorTimeUsuario (
     idJogador CHAR(36) NOT NULL,
 	FOREIGN KEY(idJogador) REFERENCES Jogador (idJogador),
 	dataEntrada DATE NOT NULL,
-	dataSaida DATE
+	dataSaida DATE NULL
 
 );
 

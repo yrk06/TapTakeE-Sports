@@ -76,27 +76,4 @@ public class UserTeam implements Serializable {
 
         return active;
     }
-
-    // We need to change this back into the controller, to allow persistance
-    public void removeActivePlayer(Player p) {
-        for (PlayerUserTeam pteam : this.players) {
-            if (pteam.getPlayer() == p && pteam.getDataSaida() == null) {
-                pteam.setDataSaida(new Date());
-            }
-        }
-    }
-
-    public void addActivePlayer(Player p) {
-        for (PlayerUserTeam pteam : this.players) {
-            if (pteam.getPlayer() == p && pteam.getDataSaida() == null) {
-                return;
-            }
-        }
-        PlayerUserTeam newPlayer = new PlayerUserTeam();
-        newPlayer.setDataEntrada(new Date());
-        newPlayer.setDataSaida(null);
-        newPlayer.setPlayer(p);
-        this.players.add(newPlayer);
-    }
-
 }

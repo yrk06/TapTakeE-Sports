@@ -3,6 +3,7 @@ package com.taptake.backend.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.Type;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,7 +31,8 @@ public class PlayerUserTeam implements Serializable {
     @Column
     private Date dataEntrada;
 
-    @Column(nullable = false)
+    @Column
+    @Nullable
     private Date dataSaida;
 
     public UUID getIdJogadorTimeUsuario() {
