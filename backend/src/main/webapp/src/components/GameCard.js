@@ -5,7 +5,7 @@ class GameCard extends React.Component {
         return (
 
             <div className="col-4 mt-5">
-                <div className="card text-center" style={{ backgroundColor: "var(--taptake-dark-1)", borderRadius: "8px" }}>
+                <div className="card text-center" style={{backgroundColor: "var(--taptake-dark-1)", borderRadius: "8px" }}>
 
                     <div className="card-body">
                         <h5 className="card-title font-weight-bold">
