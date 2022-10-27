@@ -6,6 +6,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -60,6 +63,40 @@ public class UserTeam implements Serializable {
 
     public void setPlayers(Set<PlayerUserTeam> players) {
         this.players = players;
+    }
+
+    public List<Player> getActivePlayers() {
+        List<Player> active = new LinkedList<Player>();
+
+        for (PlayerUserTeam pteam : this.players) {
+            if (pteam.getDataSaida() == null) {
+                active.add(pteam.getPlayer());
+            }
+        }
+
+        return active;
+    }
+
+    // We need to change this back into the controller, to allow persistance
+    public void removeActivePlayer(Player p) {
+        for (PlayerUserTeam pteam : this.players) {
+            if (pteam.getPlayer() == p && pteam.getDataSaida() == null) {
+                pteam.setDataSaida(new Date());
+            }
+        }
+    }
+
+    public void addActivePlayer(Player p) {
+        for (PlayerUserTeam pteam : this.players) {
+            if (pteam.getPlayer() == p && pteam.getDataSaida() == null) {
+                return;
+            }
+        }
+        PlayerUserTeam newPlayer = new PlayerUserTeam();
+        newPlayer.setDataEntrada(new Date());
+        newPlayer.setDataSaida(null);
+        newPlayer.setPlayer(p);
+        this.players.add(newPlayer);
     }
 
 }

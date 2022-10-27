@@ -42,8 +42,7 @@ CREATE TABLE TimeUsuario (
     idUsuario CHAR(36) NOT NULL,
     FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
 	idJogo CHAR(36) NOT NULL,
-    FOREIGN KEY(IdJogo) REFERENCES Jogo (idJogo),
-    pontos INT NOT NULL
+    FOREIGN KEY(IdJogo) REFERENCES Jogo (idJogo)
 );
 
 CREATE TABLE Organizacao (

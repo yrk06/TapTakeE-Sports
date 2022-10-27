@@ -11,5 +11,6 @@ import java.util.UUID;
 
 @Repository
 public interface PlayerUserTeamRepository extends JpaRepository<PlayerUserTeam, UUID> {
-    List<PlayerUserTeam> findByUserteam(UserTeam userteam);
+
+    List<PlayerUserTeam> findByUserTeam(UserTeam userteam);
 }

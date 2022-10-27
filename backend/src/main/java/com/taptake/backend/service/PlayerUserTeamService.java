@@ -22,15 +22,13 @@ public class PlayerUserTeamService {
         return playerUserTeamRepository.save(playerUserTeamm);
     }
 
-
     public void delete(UUID id) {
         playerUserTeamRepository.deleteById(id);
     }
 
     public List<PlayerUserTeam> findByUserteam(UserTeam Userteam) {
-        return playerUserTeamRepository.findByUserteam(Userteam);
+        return playerUserTeamRepository.findByUserTeam(Userteam);
     }
-
 
     public Optional<PlayerUserTeam> findById(UUID id) {
         return playerUserTeamRepository.findById(id);
