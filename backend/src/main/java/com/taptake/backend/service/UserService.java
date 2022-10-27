@@ -32,4 +32,8 @@ public class UserService {
     public User update(User user){
         return userRepository.save(user);
     }
+
+    public Optional<User> findById(UUID id) {
+        return userRepository.findById(id);
+    }
 }
