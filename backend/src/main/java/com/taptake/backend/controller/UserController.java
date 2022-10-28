@@ -43,20 +43,19 @@ public class UserController {
             Logger logger = LoggerFactory.getLogger(this.getClass());
             logger.error("Erro ao authenticar usuário", e);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user).generateDRO());
     }
 
     @GetMapping
     public ResponseEntity<Object> getAuthenticatedUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
-
-            User user = userService.findByEmail(currentUserName).get();
-            user.setSenha(null);
-            user.setTelefone(null);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
+            Optional<User> user = userService.findByEmail(currentUserName);
+            if(user.isEmpty()){
+                return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(user.get().generateDRO());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -66,10 +65,11 @@ public class UserController {
     @GetMapping("/findByEmail")
     public ResponseEntity<Object> findByEmail(@RequestParam("email") String email) {
         Optional<User> userOptional = userService.findByEmail(email);
-        if (userOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(userOptional.get());
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.OK).body(userOptional.get().generateDRO());
+
 
     }
 
@@ -95,7 +95,7 @@ public class UserController {
         var user = new User();
         BeanUtils.copyProperties(userDTO, user);
 
-        return ResponseEntity.status(HttpStatus.OK).body(userService.update(user));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.update(user).generateDRO());
     }
 
     @DeleteMapping("/delete")

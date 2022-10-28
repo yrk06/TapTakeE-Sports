@@ -1,5 +1,6 @@
 package com.taptake.backend.model;
 
+import com.taptake.backend.DRO.UserDRO;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -26,6 +27,9 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String telefone;
 
+    public UserDRO generateDRO(){
+        return new UserDRO(this.idUsuario.toString(), this.nome,this.email);
+    }
     public String getTelefone() {
         return telefone;
     }
