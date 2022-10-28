@@ -1,35 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-export default function App() {
+export default function Delete() {
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     return (
-        <div style={{
-            display: 'block',
-            width: 700,
-            padding: 30
-        }}>
-            <h4>Teste da merda da modal</h4>
-            <Modal.Dialog>
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        Sample Modal Heading
-                    </Modal.Title>
+        <>
+            <Button variant="primary" onClick={handleShow}>
+                Deletar
+            </Button>
+
+            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+                <Modal.Header>
+                    <Modal.Title className='text-secondary'>Titulo</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    <p>
-                        This is the sample text for our Modal
-                    </p>
+                <Modal.Body className='text-secondary'>
+                    Você tem certeza que deseja deletar?
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary">
-                        Deletar
-                    </Button>
-                    <Button variant="secondary">
+                    <Button variant="secondary" onClick={handleClose}>
                         Cancelar
                     </Button>
+                    <Button variant="primary">Deletar</Button>
                 </Modal.Footer>
-            </Modal.Dialog>
-        </div>
+            </Modal>
+        </>
     );
 }
