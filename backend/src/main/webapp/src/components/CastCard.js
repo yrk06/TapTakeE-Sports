@@ -16,6 +16,11 @@ class CastCard extends React.Component {
                                 `${this.props.players} Jogadores`
                             }
                         </p>
+                        <p className="card-text">
+                            {
+                                `${this.props.points} Pontos`
+                            }
+                        </p>
                         <a href="#" className="btn btn-info d-block w-50 mx-auto mt-2">Ver</a>
 
                         {this.props.admin ? <a href="#" className="btn btn-primary d-block w-50 mx-auto mt-2">Editar</a> : null}

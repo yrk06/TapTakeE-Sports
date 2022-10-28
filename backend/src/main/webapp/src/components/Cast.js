@@ -15,18 +15,17 @@ class Cast extends React.Component {
                         <input className="form-control" placeholder="Digite o jogador desejado"></input>
                         <div className="input-group-append"><button className="btn btn-primary">Pesquisar</button></div>
                     </div>
-                </div>
-
-                <div className="row justify-content-left">
-                    <CastCard name="League of Legends" players={2} admin={false} />
-                    <CastCard name="Counter Strike" players={3} admin={false} />
-                    <CastCard name="Valorant" players={4} admin={false} />
-
-                    <div className="col-4 d-flex justify-content-center align-items-center ">
+                    <div className="col-4 d-flex float-right ">
                         {
                             this.props.admin ? <IconButton variant="contained" className="btn mt-5 rounded-circle" style={{ backgroundColor: "var(--taptake-dark-1)", width: "48px", height: "48px" }}> <AddIcon sx={{ color: "#FFFFFF" }} /></IconButton> : null
                         }
                     </div>
+                </div>
+
+                <div className="row justify-content-left">
+                    <CastCard name="League of Legends" players={0} points={0} admin={true} />
+                    <CastCard name="Counter Strike" players={3} points={100} admin={true} />
+                    <CastCard name="Valorant" players={4} points={80} admin={true} />
                 </div>
             </div >
         );
