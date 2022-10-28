@@ -18,8 +18,8 @@ class GameCard extends React.Component {
                                 `${this.props.players} Jogadores`
                             }
                         </p>
-                        {this.props.admin ? <a href="#" className="btn btn-outline-primary d-block w-50 mx-auto mt-2">Editar</a> : null}
-                        {this.props.admin ? <a href="#" className="btn btn-danger d-block w-50 mx-auto mt-2">Apagar</a> : null}
+                        {this.props.admin ? <a href="/error?error=404" className="btn btn-outline-primary d-block w-50 mx-auto mt-2">Editar</a> : null}
+                        {this.props.admin ? <a href="/error?error=404" className="btn btn-danger d-block w-50 mx-auto mt-2">Apagar</a> : null}
                     </div>
                 </div>
             </div>
