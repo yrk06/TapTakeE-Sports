@@ -1,5 +1,6 @@
 package com.taptake.backend.controller;
 
+import com.taptake.backend.DRO.TeamDRO;
 import com.taptake.backend.DTO.TeamDTO;
 import com.taptake.backend.model.Game;
 import com.taptake.backend.model.Organization;
@@ -36,7 +37,7 @@ public class TeamController {
     public ResponseEntity<Object> save(@RequestBody TeamDTO teamDTO){
         Optional<Game> optionalGame = gs.findById(UUID.fromString(teamDTO.getIdJogo()));
         Optional<Organization> optionalOrganization = os.findById(UUID.fromString(teamDTO.getIdOrg()));
-        if(!optionalGame.isPresent() || !optionalOrganization.isPresent()){
+        if(optionalGame.isEmpty() || optionalOrganization.isEmpty()){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         List<Team> lt = ts.findAllByNomeTime(teamDTO.getNomeTime());
@@ -48,7 +49,7 @@ public class TeamController {
         Set<Player> players = new HashSet<>();
         for(String idPlayer : teamDTO.getIdJogadores()){
             Optional<Player> opt = ps.findById(UUID.fromString(idPlayer));
-            if(!opt.isPresent()){
+            if(opt.isEmpty()){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
             players.add(opt.get());
@@ -58,7 +59,7 @@ public class TeamController {
         team.setOrg(optionalOrganization.get());
         team.setNomeTime(teamDTO.getNomeTime());
         team.setPlayers(players);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ts.save(team));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ts.save(team).generateDRO());
     }
     @DeleteMapping
     public ResponseEntity<Object> deleteOne(@RequestParam String id){
@@ -67,40 +68,59 @@ public class TeamController {
     }
     @GetMapping
     public ResponseEntity<Object> getAll(){
-
-        return ResponseEntity.status(HttpStatus.OK).body(ts.findAll());
+        List<Team> lt = ts.findAll();
+        List<TeamDRO> ltdro = new ArrayList<>();
+        for(Team t : lt){
+            ltdro.add(t.generateDRO());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ltdro);
 
     }
 
     @GetMapping("/id/org")
     public ResponseEntity<Object> findByOrg(@RequestParam String idOrg){
         Optional<Organization> optionalOrganization= os.findById(UUID.fromString(idOrg));
-        if(!optionalOrganization.isPresent()){
+        if(optionalOrganization.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(ts.findAllByOrg(optionalOrganization.get()));
+        List<Team> lt = ts.findAllByOrg(optionalOrganization.get());
+        List<TeamDRO> ltdro = new ArrayList<>();
+        for(Team t : lt){
+            ltdro.add(t.generateDRO());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ltdro);
     }
     @GetMapping("/id/jogo")
     public ResponseEntity<Object> getAllByGame(@RequestParam String idJogo){
         Optional<Game> game = gs.findById(UUID.fromString(idJogo));
-        if(!game.isPresent()){
+        if(game.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(ts.findAllByGame(game.get()));
+        List<Team> lt = ts.findAllByGame(game.get());
+        List<TeamDRO> ltdro = new ArrayList<>();
+        for(Team t : lt){
+            ltdro.add(t.generateDRO());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ltdro);
 
     }
     @GetMapping("/id")
     public ResponseEntity<Object> findById(@RequestParam String id){
         Optional<Team> optionalTeam = ts.findById(UUID.fromString(id));
-        if(!optionalTeam.isPresent()){
+        if(optionalTeam.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(optionalTeam.get());
+        return ResponseEntity.status(HttpStatus.OK).body(optionalTeam.get().generateDRO());
     }
 
     @GetMapping("/name")
     public ResponseEntity<Object> findAllByNomeTime(@RequestParam String nomeTime){
-        return ResponseEntity.status(HttpStatus.OK).body(ts.findAllByNomeTime(nomeTime));
+        List<Team> lt = ts.findAllByNomeTime(nomeTime);
+        List<TeamDRO> ltdro = new ArrayList<>();
+        for(Team t : lt){
+            ltdro.add(t.generateDRO());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ltdro);
     }
 
     @PutMapping
@@ -108,10 +128,10 @@ public class TeamController {
         Optional<Game> optionalGame = gs.findById(UUID.fromString(teamDTO.getIdJogo()));
         Optional<Organization> optionalOrganization = os.findById(UUID.fromString(teamDTO.getIdOrg()));
         Optional<Team> optionalTeam = ts.findById(UUID.fromString(id));
-        if (!optionalTeam.isPresent()) {
+        if (optionalTeam.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        if(!optionalGame.isPresent() || !optionalOrganization.isPresent()){
+        if(optionalGame.isEmpty() || optionalOrganization.isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
@@ -133,7 +153,7 @@ public class TeamController {
             }
             newSet.add(opt.get());
         }
-        return ResponseEntity.status(HttpStatus.OK).body(ts.update(savedTeam));
+        return ResponseEntity.status(HttpStatus.OK).body(ts.update(savedTeam).generateDRO());
     }
 
 }
