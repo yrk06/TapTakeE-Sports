@@ -2,6 +2,9 @@ package com.taptake.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.taptake.backend.DRO.PlayerDRO;
+import com.taptake.backend.DRO.UserTeamDRO;
+
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -75,5 +78,23 @@ public class UserTeam implements Serializable {
         }
 
         return active;
+    }
+
+    public UserTeamDRO generateUserTeamDRO() {
+        UserTeamDRO userTeamDRO = new UserTeamDRO();
+
+        userTeamDRO.setGame(game.getIdJogo().toString());
+        userTeamDRO.setUser(user.getIdUsuario().toString());
+        userTeamDRO.setIdEquipeUsuario(idEquipeUsuario.toString());
+
+        List<PlayerDRO> playerDROs = new LinkedList<>();
+
+        for (Player player : this.getActivePlayers()) {
+            playerDROs.add(player.generateDRO());
+        }
+
+        userTeamDRO.setPlayers(playerDROs);
+
+        return userTeamDRO;
     }
 }

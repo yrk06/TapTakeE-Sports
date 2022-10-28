@@ -26,15 +26,17 @@ public class ChampionshipController {
     private GameService gs;
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody ChampionshipDTO cDTO){
+    public ResponseEntity<?> save(@RequestBody ChampionshipDTO cDTO) {
 
         List<Championship> cList = cs.findAllByNome(cDTO.getNome());
         Optional<Game> og = gs.findById(UUID.fromString(cDTO.getIdJogo()));
-        if(!og.isPresent()){
+        if (!og.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        for (Championship c : cList){
-            if((c.getGame().getIdJogo().equals(UUID.fromString(cDTO.getIdJogo())) && c.getNome().equals(cDTO.getNome()) && c.getPremiacao()==cDTO.getPremiacao() && c.getLocalCampeonato().equals(cDTO.getLocalCampeonato()))){
+        for (Championship c : cList) {
+            if ((c.getGame().getIdJogo().equals(UUID.fromString(cDTO.getIdJogo())) && c.getNome().equals(cDTO.getNome())
+                    && c.getPremiacao() == cDTO.getPremiacao()
+                    && c.getLocalCampeonato().equals(cDTO.getLocalCampeonato()))) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
             }
         }
@@ -45,47 +47,55 @@ public class ChampionshipController {
         cNew.setLocalCampeonato(cDTO.getLocalCampeonato());
         return ResponseEntity.status(HttpStatus.CREATED).body(cs.save(cNew));
     }
+
     @GetMapping("/id")
-    public ResponseEntity<?> findById(@RequestParam String id){
+    public ResponseEntity<?> findById(@RequestParam String id) {
         Optional<Championship> optC = cs.findById(UUID.fromString(id));
-        if(!optC.isPresent()){
+        if (!optC.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.OK).body(optC.get());
     }
+
     @GetMapping("/name")
-    public ResponseEntity<?> findAllByNome(@RequestParam String nome){
+    public ResponseEntity<?> findAllByNome(@RequestParam String nome) {
         return ResponseEntity.status(HttpStatus.OK).body(cs.findAllByNome(nome));
     }
 
+    @GetMapping
+    public ResponseEntity<Object> findAllByNome() {
+        return ResponseEntity.status(HttpStatus.OK).body(cs.findAll());
+    }
+
     @DeleteMapping
-    public ResponseEntity<?> delete(@RequestParam String id){
+    public ResponseEntity<?> delete(@RequestParam String id) {
         cs.deleteOne(UUID.fromString(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody ChampionshipDTO c, @RequestParam String id){
-        Optional<Championship> oc =  cs.findById(UUID.fromString(id));
+    public ResponseEntity<?> update(@RequestBody ChampionshipDTO c, @RequestParam String id) {
+        Optional<Championship> oc = cs.findById(UUID.fromString(id));
         Optional<Game> og = gs.findById(UUID.fromString(c.getIdJogo()));
 
-        if(!oc.isPresent()){
+        if (!oc.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         Championship savedC = oc.get();
-        if(!og.isPresent()){
+        if (!og.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        if(!savedC.getGame().getIdJogo().equals(c.getIdJogo())){
+        if (!savedC.getGame().getIdJogo().equals(c.getIdJogo())) {
             savedC.setGame(og.get());
         }
-        if(!savedC.getNome().equals(c.getNome())){
+        if (!savedC.getNome().equals(c.getNome())) {
             savedC.setNome(c.getNome());
         }
-        if(savedC.getPremiacao()!=c.getPremiacao()){
+        if (savedC.getPremiacao() != c.getPremiacao()) {
             savedC.setPremiacao(c.getPremiacao());
         }
-        if(!savedC.getLocalCampeonato().equals(c.getLocalCampeonato())){
+        if (!savedC.getLocalCampeonato().equals(c.getLocalCampeonato())) {
             savedC.setLocalCampeonato(c.getLocalCampeonato());
         }
         return ResponseEntity.status(HttpStatus.OK).body(cs.update(savedC));

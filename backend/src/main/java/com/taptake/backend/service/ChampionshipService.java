@@ -15,23 +15,27 @@ public class ChampionshipService {
     @Autowired
     private ChampionshipRepository rep;
 
-    public Championship save(Championship c){
+    public Championship save(Championship c) {
         return rep.save(c);
     }
 
-    public Optional<Championship> findById(UUID id){
+    public Optional<Championship> findById(UUID id) {
         return rep.findById(id);
     }
 
-    public Championship update(Championship c){
+    public Championship update(Championship c) {
         return rep.save(c);
     }
 
-    public void deleteOne(UUID id){
+    public void deleteOne(UUID id) {
         rep.deleteById(id);
     }
 
-    public List<Championship> findAllByNome(String nome){
+    public List<Championship> findAllByNome(String nome) {
         return rep.findAllByNome(nome);
+    }
+
+    public List<Championship> findAll() {
+        return rep.findAll();
     }
 }

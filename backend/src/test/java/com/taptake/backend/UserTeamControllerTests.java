@@ -1,5 +1,6 @@
 package com.taptake.backend;
 
+import com.taptake.backend.DRO.UserTeamDRO;
 import com.taptake.backend.DTO.GameDTO;
 import com.taptake.backend.DTO.OrganizationDTO;
 import com.taptake.backend.DTO.UserDTO;
@@ -12,6 +13,7 @@ import com.taptake.backend.model.Team;
 import com.taptake.backend.model.User;
 import com.taptake.backend.model.UserTeam;
 import com.taptake.backend.service.GameService;
+import com.taptake.backend.service.MatchPerformanceService;
 import com.taptake.backend.service.PlayerService;
 import com.taptake.backend.service.PlayerUserTeamService;
 import com.taptake.backend.service.UserService;
@@ -57,6 +59,9 @@ public class UserTeamControllerTests {
 
     @MockBean
     PlayerUserTeamService playerUserTeamService;
+
+    @MockBean
+    MatchPerformanceService matchPerformanceService;
 
     @Autowired
     @InjectMocks
@@ -188,7 +193,9 @@ public class UserTeamControllerTests {
 
     @Test
     void getValidUserteam() {
-        Mockito.when(userTeamService.findById(any(UUID.class))).thenReturn(Optional.of(new UserTeam()));
+        UserTeam userTeam = Mockito.mock(UserTeam.class);
+        Mockito.when(userTeam.generateUserTeamDRO()).thenReturn(new UserTeamDRO());
+        Mockito.when(userTeamService.findById(any(UUID.class))).thenReturn(Optional.of(userTeam));
         ResponseEntity<?> re = userTeamController.findById(UUID.randomUUID().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
@@ -300,6 +307,7 @@ public class UserTeamControllerTests {
         
 
         User user = new User();
+        user.setIdUsuario(UUID.randomUUID());
         Game game = new Game();
         UserTeam userTeam = new UserTeam();
 
@@ -324,11 +332,13 @@ public class UserTeamControllerTests {
 
         Team team = new Team();
         team.setGame(game);
+        team.setIdEquipe(UUID.randomUUID());
         player.setTeam(team);
 
 
         Mockito.when(userService.findByEmail(anyString())).thenReturn(Optional.of(user));
         Mockito.when(userTeamService.findById(any(UUID.class))).thenReturn(Optional.of(userTeam));
+        Mockito.when(userTeamService.update(any(UserTeam.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
         Mockito.when(playerService.findById(player.getIdJogador())).thenReturn(Optional.of(player));
         Mockito.when(playerUserTeamService.save(any(PlayerUserTeam.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
@@ -354,6 +364,7 @@ public class UserTeamControllerTests {
         UserTeamDTO userTeamDTO = new UserTeamDTO();
 
         User user = new User();
+        user.setIdUsuario(UUID.randomUUID());
         Game game = new Game();
         UserTeam userTeam = new UserTeam();
 
@@ -371,6 +382,7 @@ public class UserTeamControllerTests {
 
         Team team = new Team();
         team.setGame(game);
+        team.setIdEquipe(UUID.randomUUID());
         player.setTeam(team);
 
         userTeam.setUser(user);
@@ -386,6 +398,7 @@ public class UserTeamControllerTests {
 
         Mockito.when(userService.findByEmail(anyString())).thenReturn(Optional.of(user));
         Mockito.when(userTeamService.findById(any(UUID.class))).thenReturn(Optional.of(userTeam));
+        Mockito.when(userTeamService.update(any(UserTeam.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
         Mockito.when(playerService.findById(player.getIdJogador())).thenReturn(Optional.of(player));
 
         ResponseEntity<?> re = userTeamController.update(userTeamDTO, userTeam.getIdEquipeUsuario().toString());
@@ -415,6 +428,7 @@ public class UserTeamControllerTests {
         userTeamDTO.setPlayers(new LinkedList<>());
 
         User user = new User();
+        user.setIdUsuario(UUID.randomUUID());
         Game game = new Game();
         UserTeam userTeam = new UserTeam();
 
@@ -434,6 +448,7 @@ public class UserTeamControllerTests {
 
         Mockito.when(userService.findByEmail(anyString())).thenReturn(Optional.of(user));
         Mockito.when(userTeamService.findById(any(UUID.class))).thenReturn(Optional.of(userTeam));
+        Mockito.when(userTeamService.update(any(UserTeam.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
         Mockito.when(playerService.findById(player.getIdJogador())).thenReturn(Optional.of(player));
 
         ResponseEntity<?> re = userTeamController.update(userTeamDTO, userTeam.getIdEquipeUsuario().toString());
@@ -466,6 +481,7 @@ public class UserTeamControllerTests {
         userTeamDTO.setPlayers(new LinkedList<>(){{add(player2.getIdJogador().toString());}});
 
         User user = new User();
+        user.setIdUsuario(UUID.randomUUID());
         Game game = new Game();
         UserTeam userTeam = new UserTeam();
 
@@ -475,6 +491,7 @@ public class UserTeamControllerTests {
 
         Team team = new Team();
         team.setGame(game);
+        team.setIdEquipe(UUID.randomUUID());
         player.setTeam(team);
         player2.setTeam(team);
 
@@ -491,6 +508,7 @@ public class UserTeamControllerTests {
 
         Mockito.when(userService.findByEmail(anyString())).thenReturn(Optional.of(user));
         Mockito.when(userTeamService.findById(any(UUID.class))).thenReturn(Optional.of(userTeam));
+        Mockito.when(userTeamService.update(any(UserTeam.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
         Mockito.when(playerService.findById(player.getIdJogador())).thenReturn(Optional.of(player));
         Mockito.when(playerService.findById(player2.getIdJogador())).thenReturn(Optional.of(player2));
         Mockito.when(playerUserTeamService.save(any(PlayerUserTeam.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
