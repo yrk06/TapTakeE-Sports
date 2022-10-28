@@ -1,9 +1,11 @@
 package com.taptake.backend;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,13 +40,19 @@ public class UserControllerTests {
     // Create
     @Test
     void savePersonValid() {
+        User u = new User();
+        u.setEmail("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setSenha("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setTelefone("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setNome("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setIdUsuario(UUID.randomUUID());
+        Mockito.when(userService.save(any(User.class))).thenReturn(u);
         Mockito.when(userService.findByEmail(anyString())).thenReturn(Optional.empty());
         UserDTO testUser = new UserDTO();
         testUser.setEmail("test@test.test");
         testUser.setNome("Teste");
         testUser.setSenha("uuuuui");
         testUser.setTelefone("41 99999-9999");
-
         HttpServletRequest mhttpsr = Mockito.mock(HttpServletRequest.class);
         ResponseEntity<Object> re = controller.savePerson(mhttpsr, testUser);
         assertEquals(HttpStatus.CREATED, re.getStatusCode());
@@ -68,14 +76,20 @@ public class UserControllerTests {
 
     @Test
     void recoverValidPerson() {
-        Mockito.when(userService.findByEmail("teste@teste.com")).thenReturn(Optional.of(new User()));
+        User u = new User();
+        u.setEmail("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setSenha("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setTelefone("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setNome("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setIdUsuario(UUID.randomUUID());
+        Mockito.when(userService.findByEmail(anyString())).thenReturn(Optional.of(u));
         ResponseEntity<Object> re = controller.findByEmail("teste@teste.com");
         assertEquals(HttpStatus.OK,re.getStatusCode());
     }
 
     @Test
     void recoverInvalidPerson() {
-        Mockito.when(userService.findByEmail("teste@teste.com")).thenReturn(Optional.empty());
+        Mockito.when(userService.findByEmail(anyString())).thenReturn(Optional.empty());
         ResponseEntity<Object> re = controller.findByEmail("teste@teste.com");
         assertEquals(HttpStatus.NOT_FOUND,re.getStatusCode());
     }
@@ -84,6 +98,13 @@ public class UserControllerTests {
 
     @Test
     void updateValidPerson() {
+        User u = new User();
+        u.setEmail("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setSenha("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setTelefone("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setNome("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setIdUsuario(UUID.randomUUID());
+        Mockito.when(userService.update(any(User.class))).thenReturn(u);
         Mockito.when(userService.findByEmail(anyString())).thenReturn(Optional.of(new User()));
         UserDTO testUser = new UserDTO();
         testUser.setEmail("test@test.test");
@@ -96,12 +117,20 @@ public class UserControllerTests {
 
     @Test
     void updateInvalidPerson() {
+        User u = new User();
+        u.setEmail("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setSenha("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setTelefone("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setNome("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        u.setIdUsuario(UUID.randomUUID());
         Mockito.when(userService.findByEmail(anyString())).thenReturn(Optional.empty());
+        Mockito.when(userService.update(any(User.class))).thenReturn(u);
         UserDTO testUser = new UserDTO();
         testUser.setEmail("test@test.test");
         testUser.setNome("Teste");
         testUser.setSenha("uuuuui");
         testUser.setTelefone("41 99999-9999");
+
         ResponseEntity<Object> re = controller.updateOne(testUser,"teste@teste.com");
         assertEquals(HttpStatus.NOT_FOUND,re.getStatusCode());
     }
