@@ -21,10 +21,10 @@ class CastCard extends React.Component {
                                 `${this.props.points} Pontos`
                             }
                         </p>
-                        <a href="#" className="btn btn-info d-block w-50 mx-auto mt-2">Ver</a>
+                        <a href="/error?error=404" className="btn btn-info d-block w-50 mx-auto mt-2">Ver</a>
 
-                        {this.props.admin ? <a href="#" className="btn btn-primary d-block w-50 mx-auto mt-2">Editar</a> : null}
-                        {this.props.admin ? <a href="#" className="btn btn-danger d-block w-50 mx-auto mt-2">Apagar</a> : null}
+                        {this.props.admin ? <a href="/error?error=404" className="btn btn-primary d-block w-50 mx-auto mt-2">Editar</a> : null}
+                        {this.props.admin ? <a href="/error?error=404" className="btn btn-danger d-block w-50 mx-auto mt-2">Apagar</a> : null}
                     </div>
                 </div>
             </div>
