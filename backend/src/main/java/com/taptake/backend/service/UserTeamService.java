@@ -35,6 +35,10 @@ public class UserTeamService {
         return userTeamRepository.findById(id);
     }
 
+    public List<UserTeam> findAll() {
+        return userTeamRepository.findAll();
+    }
+
     public UserTeam update(UserTeam userTeam) {
         return userTeamRepository.save(userTeam);
     }

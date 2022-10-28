@@ -2,6 +2,8 @@ package com.taptake.backend.model;
 
 import org.hibernate.annotations.Type;
 
+import com.taptake.backend.DRO.PlayerDRO;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -68,5 +70,16 @@ public class Player implements Serializable {
 
     public void setCargo(String cargo) {
         this.cargo = cargo;
+    }
+
+    public PlayerDRO generateDRO() {
+        PlayerDRO playerDRO = new PlayerDRO();
+
+        playerDRO.setCargo(cargo);
+        playerDRO.setNome(nome);
+        playerDRO.setIdEquipe(team.getIdEquipe().toString());
+        playerDRO.setIdJogador(idJogador.toString());
+
+        return playerDRO;
     }
 }

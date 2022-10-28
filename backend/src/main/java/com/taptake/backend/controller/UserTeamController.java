@@ -1,13 +1,16 @@
 package com.taptake.backend.controller;
 
+import com.taptake.backend.DRO.UserTeamDRO;
 import com.taptake.backend.DTO.UserTeamDTO;
 import com.taptake.backend.model.Game;
+import com.taptake.backend.model.MatchPerformance;
 import com.taptake.backend.model.Player;
 import com.taptake.backend.model.PlayerUserTeam;
 import com.taptake.backend.model.User;
 
 import com.taptake.backend.model.UserTeam;
 import com.taptake.backend.service.GameService;
+import com.taptake.backend.service.MatchPerformanceService;
 import com.taptake.backend.service.PlayerService;
 import com.taptake.backend.service.PlayerUserTeamService;
 import com.taptake.backend.service.UserService;
@@ -42,6 +45,9 @@ public class UserTeamController {
 
     @Autowired
     private PlayerUserTeamService playerUserTeamService;
+
+    @Autowired
+    private MatchPerformanceService matchPerformanceService;
 
     @Autowired
     private GameService gameService;
@@ -85,15 +91,50 @@ public class UserTeamController {
 
     }
 
+    @GetMapping("/")
+    public ResponseEntity<Object> findAll() {
+
+        List<UserTeamDRO> userTeamDROs = new LinkedList<>();
+
+        for (UserTeam userTeam : userTeamService.findAll()) {
+            UserTeamDRO dro = userTeam.generateUserTeamDRO();
+            int acc_points = 0;
+            for (PlayerUserTeam player : userTeam.getPlayers()) {
+
+                for (MatchPerformance mp : matchPerformanceService.findByPeriodAndPlayer(player.getDataEntrada(),
+                        player.getDataSaida() != null ? player.getDataSaida() : new Date(), player.getPlayer())) {
+                    acc_points += mp.getPontuacao();
+                }
+            }
+            dro.setPoints(acc_points);
+            userTeamDROs.add(dro);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(userTeamDROs);
+    }
+
     @GetMapping("/id")
     public ResponseEntity<Object> findById(@RequestParam String id) {
-        Optional<UserTeam> userTeam = userTeamService.findById(UUID.fromString(id));
+        Optional<UserTeam> userTeamOpt = userTeamService.findById(UUID.fromString(id));
 
-        if (userTeam.isEmpty()) {
+        if (userTeamOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(userTeam.get());
+        UserTeam userTeam = userTeamOpt.get();
+
+        UserTeamDRO dro = userTeam.generateUserTeamDRO();
+        int acc_points = 0;
+        for (PlayerUserTeam player : userTeam.getPlayers()) {
+
+            for (MatchPerformance mp : matchPerformanceService.findByPeriodAndPlayer(player.getDataEntrada(),
+                    player.getDataSaida() != null ? player.getDataSaida() : new Date(), player.getPlayer())) {
+                acc_points += mp.getPontuacao();
+            }
+        }
+        dro.setPoints(acc_points);
+
+        return ResponseEntity.status(HttpStatus.OK).body(dro);
 
     }
 
@@ -203,7 +244,7 @@ public class UserTeamController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(userTeamService.update(updateUserTeam));
+        return ResponseEntity.status(HttpStatus.OK).body(userTeamService.update(updateUserTeam).generateUserTeamDRO());
 
     }
 

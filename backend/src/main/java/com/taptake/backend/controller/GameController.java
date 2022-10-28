@@ -1,6 +1,5 @@
 package com.taptake.backend.controller;
 
-
 import com.taptake.backend.DTO.GameDTO;
 import com.taptake.backend.model.Game;
 import com.taptake.backend.service.GameService;
@@ -21,9 +20,11 @@ public class GameController {
     private GameService gameService;
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody GameDTO gameDTO){
+    public ResponseEntity<?> save(@RequestBody GameDTO gameDTO) {
         Optional<Game> optionalGame = gameService.findByNome(gameDTO.getNome());
-        if(optionalGame.isPresent() && gameDTO.getNome().equals(optionalGame.get().getNome()) && gameDTO.getTipoJogo().equals(optionalGame.get().getTipoJogo()) && gameDTO.getQuantidadeJogadores()==optionalGame.get().getQuantidadeJogadores()){
+        if (optionalGame.isPresent() && gameDTO.getNome().equals(optionalGame.get().getNome())
+                && gameDTO.getTipoJogo().equals(optionalGame.get().getTipoJogo())
+                && gameDTO.getQuantidadeJogadores() == optionalGame.get().getQuantidadeJogadores()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         var game = new Game();
@@ -31,8 +32,8 @@ public class GameController {
         return ResponseEntity.status(HttpStatus.CREATED).body(gameService.save(game));
     }
 
-    @GetMapping
-    public ResponseEntity<?> findById(@RequestParam String id){
+    @GetMapping("/id")
+    public ResponseEntity<?> findById(@RequestParam String id) {
 
         Optional<Game> game = gameService.findById(UUID.fromString(id));
         if (game.isPresent()) {
@@ -41,34 +42,40 @@ public class GameController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    @GetMapping
+    public ResponseEntity<Object> findAll() {
+
+        return ResponseEntity.status(HttpStatus.OK).body(gameService.findAll());
+    }
+
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody GameDTO gameDTO, @RequestParam String id){
+    public ResponseEntity<?> update(@RequestBody GameDTO gameDTO, @RequestParam String id) {
         Optional<Game> optionalGame = gameService.findById(UUID.fromString(id));
 
-        if(!optionalGame.isPresent()){
+        if (!optionalGame.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         Game game = optionalGame.get();
-        if(!game.getNome().equals(gameDTO.getNome())){
+        if (!game.getNome().equals(gameDTO.getNome())) {
             game.setNome(gameDTO.getNome());
         }
-        if(!game.getTipoJogo().equals(gameDTO.getTipoJogo())){
+        if (!game.getTipoJogo().equals(gameDTO.getTipoJogo())) {
             game.setTipoJogo(gameDTO.getTipoJogo());
         }
-        if(game.getQuantidadeJogadores()!=gameDTO.getQuantidadeJogadores()){
+        if (game.getQuantidadeJogadores() != gameDTO.getQuantidadeJogadores()) {
             game.setQuantidadeJogadores(gameDTO.getQuantidadeJogadores());
         }
         return ResponseEntity.status(HttpStatus.OK).body(gameService.update(game));
     }
+
     @DeleteMapping
-    public ResponseEntity<?> deleteOne(@RequestParam String id){
+    public ResponseEntity<?> deleteOne(@RequestParam String id) {
         Optional<Game> optionalGame = gameService.findById(UUID.fromString(id));
-        if(!optionalGame.isPresent()){
+        if (!optionalGame.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         gameService.deleteOne(optionalGame.get());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 
 }

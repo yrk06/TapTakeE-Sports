@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "PlayerTimeUsuario")
+@Table(name = "JogadorTimeUsuario")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idJogadorTimeUsuario")
 public class PlayerUserTeam implements Serializable {
 

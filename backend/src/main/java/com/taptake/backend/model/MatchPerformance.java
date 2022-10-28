@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class MatchPerformance {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int idPerformancePartida;
 
     @ManyToOne

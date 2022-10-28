@@ -16,7 +16,6 @@ public class ErrorHandlerController implements ErrorController {
     public String error(HttpServletRequest request, HttpServletResponse resp) {
 
         if (request.getParameter("error") == null) {
-            System.out.println("forward:/error?error=" + resp.getStatus());
             return "redirect:/error?error=" + resp.getStatus();
         } else {
             return "index.html";

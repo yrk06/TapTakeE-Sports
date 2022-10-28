@@ -41,7 +41,7 @@ public class MatchController {
         match.setData(matchDTO.getData());
         for (String t : matchDTO.getIdEquipes()) {
             Optional<Team> team = ts.findById(UUID.fromString(t));
-            if (team.isEmpty()) {
+            if (team.isEmpty() || team.get().getGame() != optionalChampionship.get().getGame()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
             teamList.add(team.get());
@@ -50,8 +50,8 @@ public class MatchController {
         match.setEquipes(teamList);
         match = matchService.save(match);
 
-        for (Team t : match.getEquipes()){
-            for(Player p : t.getPlayers()){
+        for (Team t : match.getEquipes()) {
+            for (Player p : t.getPlayers()) {
                 MatchPerformance mp = new MatchPerformance();
                 mp.setMatch(match);
                 mp.setPlayer(p);
@@ -108,37 +108,40 @@ public class MatchController {
         if (!optionalMatch.get().getChampionship().getIdCampeonato().toString().equals(matchDTO.getIdCampeonato())) {
             m.setChampionship(optionalC.get());
         }
-        if(!m.getData().equals(matchDTO.getData())){
+        if (!m.getData().equals(matchDTO.getData())) {
             m.setData(matchDTO.getData());
         }
         Set<Team> teamSet = m.getEquipes();
-        for(String idTeam : matchDTO.getIdEquipes()){
+        for (String idTeam : matchDTO.getIdEquipes()) {
             Optional<Team> t = ts.findById(UUID.fromString(idTeam));
-            if(t.isEmpty()){
+            if (t.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
-            if(teamSet.contains(t.get())){
+            if (teamSet.contains(t.get())) {
                 teamSet.add(t.get());
             }
         }
         m.setEquipes(teamSet);
         return ResponseEntity.status(HttpStatus.OK).body(matchService.update(m).generateDRO());
     }
+
     @PostMapping("/updatescore")
-    public ResponseEntity<Object> recordScore(@RequestParam String matchID, @RequestParam String playerID, @RequestParam int points){
+    public ResponseEntity<Object> recordScore(@RequestParam String matchID, @RequestParam String playerID,
+            @RequestParam int points) {
         Optional<Match> optMatch = matchService.findById(UUID.fromString(matchID));
-        if(optMatch.isEmpty()){
+        if (optMatch.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        if(ps.findById(UUID.fromString(playerID)).isEmpty()){
+        if (ps.findById(UUID.fromString(playerID)).isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         List<MatchPerformance> lstMP = mps.findByMatch(optMatch.get());
-        for(MatchPerformance mp : lstMP){
-            if(mp.getPlayer().getIdJogador().toString().equals(playerID)){
+        for (MatchPerformance mp : lstMP) {
+            if (mp.getPlayer().getIdJogador().toString().equals(playerID)) {
                 mp.setPontuacao(points);
                 mps.update(mp);
-                return ResponseEntity.status(HttpStatus.OK).body(mp);
+                // TODO: fix this later to return DRO
+                return ResponseEntity.status(HttpStatus.OK).body(optMatch.get().generateDRO());
             }
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
