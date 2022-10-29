@@ -12,11 +12,13 @@ public class MatchDRO {
 
     private List<String> teamList;
 
+    private List<LeftMatchPerformanceDRO> players;
+
     private Date data;
+
     public String getIdPartida() {
         return idPartida;
     }
-
 
     public Date getData() {
         return data;
@@ -45,4 +47,13 @@ public class MatchDRO {
     public void setTeamList(List<String> teamList) {
         this.teamList = teamList;
     }
+
+    public List<LeftMatchPerformanceDRO> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<LeftMatchPerformanceDRO> players) {
+        this.players = players;
+    }
+
 }

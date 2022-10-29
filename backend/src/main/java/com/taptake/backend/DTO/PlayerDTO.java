@@ -1,7 +1,5 @@
 package com.taptake.backend.DTO;
 
-import java.util.UUID;
-
 public class PlayerDTO {
     private String idEquipe;
     private String nome;

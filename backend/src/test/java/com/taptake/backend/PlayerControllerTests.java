@@ -16,8 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,7 +38,7 @@ public class PlayerControllerTests {
     private PlayerController playerController;
 
     @Test
-    void savePlayerValid(){
+    void savePlayerValid() {
         Mockito.when(playerService.findByNome(anyString())).thenReturn(Optional.empty());
         Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.of(new Team()));
         PlayerDTO playerDTOtest = new PlayerDTO();
@@ -52,7 +50,7 @@ public class PlayerControllerTests {
     }
 
     @Test
-    void savePlayerAlreadyExists(){
+    void savePlayerAlreadyExists() {
         var player = new Player();
         UUID id = UUID.randomUUID();
         Team t = new Team();
@@ -70,22 +68,22 @@ public class PlayerControllerTests {
     }
 
     @Test
-    void recoverPlayerValid(){
+    void recoverPlayerValid() {
         UUID validPlayer = UUID.randomUUID();
         Mockito.when(playerService.findById(validPlayer)).thenReturn(Optional.of(new Player()));
         ResponseEntity<?> re = playerController.findById(validPlayer.toString());
-        assertEquals(HttpStatus.OK,re.getStatusCode());
+        assertEquals(HttpStatus.OK, re.getStatusCode());
     }
 
     @Test
-    void recoverInvalidPlayer(){
+    void recoverInvalidPlayer() {
         Mockito.when(playerService.findById(any(UUID.class))).thenReturn(Optional.empty());
         ResponseEntity<?> re = playerController.findById(UUID.randomUUID().toString());
-        assertEquals(HttpStatus.NOT_FOUND,re.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
 
     @Test
-    void updateValidPlayer(){
+    void updateValidPlayer() {
         UUID validPlayer = UUID.randomUUID();
         UUID validT = UUID.randomUUID();
         Team t = new Team();
@@ -100,18 +98,18 @@ public class PlayerControllerTests {
         testUser.setCargo("test");
         testUser.setNome("Test");
         testUser.setIdEquipe(validT.toString());
-        ResponseEntity<?> re = playerController.update(testUser,validPlayer.toString());
-        assertEquals(HttpStatus.OK,re.getStatusCode());
+        ResponseEntity<?> re = playerController.update(testUser, validPlayer.toString());
+        assertEquals(HttpStatus.OK, re.getStatusCode());
     }
 
     @Test
-    void updateInvalidPlayer(){
-        Mockito.when(playerService.findById(any(UUID.class))).thenReturn(Optional.empty() );
+    void updateInvalidPlayer() {
+        Mockito.when(playerService.findById(any(UUID.class))).thenReturn(Optional.empty());
         PlayerDTO testUser = new PlayerDTO();
         testUser.setCargo("test");
         testUser.setNome("Test");
-        ResponseEntity<?> re = playerController.update(testUser,UUID.randomUUID().toString());
-        assertEquals(HttpStatus.NOT_FOUND,re.getStatusCode());
+        ResponseEntity<?> re = playerController.update(testUser, UUID.randomUUID().toString());
+        assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
 
     @Test
@@ -120,6 +118,6 @@ public class PlayerControllerTests {
         p.setIdJogador(UUID.randomUUID());
         Mockito.when(playerService.findById(any(UUID.class))).thenReturn(Optional.of(p));
         ResponseEntity<?> re = playerController.deleteOne(UUID.randomUUID().toString());
-        assertEquals(HttpStatus.NO_CONTENT,re.getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT, re.getStatusCode());
     }
 }

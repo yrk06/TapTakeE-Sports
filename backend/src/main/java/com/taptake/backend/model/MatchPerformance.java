@@ -2,6 +2,8 @@ package com.taptake.backend.model;
 
 import javax.persistence.*;
 
+import com.taptake.backend.DRO.LeftMatchPerformanceDRO;
+
 @Entity
 @Table(name = "PerformancePartida")
 public class MatchPerformance {
@@ -43,5 +45,14 @@ public class MatchPerformance {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public LeftMatchPerformanceDRO generateLeftDRO() {
+        LeftMatchPerformanceDRO dro = new LeftMatchPerformanceDRO();
+
+        dro.setScore(pontuacao);
+        dro.setPlayerId(this.player.getIdJogador().toString());
+
+        return dro;
     }
 }

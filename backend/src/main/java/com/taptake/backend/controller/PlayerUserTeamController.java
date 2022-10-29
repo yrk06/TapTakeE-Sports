@@ -1,8 +1,6 @@
 package com.taptake.backend.controller;
 
-
 import com.taptake.backend.DTO.PlayerUserTeamDTO;
-import com.taptake.backend.DTO.UserTeamDTO;
 import com.taptake.backend.model.Player;
 import com.taptake.backend.model.PlayerUserTeam;
 import com.taptake.backend.model.UserTeam;
@@ -31,10 +29,10 @@ public class PlayerUserTeamController {
     @Autowired
     private UserTeamService userTeamService;
 
-
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody PlayerUserTeamDTO playerUserTeamDTO) {
-        Optional<UserTeam> optionalUserTeam = userTeamService.findById(UUID.fromString(playerUserTeamDTO.getIdEquipeUsuario()));
+        Optional<UserTeam> optionalUserTeam = userTeamService
+                .findById(UUID.fromString(playerUserTeamDTO.getIdEquipeUsuario()));
         if (optionalUserTeam.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -44,7 +42,7 @@ public class PlayerUserTeamController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        List<PlayerUserTeam> listPLayer = playerUserTeamService.findByUserteam(userTeamService.findById(UUID.fromString(playerUserTeamDTO.getIdEquipeUsuario())).get());
+        List<PlayerUserTeam> listPLayer = playerUserTeamService.findByUserteam(optionalUserTeam.get());
         for (PlayerUserTeam p : listPLayer) {
             if (playerUserTeamDTO.getIdJogador().equals(p.getPlayer().getIdJogador().toString())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -86,7 +84,8 @@ public class PlayerUserTeamController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        Optional<UserTeam> optionalUserTeam = userTeamService.findById(UUID.fromString(playerUserTeamDTO.getIdEquipeUsuario()));
+        Optional<UserTeam> optionalUserTeam = userTeamService
+                .findById(UUID.fromString(playerUserTeamDTO.getIdEquipeUsuario()));
         if (optionalUserTeam.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -96,7 +95,7 @@ public class PlayerUserTeamController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        List<PlayerUserTeam> listPLayer = playerUserTeamService.findByUserteam(userTeamService.findById(UUID.fromString(playerUserTeamDTO.getIdEquipeUsuario())).get());
+        List<PlayerUserTeam> listPLayer = playerUserTeamService.findByUserteam(optionalUserTeam.get());
         for (PlayerUserTeam p : listPLayer) {
             if (playerUserTeamDTO.getIdJogador().equals(p.getPlayer().getIdJogador().toString())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -105,11 +104,12 @@ public class PlayerUserTeamController {
 
         PlayerUserTeam updatePlayerUserTeam = optionalPlayerUserTeam.get();
 
-        if (!updatePlayerUserTeam.getPlayer().getIdJogador().equals(optionalPlayer.get().getIdJogador())){
+        if (!updatePlayerUserTeam.getPlayer().getIdJogador().equals(optionalPlayer.get().getIdJogador())) {
             updatePlayerUserTeam.setPlayer(optionalPlayer.get());
         }
 
-        if (!updatePlayerUserTeam.getUserteam().getIdEquipeUsuario().equals(optionalUserTeam.get().getIdEquipeUsuario())){
+        if (!updatePlayerUserTeam.getUserteam().getIdEquipeUsuario()
+                .equals(optionalUserTeam.get().getIdEquipeUsuario())) {
             updatePlayerUserTeam.setUserteam(optionalUserTeam.get());
         }
 

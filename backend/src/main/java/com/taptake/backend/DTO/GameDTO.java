@@ -1,8 +1,5 @@
 package com.taptake.backend.DTO;
 
-import javax.persistence.Column;
-import java.util.UUID;
-
 public class GameDTO {
 
     private String nome;
