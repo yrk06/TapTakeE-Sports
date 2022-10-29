@@ -48,9 +48,20 @@ class TeamControllerTests {
 
     @Test
     void saveValidTeam(){
+        Game g = new Game();
+        g.setIdJogo(UUID.randomUUID());
+        Organization o = new Organization();
+        o.setIdOrg(UUID.randomUUID());
+        Team t = new Team();
+        t.setIdEquipe(UUID.randomUUID());
+        t.setGame(g);
+        t.setOrg(o);
+        t.setPartidas(new HashSet<>());
+        t.setPlayers(new HashSet<>());
         Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.of(new Game()));
         Mockito.when(os.findById(any(UUID.class))).thenReturn(Optional.of(new Organization()));
         Mockito.when(ps.findById(any(UUID.class))).thenReturn(Optional.of(new Player()));
+        Mockito.when(ts.save(any(Team.class))).thenReturn(t);
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setIdJogo(UUID.randomUUID().toString());
         teamDTO.setIdOrg(UUID.randomUUID().toString());
@@ -129,7 +140,18 @@ class TeamControllerTests {
     }
     @Test
     void findByValidId(){
-        Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.of(new Team()));
+        Game g = new Game();
+        g.setIdJogo(UUID.randomUUID());
+        Organization o = new Organization();
+        o.setIdOrg(UUID.randomUUID());
+        Team t = new Team();
+        t.setPlayers(new HashSet<>());
+        t.setOrg(o);
+        t.setGame(g);
+        t.setNomeTime("tgiopfhgj");
+        t.setPartidas(new HashSet<>());
+        t.setIdEquipe(UUID.randomUUID());
+        Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.of(t));
         ResponseEntity<?> re = teamController.findById(UUID.randomUUID().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
@@ -188,9 +210,12 @@ class TeamControllerTests {
         t.setGame(g);
         t.setNomeTime("teste");
         t.setPlayers(new HashSet<>());
+        t.setIdEquipe(UUID.randomUUID());
+        t.setPartidas(new HashSet<>());
         Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.of(g));
         Mockito.when(os.findById(any(UUID.class))).thenReturn(Optional.of(org));
         Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.of(t));
+        Mockito.when(ts.update(any(Team.class))).thenReturn(t);
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setIdOrg(idOrg.toString());
         teamDTO.setIdJogo(idJogo.toString());
@@ -209,12 +234,15 @@ class TeamControllerTests {
         org.setIdOrg(idOrg);
         Team t = new Team();
         t.setOrg(org);
+        t.setIdEquipe(UUID.randomUUID());
         t.setGame(g);
         t.setNomeTime("teste");
         t.setPlayers(new HashSet<>());
+        t.setPartidas(new HashSet<>());
         Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.of(g));
         Mockito.when(os.findById(any(UUID.class))).thenReturn(Optional.of(org));
         Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.of(t));
+        Mockito.when(ts.update(any(Team.class))).thenReturn(t);
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setIdOrg(idOrg.toString());
         teamDTO.setIdJogo(idJogo.toString());

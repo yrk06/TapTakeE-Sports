@@ -1,6 +1,5 @@
 package com.taptake.backend;
 
-
 import com.taptake.backend.DTO.MatchDTO;
 import com.taptake.backend.controller.MatchController;
 import com.taptake.backend.model.*;
@@ -67,6 +66,7 @@ class MatchControllerTests {
         ResponseEntity<?> re = mc.save(md);
         assertEquals(HttpStatus.CREATED, re.getStatusCode());
     }
+
     @Test
     void saveInvalidMatch(){
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.empty());
@@ -75,6 +75,7 @@ class MatchControllerTests {
         ResponseEntity<?> re = mc.save(m);
         assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
     }
+
     @Test
     void saveMatchInvalidTeamList(){
         Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.empty());
@@ -88,6 +89,7 @@ class MatchControllerTests {
         ResponseEntity<?> re = mc.save(m);
         assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
     }
+
     @Test
     void findByValidId(){
         Match m = new Match();
@@ -99,12 +101,14 @@ class MatchControllerTests {
         ResponseEntity<?> re = mc.findById(UUID.randomUUID().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
+
     @Test
     void findByInvalidId(){
         Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.empty());
         ResponseEntity<?> re = mc.findById(UUID.randomUUID().toString());
         assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
+
     @Test
     void findByValidChampionship(){
         Mockito.when(matchService.findByChampionship(any(Championship.class))).thenReturn(new LinkedList<>());
@@ -112,6 +116,7 @@ class MatchControllerTests {
         ResponseEntity<?> re = mc.findByChampionship(UUID.randomUUID().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
+
     @Test
     void findByInvalidChampionship(){
         Mockito.when(matchService.findByChampionship(any(Championship.class))).thenReturn(new LinkedList<>());
@@ -119,11 +124,13 @@ class MatchControllerTests {
         ResponseEntity<?> re = mc.findByChampionship(UUID.randomUUID().toString());
         assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
     }
+
     @Test
-    void deleteOne(){
+    void deleteOne() {
         ResponseEntity<?> re = mc.deleteOne(UUID.randomUUID().toString());
         assertEquals(HttpStatus.NO_CONTENT, re.getStatusCode());
     }
+
     @Test
     void updateValidMatch(){
         Championship c1 = new Championship();
@@ -179,6 +186,7 @@ class MatchControllerTests {
         ResponseEntity<?> re = mc.update(matchDTO,UUID.randomUUID().toString());
         assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
+
     @Test
     void updateMatchInvalidOrg(){
         Championship c1 = new Championship();
@@ -197,17 +205,26 @@ class MatchControllerTests {
         ResponseEntity<?> re = mc.update(matchDTO,UUID.randomUUID().toString());
         assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
     }
+
     @Test
     void updateScoreValid(){
-        Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.of(new Match()));
+
+        Match match = new Match();
+        match.setEquipes(new HashSet<>());
+        match.setIdPartida(UUID.randomUUID());
+        Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.of(match));
         Mockito.when(ps.findById(any(UUID.class))).thenReturn(Optional.of(new Player()));
+
         UUID id = UUID.randomUUID();
         Player p = new Player();
+
         p.setIdJogador(id);
+
         ArrayList<MatchPerformance> lst = new ArrayList<>();
         MatchPerformance mp = new MatchPerformance();
         mp.setPlayer(p);
         lst.add(mp);
+        
         Mockito.when(mps.findByMatch(any(Match.class))).thenReturn(lst);
         ResponseEntity<?> re = mc.recordScore(UUID.randomUUID().toString(), id.toString(), 12);
         assertEquals(HttpStatus.OK, re.getStatusCode());
@@ -219,6 +236,7 @@ class MatchControllerTests {
         ResponseEntity<?> re = mc.recordScore(UUID.randomUUID().toString(), UUID.randomUUID().toString(), 12);
         assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
     }
+
     @Test
     void updateScoreInvalidPlayer(){
         Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.of(new Match()));

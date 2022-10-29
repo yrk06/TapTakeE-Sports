@@ -32,6 +32,9 @@ public class Match implements Serializable {
     @Column(nullable = false)
     private Date data;
 
+    @OneToMany(mappedBy = "match")
+    private Set<MatchPerformance> players;
+
     public Date getData() {
         return data;
     }
@@ -44,12 +47,11 @@ public class Match implements Serializable {
         return equipes;
     }
 
-
-// PARTICIPAÇÕES PARTIDA
-    public MatchDRO generateDRO(){
+    // PARTICIPAÇÕES PARTIDA
+    public MatchDRO generateDRO() {
         MatchDRO matchDRO = new MatchDRO();
         List<String> teamList = new ArrayList<>();
-        for (Team t : this.equipes){
+        for (Team t : this.equipes) {
             teamList.add(t.getIdEquipe().toString());
         }
         matchDRO.setTeamList(teamList.stream().toList());
@@ -58,6 +60,7 @@ public class Match implements Serializable {
         matchDRO.setData(this.data);
         return matchDRO;
     }
+
     public void setEquipes(Set<Team> equipes) {
         this.equipes = equipes;
     }
