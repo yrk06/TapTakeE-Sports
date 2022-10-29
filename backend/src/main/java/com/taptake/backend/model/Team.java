@@ -3,7 +3,6 @@ package com.taptake.backend.model;
 import com.taptake.backend.DRO.TeamDRO;
 import org.hibernate.annotations.Type;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -90,16 +89,16 @@ public class Team implements Serializable {
         this.nomeTime = nomeTime;
     }
 
-
-    public TeamDRO generateDRO(){
+    public TeamDRO generateDRO() {
         List<String> idPartidas = new ArrayList<>();
         List<String> idJogadores = new ArrayList<>();
-        for(Match m : partidas){
+        for (Match m : partidas) {
             idPartidas.add(m.getIdPartida().toString());
         }
-        for(Player p : players){
+        for (Player p : players) {
             idJogadores.add(p.getIdJogador().toString());
         }
-        return new TeamDRO(idEquipe.toString(), game.getIdJogo().toString(),org.getIdOrg().toString(),nomeTime,idPartidas,idJogadores );
+        return new TeamDRO(idEquipe.toString(), game.getIdJogo().toString(), org.getIdOrg().toString(), nomeTime,
+                idPartidas, idJogadores);
     }
 }
