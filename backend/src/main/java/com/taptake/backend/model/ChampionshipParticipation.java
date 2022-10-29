@@ -22,6 +22,17 @@ public class ChampionshipParticipation {
     @JoinColumn(name = "idEquipe")
     private Team team;
 
+    @Column(nullable = false)
+    private int posicao;
+
+    public int getPosicao() {
+        return posicao;
+    }
+
+    public void setPosicao(int posicao) {
+        this.posicao = posicao;
+    }
+
     public UUID getId() {
         return id;
     }

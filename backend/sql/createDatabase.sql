@@ -75,7 +75,8 @@ CREATE TABLE ParticipacaoCampeonato (
     idCampeonato CHAR(36) NOT NULL,
     FOREIGN KEY(idCampeonato) REFERENCES Campeonato (idCampeonato),
 	idEquipe CHAR(36) NOT NULL,
-    FOREIGN KEY(idEquipe) REFERENCES Equipe (idEquipe)
+    FOREIGN KEY(idEquipe) REFERENCES Equipe (idEquipe),
+    posicao INT NOT NULL
 
 );
 

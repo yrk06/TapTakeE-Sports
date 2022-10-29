@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,6 +31,9 @@ public class ChampionshipParticipationService {
     }
     public List<ChampionshipParticipation> findByTeam(Team team){
         return cpr.findByTeam(team);
+    }
+    public Optional<ChampionshipParticipation> findById(UUID id){
+        return cpr.findById(id);
     }
     public void deleteOne(UUID id){
         cpr.deleteById(id);

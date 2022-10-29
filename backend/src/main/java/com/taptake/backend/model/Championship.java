@@ -4,6 +4,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -26,6 +27,17 @@ public class Championship implements Serializable {
 
     @Column(nullable = false)
     private int premiacao;
+
+    @OneToMany
+    private Set<ChampionshipParticipation> participacoes;
+
+    public Set<ChampionshipParticipation> getParticipacoes() {
+        return participacoes;
+    }
+
+    public void setParticipacoes(Set<ChampionshipParticipation> participacoes) {
+        this.participacoes = participacoes;
+    }
 
     public UUID getIdCampeonato() {
         return idCampeonato;
