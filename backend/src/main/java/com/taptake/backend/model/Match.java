@@ -5,7 +5,6 @@ import com.taptake.backend.DRO.MatchDRO;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
