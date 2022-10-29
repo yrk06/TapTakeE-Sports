@@ -1,11 +1,15 @@
 package com.taptake.backend.DTO;
 
+import java.util.List;
+
 public class ChampionshipDTO {
 
     private String idJogo;
     private String nome;
     private String localCampeonato;
     private int premiacao;
+
+    private List<String> idEquipes;
 
     public String getIdJogo() {
         return idJogo;
@@ -37,5 +41,13 @@ public class ChampionshipDTO {
 
     public void setPremiacao(int premiacao) {
         this.premiacao = premiacao;
+    }
+
+    public List<String> getIdEquipes() {
+        return idEquipes;
+    }
+
+    public void setIdEquipes(List<String> idEquipes) {
+        this.idEquipes = idEquipes;
     }
 }
