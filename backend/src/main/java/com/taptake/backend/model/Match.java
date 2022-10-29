@@ -1,5 +1,6 @@
 package com.taptake.backend.model;
 
+import com.taptake.backend.DRO.LeftMatchPerformanceDRO;
 import com.taptake.backend.DRO.MatchDRO;
 import org.hibernate.annotations.Type;
 
@@ -58,6 +59,11 @@ public class Match implements Serializable {
         matchDRO.setIdPartida(this.idPartida.toString());
         matchDRO.setChampionship(this.championship);
         matchDRO.setData(this.data);
+
+        List<LeftMatchPerformanceDRO> mpDRO = new LinkedList<>();
+        for (MatchPerformance mp : this.players) {
+            mpDRO.add(mp.generateLeftDRO());
+        }
         return matchDRO;
     }
 
