@@ -9,7 +9,6 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -69,7 +68,7 @@ public class UserTeam implements Serializable {
     }
 
     public List<Player> getActivePlayers() {
-        List<Player> active = new LinkedList<Player>();
+        List<Player> active = new LinkedList<>();
 
         for (PlayerUserTeam pteam : this.players) {
             if (pteam.getDataSaida() == null) {

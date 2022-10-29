@@ -1,5 +1,6 @@
 package com.taptake.backend;
 
+import com.taptake.backend.DRO.MatchDRO;
 import com.taptake.backend.DTO.MatchDTO;
 import com.taptake.backend.controller.MatchController;
 import com.taptake.backend.model.*;
@@ -7,7 +8,6 @@ import com.taptake.backend.service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,17 +45,13 @@ class MatchControllerTests {
     MatchController mc;
 
     @Test
-    void saveValidMatch(){
+    void saveValidMatch() {
         UUID ID = UUID.randomUUID();
         Championship c = new Championship();
         c.setIdCampeonato(ID);
         Date d = new Date();
-        Match m = new Match();
-        Set<Team> st = new HashSet<>();
-        m.setChampionship(c);
-        m.setData(d);
-        m.setEquipes(st);
-        m.setIdPartida(UUID.randomUUID());
+        Match m = Mockito.mock(Match.class);
+
         Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.of(new Team()));
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.of(new Championship()));
         Mockito.when(matchService.save(any(Match.class))).thenReturn(m);
@@ -68,7 +64,7 @@ class MatchControllerTests {
     }
 
     @Test
-    void saveInvalidMatch(){
+    void saveInvalidMatch() {
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.empty());
         MatchDTO m = new MatchDTO();
         m.setIdCampeonato(UUID.randomUUID().toString());
@@ -77,7 +73,7 @@ class MatchControllerTests {
     }
 
     @Test
-    void saveMatchInvalidTeamList(){
+    void saveMatchInvalidTeamList() {
         Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.empty());
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.of(new Championship()));
         MatchDTO m = new MatchDTO();
@@ -91,26 +87,22 @@ class MatchControllerTests {
     }
 
     @Test
-    void findByValidId(){
-        Match m = new Match();
-        m.setEquipes(new HashSet<>());
-        m.setChampionship(new Championship());
-        m.setData(new Date());
-        m.setIdPartida(UUID.randomUUID());
+    void findByValidId() {
+        Match m = Mockito.mock(Match.class);
         Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.of(m));
         ResponseEntity<?> re = mc.findById(UUID.randomUUID().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
 
     @Test
-    void findByInvalidId(){
+    void findByInvalidId() {
         Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.empty());
         ResponseEntity<?> re = mc.findById(UUID.randomUUID().toString());
         assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
 
     @Test
-    void findByValidChampionship(){
+    void findByValidChampionship() {
         Mockito.when(matchService.findByChampionship(any(Championship.class))).thenReturn(new LinkedList<>());
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.of(new Championship()));
         ResponseEntity<?> re = mc.findByChampionship(UUID.randomUUID().toString());
@@ -118,7 +110,7 @@ class MatchControllerTests {
     }
 
     @Test
-    void findByInvalidChampionship(){
+    void findByInvalidChampionship() {
         Mockito.when(matchService.findByChampionship(any(Championship.class))).thenReturn(new LinkedList<>());
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.empty());
         ResponseEntity<?> re = mc.findByChampionship(UUID.randomUUID().toString());
@@ -132,24 +124,24 @@ class MatchControllerTests {
     }
 
     @Test
-    void updateValidMatch(){
+    void updateValidMatch() {
         Championship c1 = new Championship();
         Date d = new Date();
         Team t = new Team();
         UUID idTeam = UUID.randomUUID();
         t.setIdEquipe(idTeam);
-        Set<Team> st= new HashSet<>();
+        Set<Team> st = new HashSet<>();
         st.add(t);
 
         UUID id = UUID.randomUUID();
         c1.setIdCampeonato(id);
-        Match m = new Match();
-        m.setChampionship(c1);
-        m.setData(d);
-        m.setEquipes(st);
-        m.setIdPartida(UUID.randomUUID());
+        Match m = Mockito.mock(Match.class);
+        Mockito.when(m.getChampionship()).thenReturn(c1);
+        Mockito.when(m.getData()).thenReturn(d);
+        Mockito.when(m.getEquipes()).thenReturn(st);
         Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.of(m));
         Mockito.when(ts.findById(any(UUID.class))).thenReturn(Optional.of(t));
+        Mockito.when(m.generateDRO()).thenReturn(new MatchDRO());
         Championship c2 = new Championship();
         UUID id2 = UUID.randomUUID();
         c2.setIdCampeonato(id2);
@@ -159,16 +151,16 @@ class MatchControllerTests {
         Date d2 = new Date();
         matchDTO.setIdCampeonato(id2.toString());
         matchDTO.setData(d2);
-        List<String> ids= new ArrayList<>();
+        List<String> ids = new ArrayList<>();
         ids.add(idTeam.toString());
         matchDTO.setIdEquipes(new ArrayList<>());
 
-        ResponseEntity<?> re = mc.update(matchDTO,UUID.randomUUID().toString());
+        ResponseEntity<?> re = mc.update(matchDTO, UUID.randomUUID().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
 
     @Test
-    void updateMatchInvalidMatchId(){
+    void updateMatchInvalidMatchId() {
         Championship c1 = new Championship();
 
         UUID id = UUID.randomUUID();
@@ -183,12 +175,12 @@ class MatchControllerTests {
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.of(c2));
         MatchDTO matchDTO = new MatchDTO();
         matchDTO.setIdCampeonato(id2.toString());
-        ResponseEntity<?> re = mc.update(matchDTO,UUID.randomUUID().toString());
+        ResponseEntity<?> re = mc.update(matchDTO, UUID.randomUUID().toString());
         assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
 
     @Test
-    void updateMatchInvalidOrg(){
+    void updateMatchInvalidOrg() {
         Championship c1 = new Championship();
 
         UUID id = UUID.randomUUID();
@@ -202,16 +194,15 @@ class MatchControllerTests {
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.empty());
         MatchDTO matchDTO = new MatchDTO();
         matchDTO.setIdCampeonato(id2.toString());
-        ResponseEntity<?> re = mc.update(matchDTO,UUID.randomUUID().toString());
+        ResponseEntity<?> re = mc.update(matchDTO, UUID.randomUUID().toString());
         assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
     }
 
     @Test
-    void updateScoreValid(){
+    void updateScoreValid() {
 
-        Match match = new Match();
-        match.setEquipes(new HashSet<>());
-        match.setIdPartida(UUID.randomUUID());
+        Match match = Mockito.mock(Match.class);
+
         Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.of(match));
         Mockito.when(ps.findById(any(UUID.class))).thenReturn(Optional.of(new Player()));
 
@@ -224,21 +215,21 @@ class MatchControllerTests {
         MatchPerformance mp = new MatchPerformance();
         mp.setPlayer(p);
         lst.add(mp);
-        
+
         Mockito.when(mps.findByMatch(any(Match.class))).thenReturn(lst);
         ResponseEntity<?> re = mc.recordScore(UUID.randomUUID().toString(), id.toString(), 12);
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
 
     @Test
-    void updateScoreInvalidMatch(){
+    void updateScoreInvalidMatch() {
         Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.empty());
         ResponseEntity<?> re = mc.recordScore(UUID.randomUUID().toString(), UUID.randomUUID().toString(), 12);
         assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
     }
 
     @Test
-    void updateScoreInvalidPlayer(){
+    void updateScoreInvalidPlayer() {
         Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.of(new Match()));
         Mockito.when(ps.findById(any(UUID.class))).thenReturn(Optional.empty());
         ResponseEntity<?> re = mc.recordScore(UUID.randomUUID().toString(), UUID.randomUUID().toString(), 12);
@@ -246,7 +237,7 @@ class MatchControllerTests {
     }
 
     @Test
-    void updateScorePlayerNotFound(){
+    void updateScorePlayerNotFound() {
         Mockito.when(matchService.findById(any(UUID.class))).thenReturn(Optional.of(new Match()));
         Mockito.when(ps.findById(any(UUID.class))).thenReturn(Optional.of(new Player()));
         Mockito.when(mps.findByMatch(any(Match.class))).thenReturn(new ArrayList<>());

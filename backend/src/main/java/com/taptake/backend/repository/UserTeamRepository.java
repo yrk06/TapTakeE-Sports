@@ -1,6 +1,5 @@
 package com.taptake.backend.repository;
 
-import com.taptake.backend.model.Player;
 import com.taptake.backend.model.User;
 import com.taptake.backend.model.UserTeam;
 import org.springframework.data.jpa.repository.JpaRepository;

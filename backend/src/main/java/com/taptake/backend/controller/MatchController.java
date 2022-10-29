@@ -140,7 +140,6 @@ public class MatchController {
             if (mp.getPlayer().getIdJogador().toString().equals(playerID)) {
                 mp.setPontuacao(points);
                 mps.update(mp);
-                // TODO: fix this later to return DRO
                 return ResponseEntity.status(HttpStatus.OK).body(optMatch.get().generateDRO());
             }
         }
