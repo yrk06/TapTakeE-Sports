@@ -10,6 +10,7 @@ import LoginForm from "./components/LoginForm";
 import About from "./components/About";
 import HowItWorks from "./components/HowItWorks";
 import ViewRecoveryGame from "./components/ViewRecoveryGame";
+import ViewRecoveryTeam from "./components/ViewRecoveryTeam";
 import Cast from "./components/Cast";
 import Lineup from "./components/Lineup";
 import UpdateForm from "./components/UpdateForm";
@@ -122,6 +123,15 @@ function App() {
               <div>
                 <Header signed={signed} />
                 <ViewRecoveryGame />
+              </div>
+            ),
+          },
+          {
+            path: "/teams",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewRecoveryTeam />
               </div>
             ),
           },
