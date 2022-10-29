@@ -9,8 +9,7 @@ import axios from "axios";
 import LoginForm from "./components/LoginForm";
 import About from "./components/About";
 import HowItWorks from "./components/HowItWorks";
-import ViewRecoverySearchUser from "./components/ViewRecoverySearchUser";
-import ViewRecoverySearchAdmin from "./components/ViewRecoverySearchAdmin";
+import ViewRecoveryGame from "./components/ViewRecoveryGame";
 import Cast from "./components/Cast";
 import Lineup from "./components/Lineup";
 import UpdateForm from "./components/UpdateForm";
@@ -107,20 +106,11 @@ function App() {
             ),
           },
           {
-            path: "/ViewRecoverySearchUser",
+            path: "/games",
             element: (
               <div>
                 <Header signed={signed} />
-                <ViewRecoverySearchUser />
-              </div>
-            ),
-          },
-          {
-            path: "/ViewRecoverySearchAdmin",
-            element: (
-              <div>
-                <Header signed={signed} />
-                <ViewRecoverySearchAdmin />
+                <ViewRecoveryGame />
               </div>
             ),
           },
