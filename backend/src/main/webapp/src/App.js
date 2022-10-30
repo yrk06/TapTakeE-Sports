@@ -16,7 +16,7 @@ import Lineup from "./components/Lineup";
 import UpdateForm from "./components/UpdateForm";
 import CreateForm from "./components/CreateForm";
 import SignupForm from './components/SignupForm';
-import Delete from "./components/Delete";
+import ModalDelete from "./components/ModalDelete";
 
 
 function App() {
@@ -113,7 +113,7 @@ function App() {
             element: (
               <div>
                 <Header signed={signed} />
-                <Delete />
+                <ModalDelete />
               </div>
             ),
           },

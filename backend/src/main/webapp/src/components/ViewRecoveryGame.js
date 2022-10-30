@@ -15,7 +15,6 @@ class ViewRecoveryGame extends React.Component {
                         <input className="form-control" placeholder="Digite o jogo desejado"></input>
                         <div className="input-group-append"><button className="btn btn-primary">Pesquisar</button></div>
                     </div>
-
                 </div>
 
                 <div className="row justify-content-left">
@@ -27,10 +26,8 @@ class ViewRecoveryGame extends React.Component {
                     <div className="col-4 d-flex justify-content-center align-items-center ">
                         {
                             this.props.admin ? <IconButton variant="contained" className="btn mt-5 rounded-circle" style={{ backgroundColor: "var(--taptake-dark-1)", width: "48px", height: "48px" }}> <AddIcon sx={{ color: "#FFFFFF" }} /></IconButton> : null
-
                         }
                     </div>
-
                 </div>
             </div >
         );
