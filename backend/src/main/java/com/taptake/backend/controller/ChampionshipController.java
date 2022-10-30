@@ -1,5 +1,6 @@
 package com.taptake.backend.controller;
 
+import com.taptake.backend.DRO.ChampionshipDRO;
 import com.taptake.backend.DTO.ChampionshipDTO;
 import com.taptake.backend.model.Championship;
 import com.taptake.backend.model.ChampionshipParticipation;
@@ -71,7 +72,7 @@ public class ChampionshipController {
 
         }
         c.setParticipacoes(scp);
-        return ResponseEntity.status(HttpStatus.CREATED).body(cs.save(c));
+        return ResponseEntity.status(HttpStatus.CREATED).body(cs.save(c).generateDRO());
     }
 
     @GetMapping("/id")
@@ -85,7 +86,12 @@ public class ChampionshipController {
 
     @GetMapping("/name")
     public ResponseEntity<Object> findAllByNome(@RequestParam String nome) {
-        return ResponseEntity.status(HttpStatus.OK).body(cs.findAllByNome(nome));
+        List<Championship> lst = cs.findAllByNome(nome);
+        List<ChampionshipDRO> lstDRO = new ArrayList<>();
+        for(Championship c : lst){
+            lstDRO.add(c.generateDRO());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(lstDRO);
     }
 
     @GetMapping
@@ -137,7 +143,7 @@ public class ChampionshipController {
             savedC.setLocalCampeonato(c.getLocalCampeonato());
         }
         savedC.setParticipacoes(scp);
-        return ResponseEntity.status(HttpStatus.OK).body(cs.update(savedC));
+        return ResponseEntity.status(HttpStatus.OK).body(cs.update(savedC).generateDRO());
     }
 
     @PostMapping("/rank")
