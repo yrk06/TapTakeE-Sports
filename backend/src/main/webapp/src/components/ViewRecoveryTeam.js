@@ -19,10 +19,10 @@ class ViewRecoveryTeam extends React.Component {
                 </div>
 
                 <div className="row justify-content-left">
-                    <TeamCard nameTeam="Name Test" nameOrg= "Name Org Test" admin={true} />
-                    <TeamCard nameTeam="Name Test" nameOrg= "Name Org Test" admin={true} />
-                    <TeamCard nameTeam="Name Test" nameOrg= "Name Org Test" admin={true} />
-                    <TeamCard nameTeam="Name Test" nameOrg= "Name Org Test" admin={true} />
+                    <TeamCard nameTeam="Name Test" nameOrg= "Name Org Test" nameGame= "Game Test" admin={true} />
+                    <TeamCard nameTeam="Name Test" nameOrg= "Name Org Test" nameGame= "Game Test" admin={true} />
+                    <TeamCard nameTeam="Name Test" nameOrg= "Name Org Test" nameGame= "Game Test" admin={true} />
+                    <TeamCard nameTeam="Name Test" nameOrg= "Name Org Test" nameGame= "Game Test" admin={true} />
 
                     <div className="col-4 d-flex justify-content-center align-items-center ">
                         {
