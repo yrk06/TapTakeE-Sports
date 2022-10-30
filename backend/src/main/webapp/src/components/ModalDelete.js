@@ -11,13 +11,13 @@ export default function Delete() {
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Button className='btn btn-danger' onClick={handleShow}>
                 Deletar
             </Button>
 
             <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
                 <Modal.Header>
-                    <Modal.Title className='text-secondary'>Titulo</Modal.Title>
+                    <Modal.Title className='text-secondary'>Deletar?</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='text-secondary'>
                     Você tem certeza que deseja deletar?
