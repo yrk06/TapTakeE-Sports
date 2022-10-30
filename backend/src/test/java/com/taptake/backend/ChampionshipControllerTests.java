@@ -49,16 +49,26 @@ public class ChampionshipControllerTests {
 
     @Test
     void saveValidChampionship(){
+        Game g = new Game();
+        g.setIdJogo(UUID.randomUUID());
+        Championship c = new Championship();
+        c.setGame(g);
+        c.setNome("teste");
+        c.setLocalCampeonato("teste");
+        c.setPremiacao(12);
+        c.setParticipacoes(new HashSet<>());
+        c.setIdCampeonato(UUID.randomUUID());
         Mockito.when(cs.findAllByNome(anyString())).thenReturn(new ArrayList<>());
         Mockito.when(gs.findById(any(UUID.class))).thenReturn(Optional.of(new Game()));
-        Mockito.when(cs.save(any(Championship.class))).thenReturn(new Championship());
-        ChampionshipDTO c = new ChampionshipDTO();
-        c.setNome("teste");
-        c.setPremiacao(12);
-        c.setLocalCampeonato("teste");
-        c.setIdJogo(UUID.randomUUID().toString());
-        c.setIdEquipes(new ArrayList<>());
-        ResponseEntity<?> re = cc.save(c);
+        Mockito.when(cs.save(any(Championship.class))).thenReturn(c);
+
+        ChampionshipDTO cd = new ChampionshipDTO();
+        cd.setNome("teste");
+        cd.setPremiacao(12);
+        cd.setLocalCampeonato("teste");
+        cd.setIdJogo(UUID.randomUUID().toString());
+        cd.setIdEquipes(new ArrayList<>());
+        ResponseEntity<?> re = cc.save(cd);
         assertEquals(HttpStatus.CREATED, re.getStatusCode());
     }
 
@@ -121,8 +131,10 @@ public class ChampionshipControllerTests {
         c.setLocalCampeonato("teste");
         c.setPremiacao(12);
         c.setParticipacoes(new HashSet<>());
+        c.setIdCampeonato(UUID.randomUUID());
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.of(c));
         Mockito.when(gs.findById(validId)).thenReturn(Optional.of(g));
+        Mockito.when(cs.update(any(Championship.class))).thenReturn(c);
         ChampionshipDTO cd = new ChampionshipDTO();
         cd.setNome("teste");
         cd.setPremiacao(12);

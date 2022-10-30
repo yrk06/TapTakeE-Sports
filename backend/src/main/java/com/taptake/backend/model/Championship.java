@@ -1,9 +1,12 @@
 package com.taptake.backend.model;
 
+import com.taptake.backend.DRO.ChampionshipDRO;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,6 +33,16 @@ public class Championship implements Serializable {
 
     @OneToMany
     private Set<ChampionshipParticipation> participacoes;
+
+    public ChampionshipDRO generateDRO(){
+        List<String> lst = new ArrayList<>();
+        for (ChampionshipParticipation cp : participacoes){
+            lst.add(cp.getTeam().getIdEquipe().toString());
+        }
+        return new ChampionshipDRO(idCampeonato.toString(),game.getIdJogo().toString(),nome, localCampeonato,premiacao, lst);
+    }
+
+
 
     public Set<ChampionshipParticipation> getParticipacoes() {
         return participacoes;
