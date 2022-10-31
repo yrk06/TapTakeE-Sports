@@ -12,7 +12,7 @@ public class ChampionshipParticipation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Type(type = "uuid-char")
-    private UUID id;
+    private UUID idParticipacaoCampeonato;
 
     @ManyToOne
     @JoinColumn(name = "idCampeonato")
@@ -33,12 +33,12 @@ public class ChampionshipParticipation {
         this.posicao = posicao;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getidParticipacaoCampeonato() {
+        return idParticipacaoCampeonato;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setidParticipacaoCampeonato(UUID id) {
+        this.idParticipacaoCampeonato = id;
     }
 
     public Championship getChampionship() {
