@@ -9,6 +9,10 @@ export default function Delete() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    function onDelete() {
+        alert("Deletado com sucesso!");
+    }
+
     return (
         <>
             <Button className='btn btn-danger' onClick={handleShow}>
@@ -26,7 +30,7 @@ export default function Delete() {
                     <Button variant="secondary" onClick={handleClose}>
                         Cancelar
                     </Button>
-                    <Button variant="primary">Deletar</Button>
+                    <Button variant="primary" onClick={onDelete}>Deletar</Button>
                 </Modal.Footer>
             </Modal>
         </>
