@@ -16,10 +16,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-
                 .authorizeRequests()
-                .antMatchers("/assets/**").permitAll() // (3)
-                .antMatchers(HttpMethod.POST, "/api/user/").permitAll()
+                .antMatchers("/assets/**", "/api/user/").permitAll() // (4)
+                .antMatchers(HttpMethod.POST, "/api/game").hasAuthority("Admin")
                 .antMatchers("/api/**").authenticated() // (4)
                 .and()
                 .formLogin() // (5)

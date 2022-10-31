@@ -4,12 +4,13 @@ public class UserDRO {
     private String idUsuario;
     private String nome;
     private String email;
+    private String role;
 
-
-    public UserDRO(String idUsuario, String nome, String email) {
+    public UserDRO(String idUsuario, String nome, String email, String role) {
         this.idUsuario = idUsuario;
         this.nome = nome;
         this.email = email;
+        this.role = role;
     }
 
     public String getIdUsuario() {
@@ -34,6 +35,14 @@ public class UserDRO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
 }

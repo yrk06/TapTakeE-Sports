@@ -27,9 +27,14 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String telefone;
 
-    public UserDRO generateDRO(){
-        return new UserDRO(this.idUsuario.toString(), this.nome,this.email);
+    @ManyToOne
+    @JoinColumn(name = "idCargo")
+    private Role role;
+
+    public UserDRO generateDRO() {
+        return new UserDRO(this.idUsuario.toString(), this.nome, this.email, this.role.getNome());
     }
+
     public String getTelefone() {
         return telefone;
     }
@@ -68,5 +73,13 @@ public class User implements Serializable {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
