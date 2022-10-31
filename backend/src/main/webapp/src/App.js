@@ -18,7 +18,7 @@ import CreateForm from "./components/CreateForm";
 import SignupForm from './components/SignupForm';
 import ModalDelete from "./components/ModalDelete";
 import NotFoundContent from "./components/NotFoundContent";
-import ViewGameForm from "./components/ViewGameForm";
+import ViewGameForm from "./components/Game/ViewGameForm";
 
 
 function App() {
