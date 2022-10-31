@@ -17,16 +17,24 @@ import UpdateForm from "./components/UpdateForm";
 import CreateForm from "./components/CreateForm";
 import SignupForm from './components/SignupForm';
 import ModalDelete from "./components/ModalDelete";
+import NotFoundContent from "./components/NotFoundContent";
+import ViewGameForm from "./components/ViewGameForm";
 
 
 function App() {
   const [signed, setSigned] = useState(0);
+  const [admin, setAdmin] = useState(false)
 
   useEffect(() => {
     const getSigned = () =>
       axios
-        .get("/api/user")
-        .then(() => setSigned(true))
+        .get("/api/user/")
+        .then((res) => {
+          if (res.data.role === "Admin") {
+            setAdmin(true)
+          }
+          setSigned(true)
+        })
         .catch(() => setSigned(false));
     getSigned();
   }, []);
@@ -41,10 +49,6 @@ function App() {
 
               <HomePageContent />
             </div>
-          },
-          {
-            path: "/error",
-            element: <ErrorPage />
           },
           {
             path: "/login",
@@ -117,12 +121,13 @@ function App() {
               </div>
             ),
           },
+          // GAMES
           {
             path: "/games",
             element: (
               <div>
                 <Header signed={signed} />
-                <ViewRecoveryGame />
+                <ViewRecoveryGame admin={admin} />
               </div>
             ),
           },
@@ -135,6 +140,33 @@ function App() {
               </div>
             ),
           },
+          {
+            path: "/games/new",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewGameForm />
+              </div>
+            ),
+          },
+          {
+            path: "/games/update",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewGameForm />
+              </div>
+            ),
+          },
+          {
+            path: "*",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <NotFoundContent />
+              </div>
+            )
+          }
         ])
       } />
     </div>

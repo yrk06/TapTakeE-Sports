@@ -1,0 +1,21 @@
+{
+    "restartable": "rs",
+    "ignore": [
+        "build/**",
+        "node/**",
+        "build\\",
+        "node\\",
+        ".git",
+        "node_modules/**/node_modules"
+    ],
+    "verbose": true,
+    "exec": "hotReload.sh",
+    "watch": [
+        "src/",
+        "public/"
+    ],
+    "env": {
+        "NODE_ENV": "development"
+    },
+    "ext": "js,json,css,html"
+}

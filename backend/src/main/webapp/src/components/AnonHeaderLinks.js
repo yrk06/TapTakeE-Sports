@@ -10,7 +10,7 @@ class AnonHeaderLinks extends React.Component {
         }}
       >
         <li className="nav-item">
-          <a className="nav-link active" href="/">
+          <a className="nav-link active" href="/games">
             Jogos
           </a>
         </li>
