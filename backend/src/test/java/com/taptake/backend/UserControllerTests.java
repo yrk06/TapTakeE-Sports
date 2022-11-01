@@ -56,7 +56,7 @@ public class UserControllerTests {
         UserDTO testUser = new UserDTO();
         testUser.setEmail("test@test.test");
         testUser.setNome("Teste");
-        testUser.setSenha("uuuuui");
+        testUser.setSenha("aA5#bb");
         testUser.setTelefone("41 99999-9999");
         HttpServletRequest mhttpsr = Mockito.mock(HttpServletRequest.class);
         ResponseEntity<Object> re = controller.savePerson(mhttpsr, testUser);
@@ -69,7 +69,7 @@ public class UserControllerTests {
         UserDTO testUser = new UserDTO();
         testUser.setEmail("test@test.test");
         testUser.setNome("Teste");
-        testUser.setSenha("uuuuui");
+        testUser.setSenha("aA5#bb");
         testUser.setTelefone("41 99999-9999");
 
         MockHttpServletRequest mhttpsr = new MockHttpServletRequest();
@@ -120,7 +120,7 @@ public class UserControllerTests {
         UserDTO testUser = new UserDTO();
         testUser.setEmail("test@test.test");
         testUser.setNome("Teste");
-        testUser.setSenha("uuuuui");
+        testUser.setSenha("aA5#bb");
         testUser.setTelefone("41 99999-9999");
         ResponseEntity<Object> re = controller.updateOne(testUser, "teste@teste.com");
         assertEquals(HttpStatus.OK, re.getStatusCode());
