@@ -24,6 +24,7 @@ public class DefaultUserDetailsService implements UserDetailsService {
         DefaultUserDetails ud = new DefaultUserDetails();
         ud.setUsername(username);
         ud.setPassword(user.get().getSenha());
+        ud.setRole(user.get().getRole().getNome());
         return ud;
     }
 

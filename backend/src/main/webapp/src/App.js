@@ -3,30 +3,38 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Header from "./components/Header";
 import HomePageContent from "./components/HomePageContent";
-import ErrorPage from "./components/ErrorPage";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoginForm from "./components/LoginForm";
 import About from "./components/About";
 import HowItWorks from "./components/HowItWorks";
-import ViewRecoveryGame from "./components/ViewRecoveryGame";
 import ViewRecoveryTeam from "./components/ViewRecoveryTeam";
+import ViewRecoveryGame from "./components/Game/ViewRecoveryGame";
 import Cast from "./components/Cast";
 import Lineup from "./components/Lineup";
 import UpdateForm from "./components/UpdateForm";
 import CreateForm from "./components/CreateForm";
 import SignupForm from './components/SignupForm';
 import ModalDelete from "./components/ModalDelete";
+import NotFoundContent from "./components/NotFoundContent";
+import ViewGameForm from "./components/Game/ViewGameForm";
+import UpdateGame from "./components/Game/UpdateGame";
 
 
 function App() {
   const [signed, setSigned] = useState(0);
+  const [admin, setAdmin] = useState(false)
 
   useEffect(() => {
     const getSigned = () =>
       axios
-        .get("/api/user")
-        .then(() => setSigned(true))
+        .get("/api/user/")
+        .then((res) => {
+          if (res.data.role === "Admin") {
+            setAdmin(true)
+          }
+          setSigned(true)
+        })
         .catch(() => setSigned(false));
     getSigned();
   }, []);
@@ -41,10 +49,6 @@ function App() {
 
               <HomePageContent />
             </div>
-          },
-          {
-            path: "/error",
-            element: <ErrorPage />
           },
           {
             path: "/login",
@@ -117,12 +121,31 @@ function App() {
               </div>
             ),
           },
+          // GAMES
           {
             path: "/games",
             element: (
               <div>
                 <Header signed={signed} />
-                <ViewRecoveryGame />
+                <ViewRecoveryGame admin={admin} />
+              </div>
+            ),
+          },
+          {
+            path: "/games/new",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewGameForm />
+              </div>
+            ),
+          },
+          {
+            path: "/games/update",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <UpdateGame />
               </div>
             ),
           },
@@ -135,6 +158,24 @@ function App() {
               </div>
             ),
           },
+          {
+            path: "/games/update",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewGameForm />
+              </div>
+            ),
+          },
+          {
+            path: "*",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <NotFoundContent />
+              </div>
+            )
+          }
         ])
       } />
     </div>

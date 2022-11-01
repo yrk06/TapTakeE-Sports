@@ -60,7 +60,7 @@ public class UserController {
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
             Optional<User> user = userService.findByEmail(currentUserName);
-            if(user.isEmpty()){
+            if (user.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
             }
             return ResponseEntity.status(HttpStatus.OK).body(user.get().generateDRO());
@@ -81,7 +81,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.OK).body(userOptional.get().generateDRO());
-
 
     }
 

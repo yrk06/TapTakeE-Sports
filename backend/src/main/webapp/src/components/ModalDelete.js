@@ -2,19 +2,15 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-export default function Delete() {
+export default function Delete({ onDelete }) {
 
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    function onDelete() {
-        alert("Deletado com sucesso!");
-    }
-
     return (
-        <>
+        <div>
             <Button className='btn btn-danger' onClick={handleShow}>
                 Deletar
             </Button>
@@ -33,6 +29,6 @@ export default function Delete() {
                     <Button variant="primary" onClick={onDelete}>Deletar</Button>
                 </Modal.Footer>
             </Modal>
-        </>
+        </div>
     );
 }

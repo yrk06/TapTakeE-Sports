@@ -31,18 +31,17 @@ public class Championship implements Serializable {
     @Column(nullable = false)
     private int premiacao;
 
-    @OneToMany
+    @OneToMany(mappedBy = "championship")
     private Set<ChampionshipParticipation> participacoes;
 
-    public ChampionshipDRO generateDRO(){
+    public ChampionshipDRO generateDRO() {
         List<String> lst = new ArrayList<>();
-        for (ChampionshipParticipation cp : participacoes){
+        for (ChampionshipParticipation cp : participacoes) {
             lst.add(cp.getTeam().getIdEquipe().toString());
         }
-        return new ChampionshipDRO(idCampeonato.toString(),game.getIdJogo().toString(),nome, localCampeonato,premiacao, lst);
+        return new ChampionshipDRO(idCampeonato.toString(), game.getIdJogo().toString(), nome, localCampeonato,
+                premiacao, lst);
     }
-
-
 
     public Set<ChampionshipParticipation> getParticipacoes() {
         return participacoes;
@@ -55,7 +54,6 @@ public class Championship implements Serializable {
     public UUID getIdCampeonato() {
         return idCampeonato;
     }
-
 
     public void setIdCampeonato(UUID idCampeonato) {
         this.idCampeonato = idCampeonato;
