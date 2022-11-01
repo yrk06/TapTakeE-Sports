@@ -9,8 +9,8 @@ import axios from "axios";
 import LoginForm from "./components/LoginForm";
 import About from "./components/About";
 import HowItWorks from "./components/HowItWorks";
-import ViewRecoveryGame from "./components/ViewRecoveryGame";
 import ViewRecoveryTeam from "./components/ViewRecoveryTeam";
+import ViewRecoveryGame from "./components/Game/ViewRecoveryGame";
 import Cast from "./components/Cast";
 import Lineup from "./components/Lineup";
 import UpdateForm from "./components/UpdateForm";
@@ -19,6 +19,7 @@ import SignupForm from './components/SignupForm';
 import ModalDelete from "./components/ModalDelete";
 import NotFoundContent from "./components/NotFoundContent";
 import ViewGameForm from "./components/Game/ViewGameForm";
+import UpdateGame from "./components/Game/UpdateGame";
 
 
 function App() {
@@ -132,20 +133,29 @@ function App() {
             ),
           },
           {
-            path: "/teams",
-            element: (
-              <div>
-                <Header signed={signed} />
-                <ViewRecoveryTeam />
-              </div>
-            ),
-          },
-          {
             path: "/games/new",
             element: (
               <div>
                 <Header signed={signed} />
                 <ViewGameForm />
+              </div>
+            ),
+          },
+          {
+            path: "/games/update",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <UpdateGame />
+              </div>
+            ),
+          },
+          {
+            path: "/teams",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewRecoveryTeam />
               </div>
             ),
           },

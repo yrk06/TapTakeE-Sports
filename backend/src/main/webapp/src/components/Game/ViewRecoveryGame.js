@@ -35,7 +35,7 @@ const ViewRecoveryGame = ({ admin }) => {
             <div className="row justify-content-left">
 
                 {
-                    games.map((element, index) => <GameCard key={index} name={element.nome} players={element.quantidadeJogadores} admin={isAdmin} />)
+                    games.map((element, index) => <GameCard key={index} game={element} admin={isAdmin} />)
                 }
 
                 <div className="col-4 d-flex justify-content-center align-items-center ">
