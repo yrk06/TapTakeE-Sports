@@ -5,7 +5,7 @@ const UpdateOrg = () => {
 
     console.log(orgs)
     return (
-        <ViewOrgsForm update={true} orgname={orgs.nome} typegame={orgs.localOrg} gamequantity={orgs.dataCriacao} gameId={orgs.idOrganizacao} />
+        <ViewOrgsForm update={true} orgname={orgs.nome} orgLocal={orgs.localOrg} createDate={orgs.dataCriacao} gameId={orgs.idOrganizacao} />
     )
 }
 
