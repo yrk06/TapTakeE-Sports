@@ -20,6 +20,7 @@ import NotFoundContent from "./components/NotFoundContent";
 import ViewGameForm from "./components/Game/ViewGameForm";
 import UpdateGame from "./components/Game/UpdateGame";
 import ViewOrgsForm from "./components/ViewOrgsForm";
+import UpdateOrg from "./components/Org/UpdateOrg";
 
 function App() {
   const [signed, setSigned] = useState(0);
@@ -186,17 +187,17 @@ function App() {
               </div>
             ),
           },
-          // {
-          //   path: "/games/update",
-          //   element: (
-          //     <div>
-          //       <Header signed={signed} />
-          //       <UpdateGame />
-          //     </div>
-          //   ),
-          // },
           {
-            path: "/games/update",
+            path: "/org/update",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <UpdateOrg />
+              </div>
+            ),
+          },
+          {
+            path: "/org/update",
             element: (
               <div>
                 <Header signed={signed} />
