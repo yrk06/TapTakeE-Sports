@@ -8,7 +8,7 @@ import axios from "axios";
 import LoginForm from "./components/LoginForm";
 import About from "./components/About";
 import HowItWorks from "./components/HowItWorks";
-import ViewRecoveryTeam from "./components/ViewRecoveryTeam";
+import ViewRecoveryTeam from "./components/Team/ViewRecoveryTeam";
 import ViewRecoveryGame from "./components/Game/ViewRecoveryGame";
 import Cast from "./components/Cast";
 import Lineup from "./components/Lineup";
