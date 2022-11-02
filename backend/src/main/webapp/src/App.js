@@ -167,8 +167,18 @@ function App() {
               </div>
             ),
           },
+          // ORGS
           {
-            path: "ViewOrgsForm",
+            path: "/org",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewRecoveryGame admin={admin} />
+              </div>
+            ),
+          },
+          {
+            path: "/org/new",
             element: (
               <div>
                 <Header signed={signed} />
@@ -176,6 +186,25 @@ function App() {
               </div>
             ),
           },
+          // {
+          //   path: "/games/update",
+          //   element: (
+          //     <div>
+          //       <Header signed={signed} />
+          //       <UpdateGame />
+          //     </div>
+          //   ),
+          // },
+          {
+            path: "/games/update",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewOrgsForm />
+              </div>
+            ),
+          },
+          //--------------------------------------------------------------
           {
             path: "*",
             element: (

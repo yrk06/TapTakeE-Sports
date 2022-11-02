@@ -32,12 +32,12 @@ const ViewOrgsForm = ({ orgname, orgLocal, createDate, orgId, update = false }) 
             <div className="row">
                 <div className="col-md-6 offset-md-3 justify-content-center">
                     <form id="newgame" onSubmit={createorg}>
-                        <label htmlFor="gamename">Nome da organização</label>
-                        <input id="gamename" name="nome" type="text" class="form-control" placeholder="nome" defaultValue={orgname} />
-                        <label htmlFor="tipoJogo">Nacionalidade da organização</label>
-                        <input id="gametype" name="tipoJogo" type="text" class="form-control" placeholder="tipo" defaultValue={orgLocal} />
-                        <label htmlFor="gamequantity">Data de criação da organização</label>
-                        <input id="gamequantity" name="quantidadeJogadores" type="input" class="form-control" placeholder="Quantidade de Jogadores" defaultValue={createDate} />
+                        <label htmlFor="orgname">Nome da organização</label>
+                        <input id="orgname" name="nome" type="text" class="form-control" placeholder="nome" defaultValue={orgname} />
+                        <label htmlFor="localOrg">Nacionalidade da organização</label>
+                        <input id="localorg" name="localOrg" type="text" class="form-control" placeholder="tipo" defaultValue={orgLocal} />
+                        <label htmlFor="createorg">Data de criação da organização</label>
+                        <input id="createorg" name="dataCriacao" type="date" class="form-control" placeholder="Data de criação" defaultValue={createDate} />
                         <button className="btn btn-primary mt-3 mx-auto">{!update ? "Salvar" : "Atualizar"}</button>
                     </form>
                 </div>
