@@ -19,7 +19,7 @@ import ModalDelete from "./components/ModalDelete";
 import NotFoundContent from "./components/NotFoundContent";
 import ViewGameForm from "./components/Game/ViewGameForm";
 import UpdateGame from "./components/Game/UpdateGame";
-
+import ViewOrgsForm from "./components/ViewOrgsForm";
 
 function App() {
   const [signed, setSigned] = useState(0);
@@ -164,6 +164,15 @@ function App() {
               <div>
                 <Header signed={signed} />
                 <ViewGameForm />
+              </div>
+            ),
+          },
+          {
+            path: "ViewOrgsForm",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewOrgsForm />
               </div>
             ),
           },
