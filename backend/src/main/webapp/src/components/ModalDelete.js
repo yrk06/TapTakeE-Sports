@@ -11,7 +11,7 @@ export default function Delete({ onDelete }) {
 
     return (
         <div>
-            <Button className='btn btn-danger' onClick={handleShow}>
+            <Button className='btn btn-danger d-block w-50 mx-auto mt-2' onClick={handleShow}>
                 Deletar
             </Button>
 
