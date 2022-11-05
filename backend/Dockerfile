@@ -21,6 +21,9 @@ ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
 COPY src /home/app/src
+CMD mkdir /home/app/src/main/resources/cert
+ARG CERT=src/main/resources/cert/taptake.pfx
+COPY ${CERT} /home/app/src/main/resources/cert/taptake.pfx
 COPY pom.xml /home/app
 RUN mvn -f /home/app/pom.xml clean package
 
