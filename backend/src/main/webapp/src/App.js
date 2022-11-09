@@ -1,6 +1,7 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import './components/deparam'
 import Header from "./components/Header";
 import HomePageContent from "./components/HomePageContent";
 import { useEffect, useState } from "react";
@@ -19,6 +20,9 @@ import ModalDelete from "./components/ModalDelete";
 import NotFoundContent from "./components/NotFoundContent";
 import ViewGameForm from "./components/Game/ViewGameForm";
 import UpdateGame from "./components/Game/UpdateGame";
+import ViewRecoveryChamp from "./components/Champ/ViewRecoveryChamp";
+import ViewChampForm from "./components/Champ/ViewChampForm";
+import UpdateChamp from "./components/Champ/UpdateChamp";
 
 
 function App() {
@@ -149,6 +153,35 @@ function App() {
               </div>
             ),
           },
+          // Campeonatos
+          {
+            path: "/champ",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewRecoveryChamp admin={admin} />
+              </div>
+            )
+          },
+          {
+            path: "/champ/new",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewChampForm />
+              </div>
+            )
+          },
+          {
+            path: "/champ/update",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <UpdateChamp />
+              </div>
+            )
+          },
+          //
           {
             path: "/teams",
             element: (

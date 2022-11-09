@@ -10,7 +10,7 @@ import com.taptake.backend.service.ChampionshipParticipationService;
 import com.taptake.backend.service.ChampionshipService;
 import com.taptake.backend.service.GameService;
 import com.taptake.backend.service.TeamService;
-import org.springframework.beans.BeanUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,16 +51,15 @@ public class ChampionshipController {
         }
         Set<ChampionshipParticipation> scp = new HashSet<>();
 
-
         var cNew = new Championship();
         cNew.setGame(og.get());
         cNew.setNome(cDTO.getNome());
         cNew.setPremiacao(cDTO.getPremiacao());
         cNew.setLocalCampeonato(cDTO.getLocalCampeonato());
         Championship c = cs.save(cNew);
-        for(String id : cDTO.getIdEquipes()){
+        for (String id : cDTO.getIdEquipes()) {
             Optional<Team> opt = ts.findById(UUID.fromString(id));
-            if(opt.isEmpty()){
+            if (opt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
             ChampionshipParticipation cp = new ChampionshipParticipation();
@@ -81,14 +80,14 @@ public class ChampionshipController {
         if (optC.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(optC.get());
+        return ResponseEntity.status(HttpStatus.OK).body(optC.get().generateDRO());
     }
 
     @GetMapping("/name")
     public ResponseEntity<Object> findAllByNome(@RequestParam String nome) {
         List<Championship> lst = cs.findAllByNome(nome);
         List<ChampionshipDRO> lstDRO = new ArrayList<>();
-        for(Championship c : lst){
+        for (Championship c : lst) {
             lstDRO.add(c.generateDRO());
         }
         return ResponseEntity.status(HttpStatus.OK).body(lstDRO);
@@ -96,60 +95,99 @@ public class ChampionshipController {
 
     @GetMapping
     public ResponseEntity<Object> findAllByNome() {
-        return ResponseEntity.status(HttpStatus.OK).body(cs.findAll());
+        List<Championship> champs = cs.findAll();
+        List<ChampionshipDRO> response = new LinkedList<>();
+        for (Championship c : champs) {
+            response.add(c.generateDRO());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestParam String id) {
+        Optional<Championship> optChamp = cs.findById(UUID.fromString(id));
+        if (optChamp.isPresent()) {
+            Championship champ = optChamp.get();
+            for (ChampionshipParticipation cp : champ.getParticipacoes()) {
+                cps.deleteOne(cp.getidParticipacaoCampeonato());
+            }
+        }
         cs.deleteOne(UUID.fromString(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping
-    public ResponseEntity<Object> update(@RequestBody ChampionshipDTO c, @RequestParam String id) {
-        Optional<Championship> oc = cs.findById(UUID.fromString(id));
-        Optional<Game> og = gs.findById(UUID.fromString(c.getIdJogo()));
-        Set<ChampionshipParticipation> scp = new HashSet<>();
-        if (oc.isEmpty()) {
+    public ResponseEntity<Object> update(@RequestBody ChampionshipDTO championshipDTO, @RequestParam String id) {
+
+        Optional<Championship> optChampionship = cs.findById(UUID.fromString(id));
+        if (optChampionship.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        Championship savedC = oc.get();
-        if (og.isEmpty()) {
+
+        Optional<Game> optGame = gs.findById(UUID.fromString(championshipDTO.getIdJogo()));
+        if (optGame.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        for(String idequipes : c.getIdEquipes()){
-            Optional<Team> opt = ts.findById(UUID.fromString(idequipes));
-            if(opt.isEmpty()){
+
+        Championship championship = optChampionship.get();
+
+        Set<ChampionshipParticipation> updatedChampionshipParticipation = new HashSet<>();
+
+        for (String idEquipe : championshipDTO.getIdEquipes()) {
+
+            Optional<Team> optTeam = ts.findById(UUID.fromString(idEquipe));
+            if (optTeam.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
-            ChampionshipParticipation cp = new ChampionshipParticipation();
-            cp.setChampionship(oc.get());
-            cp.setTeam(opt.get());
-            cp.setPosicao(-1);
 
-            scp.add(cps.save(cp));
+            Optional<ChampionshipParticipation> existingParticipation = championship.getParticipacoes().stream()
+                    .filter((
+                            ChampionshipParticipation champP) -> Objects
+                                    .equals(champP.getTeam().getIdEquipe().toString(), idEquipe))
+                    .findFirst();
+
+            if (existingParticipation.isPresent()) {
+
+                updatedChampionshipParticipation.add(existingParticipation.get());
+
+            } else {
+
+                ChampionshipParticipation cp = new ChampionshipParticipation();
+                cp.setChampionship(championship);
+                cp.setTeam(optTeam.get());
+                cp.setPosicao(-1);
+                updatedChampionshipParticipation.add(cps.save(cp));
+
+            }
 
         }
-        if (!savedC.getGame().getIdJogo().equals(c.getIdJogo())) {
-            savedC.setGame(og.get());
+
+        for (ChampionshipParticipation champp : championship.getParticipacoes()) {
+            if (!updatedChampionshipParticipation.contains(champp)) {
+                cps.deleteOne(champp.getidParticipacaoCampeonato());
+            }
         }
-        if (!savedC.getNome().equals(c.getNome())) {
-            savedC.setNome(c.getNome());
+        championship.setParticipacoes(updatedChampionshipParticipation);
+
+        if (!championship.getGame().getIdJogo().toString().equals(championshipDTO.getIdJogo())) {
+            championship.setGame(optGame.get());
         }
-        if (savedC.getPremiacao() != c.getPremiacao()) {
-            savedC.setPremiacao(c.getPremiacao());
+        if (!championship.getNome().equals(championshipDTO.getNome())) {
+            championship.setNome(championshipDTO.getNome());
         }
-        if (!savedC.getLocalCampeonato().equals(c.getLocalCampeonato())) {
-            savedC.setLocalCampeonato(c.getLocalCampeonato());
+        if (championship.getPremiacao() != championshipDTO.getPremiacao()) {
+            championship.setPremiacao(championshipDTO.getPremiacao());
         }
-        savedC.setParticipacoes(scp);
-        return ResponseEntity.status(HttpStatus.OK).body(cs.update(savedC).generateDRO());
+        if (!championship.getLocalCampeonato().equals(championshipDTO.getLocalCampeonato())) {
+            championship.setLocalCampeonato(championshipDTO.getLocalCampeonato());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(cs.update(championship).generateDRO());
     }
 
     @PostMapping("/rank")
-    public ResponseEntity<Object> setPos(@RequestParam int pos, @RequestParam String idPart){
+    public ResponseEntity<Object> setPos(@RequestParam int pos, @RequestParam String idPart) {
         Optional<ChampionshipParticipation> opt = cps.findById(UUID.fromString(idPart));
-        if(opt.isEmpty()){
+        if (opt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         opt.get().setPosicao(pos);
