@@ -11,7 +11,6 @@ const ViewGameForm = ({ gamename, typegame, gamequantity, gameId, update = false
         for (let field of $("#newgame").serializeArray()) {
             gameDTO[field.name] = field.value
         }
-        console.log(gameDTO)
 
         if (update) {
             axios
@@ -37,7 +36,7 @@ const ViewGameForm = ({ gamename, typegame, gamequantity, gameId, update = false
                         <label htmlFor="tipoJogo">Tipo do Jogo</label>
                         <input id="gametype" name="tipoJogo" type="text" class="form-control" placeholder="tipo" defaultValue={typegame} />
                         <label htmlFor="gamequantity">Quantidade de Jogadores</label>
-                        <input id="gamequantity" name="quantidadeJogadores" type="input" class="form-control" placeholder="Quantidade de Jogadores" defaultValue={gamequantity} />
+                        <input id="gamequantity" name="quantidadeJogadores" type="number" class="form-control" placeholder="Quantidade de Jogadores" defaultValue={gamequantity} />
                         <button className="btn btn-primary mt-3 mx-auto">{!update ? "Salvar" : "Atualizar"}</button>
                     </form>
                 </div>
