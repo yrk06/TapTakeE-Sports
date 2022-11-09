@@ -1,7 +1,5 @@
 package com.taptake.backend;
 
-
-
 import com.taptake.backend.DTO.ChampionshipDTO;
 import com.taptake.backend.controller.ChampionshipController;
 import com.taptake.backend.model.Championship;
@@ -45,10 +43,8 @@ public class ChampionshipControllerTests {
     @InjectMocks
     ChampionshipController cc;
 
-
-
     @Test
-    void saveValidChampionship(){
+    void saveValidChampionship() {
         Game g = new Game();
         g.setIdJogo(UUID.randomUUID());
         Championship c = new Championship();
@@ -73,7 +69,7 @@ public class ChampionshipControllerTests {
     }
 
     @Test
-    void saveInvalidChampionship(){
+    void saveInvalidChampionship() {
         LinkedList<Championship> lc = new LinkedList<>();
         Game g = new Game();
         UUID id = UUID.randomUUID();
@@ -95,17 +91,19 @@ public class ChampionshipControllerTests {
         ResponseEntity<?> re = cc.save(c);
         assertEquals(HttpStatus.CONFLICT, re.getStatusCode());
     }
-//    @Test
+    // @Test
 
     @Test
-    void recoverValidChampionshipById(){
-        Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.of(new Championship()));
+    void recoverValidChampionshipById() {
+        Championship championship = Mockito.mock(Championship.class);
+        Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.of(championship));
         UUID validId = UUID.randomUUID();
         ResponseEntity<?> re = cc.findById(validId.toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
+
     @Test
-    void recoverInvalidChampionshipById(){
+    void recoverInvalidChampionshipById() {
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.empty());
         UUID validId = UUID.randomUUID();
         ResponseEntity<?> re = cc.findById(validId.toString());
@@ -113,18 +111,16 @@ public class ChampionshipControllerTests {
     }
 
     @Test
-    void recoverValidChampionsListByNome(){
+    void recoverValidChampionsListByNome() {
         ResponseEntity<?> re = cc.findAllByNome("teste");
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
 
-
-
     @Test
-    void updateValidChampionship(){
+    void updateValidChampionship() {
         UUID validId = UUID.randomUUID();
         Championship c = new Championship();
-        Game g= new Game();
+        Game g = new Game();
         g.setIdJogo(validId);
         c.setGame(g);
         c.setNome("teste");
@@ -144,11 +140,12 @@ public class ChampionshipControllerTests {
         ResponseEntity<?> re = cc.update(cd, UUID.randomUUID().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
+
     @Test
-    void updateChampionshipInvalidG(){
+    void updateChampionshipInvalidG() {
         UUID validId = UUID.randomUUID();
         Championship c = new Championship();
-        Game g= new Game();
+        Game g = new Game();
         g.setIdJogo(validId);
         c.setGame(g);
         c.setNome("teste");
@@ -166,8 +163,9 @@ public class ChampionshipControllerTests {
         ResponseEntity<?> re = cc.update(cd, UUID.randomUUID().toString());
         assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
     }
+
     @Test
-    void updateChampionshipInvalidC(){
+    void updateChampionshipInvalidC() {
         UUID validId = UUID.randomUUID();
         Game g = new Game();
         Mockito.when(cs.findById(any(UUID.class))).thenReturn(Optional.empty());
@@ -183,23 +181,23 @@ public class ChampionshipControllerTests {
     }
 
     @Test
-    void DeleteValidChampionship(){
+    void DeleteValidChampionship() {
         ResponseEntity<?> re = cc.delete(UUID.randomUUID().toString());
         assertEquals(HttpStatus.NO_CONTENT, re.getStatusCode());
     }
 
     @Test
-    void updatePositionValid(){
+    void updatePositionValid() {
         Mockito.when(cps.findById(any(UUID.class))).thenReturn(Optional.of(new ChampionshipParticipation()));
         ResponseEntity<?> re = cc.setPos(5, UUID.randomUUID().toString());
         assertEquals(HttpStatus.OK, re.getStatusCode());
     }
+
     @Test
-    void updatePositionInvalid(){
+    void updatePositionInvalid() {
         Mockito.when(cps.findById(any(UUID.class))).thenReturn(Optional.empty());
         ResponseEntity<?> re = cc.setPos(5, UUID.randomUUID().toString());
         assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
-
 
 }
