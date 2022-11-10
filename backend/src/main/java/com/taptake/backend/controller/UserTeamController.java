@@ -91,6 +91,40 @@ public class UserTeamController {
 
     }
 
+    @GetMapping("/owned")
+    public ResponseEntity<Object> findAllOwned() {
+
+        // Get user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if ((authentication instanceof AnonymousAuthenticationToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String currentUserName = authentication.getName();
+
+        // If user is authenticated, the service must find it
+        User user = userService.findByEmail(currentUserName).get();
+
+        List<UserTeamDRO> userTeamDROs = new LinkedList<>();
+
+        for (UserTeam userTeam : userTeamService.findByUser(user)) {
+            UserTeamDRO dro = userTeam.generateUserTeamDRO();
+            int acc_points = 0;
+            for (PlayerUserTeam player : userTeam.getPlayers()) {
+
+                for (MatchPerformance mp : matchPerformanceService.findByPeriodAndPlayer(player.getDataEntrada(),
+                        player.getDataSaida() != null ? player.getDataSaida() : new Date(), player.getPlayer())) {
+                    acc_points += mp.getPontuacao();
+                }
+            }
+            dro.setPoints(acc_points);
+            userTeamDROs.add(dro);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(userTeamDROs);
+    }
+
     @GetMapping("/")
     public ResponseEntity<Object> findAll() {
 
@@ -165,7 +199,11 @@ public class UserTeamController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        userService.deleteOne(UUID.fromString(id));
+        for (PlayerUserTeam playerUserTeam : updateUserTeam.getPlayers()) {
+            playerUserTeamService.delete(playerUserTeam.getIdJogadorTimeUsuario());
+        }
+
+        userTeamService.delete(UUID.fromString(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
