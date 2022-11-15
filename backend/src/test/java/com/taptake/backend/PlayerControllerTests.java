@@ -4,6 +4,7 @@ import com.taptake.backend.DTO.PlayerDTO;
 import com.taptake.backend.controller.PlayerController;
 import com.taptake.backend.model.Player;
 import com.taptake.backend.model.Team;
+import com.taptake.backend.service.GameService;
 import com.taptake.backend.service.PlayerService;
 import com.taptake.backend.service.TeamService;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,9 @@ public class PlayerControllerTests {
 
     @MockBean
     PlayerService playerService;
+
+    @MockBean
+    GameService gameService;
 
     @MockBean
     TeamService ts;

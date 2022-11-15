@@ -84,7 +84,7 @@ CREATE TABLE Partida (
     idPartida CHAR(36) NOT NULL PRIMARY KEY,
     idCampeonato CHAR(36) NOT NULL,
 	FOREIGN KEY(idCampeonato) REFERENCES Campeonato (idCampeonato),
-	data DATE NOT NULL
+	data DATETIME NOT NULL
 );
 
 CREATE TABLE ParticipacaoPartida (
@@ -111,8 +111,8 @@ CREATE TABLE JogadorTimeUsuario (
 	FOREIGN KEY(idEquipeUsuario) REFERENCES TimeUsuario (idEquipeUsuario),
     idJogador CHAR(36) NOT NULL,
 	FOREIGN KEY(idJogador) REFERENCES Jogador (idJogador),
-	dataEntrada DATE NOT NULL,
-	dataSaida DATE NULL
+	dataEntrada DATETIME NOT NULL,
+	dataSaida DATETIME NULL
 
 );
 

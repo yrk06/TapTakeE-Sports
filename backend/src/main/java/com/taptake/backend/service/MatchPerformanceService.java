@@ -24,11 +24,11 @@ public class MatchPerformanceService {
         return matchPerformanceRepository.save(matchPerformance);
     }
 
-    public Optional<MatchPerformance> findById(UUID id) {
+    public Optional<MatchPerformance> findById(int id) {
         return matchPerformanceRepository.findById(id);
     }
 
-    public void delete(UUID id) {
+    public void delete(int id) {
         matchPerformanceRepository.deleteById(id);
     }
 

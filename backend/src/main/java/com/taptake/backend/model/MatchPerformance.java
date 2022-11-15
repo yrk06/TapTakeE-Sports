@@ -55,4 +55,13 @@ public class MatchPerformance {
 
         return dro;
     }
+
+    public int getIdPerformancePartida() {
+        return idPerformancePartida;
+    }
+
+    public void setIdPerformancePartida(int idPerformancePartida) {
+        this.idPerformancePartida = idPerformancePartida;
+    }
+
 }

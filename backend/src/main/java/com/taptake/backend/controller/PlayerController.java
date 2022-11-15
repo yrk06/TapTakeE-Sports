@@ -1,8 +1,11 @@
 package com.taptake.backend.controller;
 
+import com.taptake.backend.DRO.PlayerDRO;
 import com.taptake.backend.DTO.PlayerDTO;
+import com.taptake.backend.model.Game;
 import com.taptake.backend.model.Player;
 import com.taptake.backend.model.Team;
+import com.taptake.backend.service.GameService;
 import com.taptake.backend.service.PlayerService;
 import com.taptake.backend.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,6 +28,9 @@ public class PlayerController {
 
     @Autowired
     private TeamService ts;
+
+    @Autowired
+    private GameService gameService;
 
     @GetMapping
     public ResponseEntity<Object> findById(@RequestParam String id) {
@@ -41,7 +49,7 @@ public class PlayerController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         Optional<Team> team = ts.findById(UUID.fromString(playerDTO.getIdEquipe()));
-        if(team.isEmpty()){
+        if (team.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
@@ -57,12 +65,26 @@ public class PlayerController {
     @DeleteMapping
     public ResponseEntity<Object> deleteOne(@RequestParam("id") String id) {
         Optional<Player> player = playerService.findById(UUID.fromString(id));
-        if(player.isEmpty()){
+        if (player.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         playerService.deleteOne(player.get().getIdJogador());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
+    }
+
+    @GetMapping("/game")
+    public ResponseEntity<Object> findAllByGame(@RequestParam String gameId) {
+        Optional<Game> game = gameService.findById(UUID.fromString(gameId));
+        if (!game.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        List<Player> players = playerService.findByGame(game.get());
+        List<PlayerDRO> playerDROs = new LinkedList<>();
+        for (Player p : players) {
+            playerDROs.add(p.generateDRO());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(playerDROs);
     }
 
     @PutMapping
@@ -81,10 +103,10 @@ public class PlayerController {
             newPlayer.setCargo(playerDTO.getCargo());
         }
         Optional<Team> ot = ts.findById(UUID.fromString(playerDTO.getIdEquipe()));
-        if(ot.isEmpty()){
+        if (ot.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        if(!userOptional.get().getTeam().getIdEquipe().toString().equals(playerDTO.getIdEquipe())){
+        if (!userOptional.get().getTeam().getIdEquipe().toString().equals(playerDTO.getIdEquipe())) {
             newPlayer.setTeam(ot.get());
         }
         return ResponseEntity.status(HttpStatus.OK).body(playerService.update(newPlayer));

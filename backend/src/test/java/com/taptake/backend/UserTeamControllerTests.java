@@ -83,6 +83,7 @@ public class UserTeamControllerTests {
 
         UserTeamDTO userTeamDTO = new UserTeamDTO();
         userTeamDTO.setIdJogo(game.getIdJogo().toString());
+        userTeamDTO.setPlayers(new LinkedList<>());
 
         Mockito.when(userTeamService.findByUser(any(User.class))).thenReturn(new LinkedList<>());
         Mockito.when(userService.findById(any(UUID.class))).thenReturn(Optional.of(user));
@@ -217,6 +218,7 @@ public class UserTeamControllerTests {
         UserTeam userTeam = new UserTeam();
         userTeam.setUser(user);
         userTeam.setIdEquipeUsuario(UUID.randomUUID());
+        userTeam.setPlayers(new HashSet<>());
 
         user.setIdUsuario(UUID.randomUUID());
         game.setIdJogo(UUID.randomUUID());
