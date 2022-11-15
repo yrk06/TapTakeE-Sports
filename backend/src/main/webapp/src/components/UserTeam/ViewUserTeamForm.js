@@ -60,7 +60,7 @@ const ViewUserTeamForm = ({ userTeam, update = false }) => {
             .then(res => res.data)
             .then(teams => teams.map(el => el.game))
             .then(setNotAllowedGames)
-    }, [])
+    }, [update, userTeam])
 
     const [players, setPlayers] = useState([])
     const [selectedPlayers, setSelectedPlayers] = useState([])
