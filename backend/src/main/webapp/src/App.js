@@ -23,6 +23,9 @@ import UpdateGame from "./components/Game/UpdateGame";
 import ViewRecoveryChamp from "./components/Champ/ViewRecoveryChamp";
 import ViewChampForm from "./components/Champ/ViewChampForm";
 import UpdateChamp from "./components/Champ/UpdateChamp";
+import ViewRecoveryUserTeam from "./components/UserTeam/ViewRecoveryUserTeam";
+import ViewUserTeamForm from "./components/UserTeam/ViewUserTeamForm";
+import UpdateUserTeam from "./components/UserTeam/UpdateUserTeam";
 
 
 function App() {
@@ -47,6 +50,7 @@ function App() {
       <Header signed={signed} />
       <RouterProvider router={
         createBrowserRouter([
+          // STATIC
           {
             path: "/",
             element: <div>
@@ -63,42 +67,6 @@ function App() {
             element: <SignupForm />
           },
           {
-            path: "/UpdateForm",
-            element: (
-              <div>
-                <Header signed={signed} />
-                <UpdateForm />
-              </div>
-            ),
-          },
-          {
-            path: "/CreateForm",
-            element: (
-              <div>
-                <Header signed={signed} />
-                <CreateForm />
-              </div>
-            ),
-          },
-          {
-            path: "/Cast",
-            element: (
-              <div>
-                <Header signed={signed} />
-                <Cast />
-              </div>
-            ),
-          },
-          {
-            path: "/Lineup",
-            element: (
-              <div>
-                <Header signed={signed} />
-                <Lineup />
-              </div>
-            ),
-          },
-          {
             path: "/about",
             element: (
               <div>
@@ -113,15 +81,6 @@ function App() {
               <div>
                 <Header signed={signed} />
                 <HowItWorks />
-              </div>
-            ),
-          },
-          {
-            path: "/Delete",
-            element: (
-              <div>
-                <Header signed={signed} />
-                <ModalDelete />
               </div>
             ),
           },
@@ -181,22 +140,41 @@ function App() {
               </div>
             )
           },
-          //
+          // UserTeam
+          {
+            path: "/roster",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewRecoveryUserTeam />
+              </div>
+            )
+          },
+          {
+            path: "/roster/new",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <ViewUserTeamForm />
+              </div>
+            )
+          },
+          {
+            path: "/roster/update",
+            element: (
+              <div>
+                <Header signed={signed} />
+                <UpdateUserTeam />
+              </div>
+            )
+          },
+          ///
           {
             path: "/teams",
             element: (
               <div>
                 <Header signed={signed} />
                 <ViewRecoveryTeam />
-              </div>
-            ),
-          },
-          {
-            path: "/games/update",
-            element: (
-              <div>
-                <Header signed={signed} />
-                <ViewGameForm />
               </div>
             ),
           },

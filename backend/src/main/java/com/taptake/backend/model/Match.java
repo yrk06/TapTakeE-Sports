@@ -56,13 +56,14 @@ public class Match implements Serializable {
         }
         matchDRO.setTeamList(teamList.stream().toList());
         matchDRO.setIdPartida(this.idPartida.toString());
-        matchDRO.setChampionship(this.championship);
+        matchDRO.setChampionship(this.championship.generateDRO());
         matchDRO.setData(this.data);
 
         List<LeftMatchPerformanceDRO> mpDRO = new LinkedList<>();
         for (MatchPerformance mp : this.players) {
             mpDRO.add(mp.generateLeftDRO());
         }
+        matchDRO.setPlayers(mpDRO);
         return matchDRO;
     }
 
@@ -85,4 +86,13 @@ public class Match implements Serializable {
     public void setChampionship(Championship championship) {
         this.championship = championship;
     }
+
+    public Set<MatchPerformance> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Set<MatchPerformance> players) {
+        this.players = players;
+    }
+
 }

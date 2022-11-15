@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Repository
-public interface MatchPerformanceRepository extends JpaRepository<MatchPerformance, UUID> {
+public interface MatchPerformanceRepository extends JpaRepository<MatchPerformance, Integer> {
+
     List<MatchPerformance> findByPlayer(Player p);
 
     List<MatchPerformance> findByMatch(Match m);

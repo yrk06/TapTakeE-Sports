@@ -24,7 +24,7 @@ public class MatchController {
     private TeamService ts;
 
     @Autowired
-    private MatchPerformanceService mps;
+    private MatchPerformanceService matchPerformanceService;
 
     @Autowired
     private PlayerService ps;
@@ -48,6 +48,7 @@ public class MatchController {
 
         }
         match.setEquipes(teamList);
+        match.setPlayers(new HashSet<>());
         match = matchService.save(match);
 
         for (Team t : match.getEquipes()) {
@@ -56,7 +57,8 @@ public class MatchController {
                 mp.setMatch(match);
                 mp.setPlayer(p);
                 mp.setPontuacao(0);
-                mps.save(mp);
+                matchPerformanceService.save(mp);
+                match.getPlayers().add(mp);
             }
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(match.generateDRO());
@@ -90,7 +92,19 @@ public class MatchController {
 
     @DeleteMapping
     public ResponseEntity<Object> deleteOne(@RequestParam String id) {
+        Optional<Match> optMatch = matchService.findById(UUID.fromString(id));
+        if (!optMatch.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        Match match = optMatch.get();
+
+        for (MatchPerformance mp : match.getPlayers()) {
+            matchPerformanceService.delete(mp.getIdPerformancePartida());
+        }
+
         matchService.delete(UUID.fromString(id));
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -135,11 +149,11 @@ public class MatchController {
         if (ps.findById(UUID.fromString(playerID)).isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        List<MatchPerformance> lstMP = mps.findByMatch(optMatch.get());
+        List<MatchPerformance> lstMP = matchPerformanceService.findByMatch(optMatch.get());
         for (MatchPerformance mp : lstMP) {
             if (mp.getPlayer().getIdJogador().toString().equals(playerID)) {
                 mp.setPontuacao(points);
-                mps.update(mp);
+                matchPerformanceService.update(mp);
                 return ResponseEntity.status(HttpStatus.OK).body(optMatch.get().generateDRO());
             }
         }

@@ -8,7 +8,7 @@ import java.util.List;
 public class MatchDRO {
     private String idPartida;
 
-    private Championship championship;
+    private ChampionshipDRO championship;
 
     private List<String> teamList;
 
@@ -32,11 +32,11 @@ public class MatchDRO {
         this.idPartida = idPartida;
     }
 
-    public Championship getChampionship() {
+    public ChampionshipDRO getChampionship() {
         return championship;
     }
 
-    public void setChampionship(Championship championship) {
+    public void setChampionship(ChampionshipDRO championship) {
         this.championship = championship;
     }
 

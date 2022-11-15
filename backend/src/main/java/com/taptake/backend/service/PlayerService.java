@@ -1,5 +1,6 @@
 package com.taptake.backend.service;
 
+import com.taptake.backend.model.Game;
 import com.taptake.backend.model.Player;
 import com.taptake.backend.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,11 @@ public class PlayerService {
     private PlayerRepository playerRepository;
 
     @Transactional
-    public Player save(Player player){
+    public Player save(Player player) {
         return playerRepository.save(player);
     }
 
-    public Optional<Player> findById(UUID id){
+    public Optional<Player> findById(UUID id) {
         return playerRepository.findById(id);
     }
 
@@ -37,7 +38,11 @@ public class PlayerService {
         playerRepository.deleteById(idJogador);
     }
 
-    public Player update(Player player){
+    public Player update(Player player) {
         return playerRepository.save(player);
+    }
+
+    public List<Player> findByGame(Game game) {
+        return playerRepository.findByGame(game);
     }
 }

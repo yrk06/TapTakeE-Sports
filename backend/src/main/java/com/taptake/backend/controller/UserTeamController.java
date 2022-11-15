@@ -84,8 +84,24 @@ public class UserTeamController {
         userTeam.setUser(user);
         userTeam.setGame(optionalGame.get());
         userTeam.setPlayers(new HashSet<>());
-
         userTeam = userTeamService.save(userTeam);
+
+        for (String playerId : userTeamDTO.getPlayers()) {
+            Optional<Player> optPlayer = playerService.findById(UUID.fromString(playerId));
+            if (!optPlayer.isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+            PlayerUserTeam newPlayer = new PlayerUserTeam();
+            newPlayer.setDataEntrada(new Date());
+            newPlayer.setDataSaida(null);
+            newPlayer.setPlayer(optPlayer.get());
+            newPlayer.setUserteam(userTeam);
+
+            newPlayer = playerUserTeamService.save(newPlayer);
+            userTeam.getPlayers().add(newPlayer);
+        }
+
+        userTeam = userTeamService.update(userTeam);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userTeamService.save(userTeam));
 
@@ -200,6 +216,7 @@ public class UserTeamController {
         }
 
         for (PlayerUserTeam playerUserTeam : updateUserTeam.getPlayers()) {
+
             playerUserTeamService.delete(playerUserTeam.getIdJogadorTimeUsuario());
         }
 
@@ -258,7 +275,7 @@ public class UserTeamController {
                 }
             }
             if (skip)
-                break;
+                continue;
             PlayerUserTeam newPlayer = new PlayerUserTeam();
             newPlayer.setDataEntrada(new Date());
             newPlayer.setDataSaida(null);
