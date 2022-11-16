@@ -17,7 +17,7 @@ class SignupForm extends React.Component {
       userDTO[field.name] = field.value
     }
 
-    axios.post("/api/user", userDTO).then(() => window.location.href = "/")
+    axios.post("/api/user/", userDTO).then(() => window.location.href = "/")
   }
   render() {
     return (
@@ -98,7 +98,7 @@ class SignupForm extends React.Component {
                         minLength={6}
                         maxLength={32}
                         required
-                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{3,32}$"
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$"
                       />
                     </div>
                     <div className="mb-3">
@@ -110,7 +110,7 @@ class SignupForm extends React.Component {
                         minLength={6}
                         maxLength={32}
                         required
-                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{3,32}$"
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$"
                       />
                       <p id="confirmar_senha_validation" className="text-danger" style={{ "display": "none" }}>As senhas devem ser iguais</p>
                     </div>
@@ -119,7 +119,7 @@ class SignupForm extends React.Component {
                         className="btn btn-primary d-block w-100"
                         type="submit"
                       >
-                        Login
+                        Cadastrar
                       </button>
                     </div>
                     <a className="text-muted mt-2" href="/login">Já possui cadastro?</a>
