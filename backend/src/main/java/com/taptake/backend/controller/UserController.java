@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
@@ -93,6 +94,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.OK).body(userOptional.get().generateDRO());
+
+    }
+
+    @GetMapping("/id")
+    public ResponseEntity<Object> getNameById(@RequestParam("id") String id) {
+
+        Optional<User> userOptional = userService.findById(UUID.fromString(id));
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(userOptional.get().getNome());
 
     }
 
