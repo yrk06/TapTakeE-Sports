@@ -1,7 +1,6 @@
 package com.taptake.backend.model;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 
 import org.springframework.security.core.GrantedAuthority;

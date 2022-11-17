@@ -1,7 +1,5 @@
 package com.taptake.backend.DRO;
 
-import com.taptake.backend.model.Championship;
-
 import java.util.Date;
 import java.util.List;
 

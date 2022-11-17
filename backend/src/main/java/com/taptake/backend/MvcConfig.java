@@ -8,7 +8,6 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.taptake.backend.service.LoggerMiddleware;
-import com.taptake.backend.service.ResourceBlockedMiddleware;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
@@ -22,9 +21,6 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoggerMiddleware());
 
-        // Disable this when testing in localhost
-        // registry.addInterceptor(new
-        // ResourceBlockedMiddleware()).addPathPatterns("/api/**");
     }
 
     @Override

@@ -1,7 +1,4 @@
-import axios from 'axios';
 import React from 'react';
-import ModalDelete from '../ModalDelete'
-import $ from 'jquery'
 
 const UserTeamCard = ({ team }) => {
 
