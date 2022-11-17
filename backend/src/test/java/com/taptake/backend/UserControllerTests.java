@@ -2,6 +2,7 @@ package com.taptake.backend;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import java.util.Optional;
@@ -25,6 +26,7 @@ import com.taptake.backend.DTO.UserDTO;
 import com.taptake.backend.controller.UserController;
 import com.taptake.backend.model.Role;
 import com.taptake.backend.model.User;
+import com.taptake.backend.service.RoleService;
 import com.taptake.backend.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +35,9 @@ public class UserControllerTests {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    RoleService roleService;
 
     @Autowired
     @InjectMocks
@@ -53,6 +58,8 @@ public class UserControllerTests {
         u.setRole(role);
         Mockito.when(userService.save(any(User.class))).thenReturn(u);
         Mockito.when(userService.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        Mockito.when(roleService.findById(anyInt())).thenReturn(Optional.of(new Role()));
         UserDTO testUser = new UserDTO();
         testUser.setEmail("test@test.test");
         testUser.setNome("Teste");

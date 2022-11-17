@@ -3,6 +3,7 @@ package com.taptake.backend.controller;
 import com.taptake.backend.DTO.UserDTO;
 import com.taptake.backend.model.Role;
 import com.taptake.backend.model.User;
+import com.taptake.backend.service.RoleService;
 import com.taptake.backend.service.UserService;
 
 import org.springframework.beans.BeanUtils;
@@ -30,6 +31,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    RoleService roleService;
+
     @PostMapping
     public ResponseEntity<Object> savePerson(HttpServletRequest request, @RequestBody UserDTO userDTO) {
         Pattern p = Pattern.compile("^(.+)@(.+)$");
@@ -51,11 +55,8 @@ public class UserController {
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
         user.setSenha(bc.encode(user.getSenha()));
+        user.setRole(roleService.findById(1).get());
         user = userService.save(user);
-
-        Role dummy = new Role();
-        dummy.setIdCargo(1);
-        user.setRole(dummy);
         try {
             request.login(userDTO.getEmail(), userDTO.getSenha());
         } catch (ServletException e) {

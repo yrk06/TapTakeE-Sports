@@ -29,6 +29,7 @@ public class User implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idCargo")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Role role;
 
     public UserDRO generateDRO() {
