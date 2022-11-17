@@ -20,7 +20,7 @@ public class GameController {
     private GameService gameService;
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody GameDTO gameDTO) {
+    public ResponseEntity<Object> save(@RequestBody GameDTO gameDTO) {
         Optional<Game> optionalGame = gameService.findByNome(gameDTO.getNome());
         if (optionalGame.isPresent() && gameDTO.getNome().equals(optionalGame.get().getNome())
                 && gameDTO.getTipoJogo().equals(optionalGame.get().getTipoJogo())
@@ -33,7 +33,7 @@ public class GameController {
     }
 
     @GetMapping("/id")
-    public ResponseEntity<?> findById(@RequestParam String id) {
+    public ResponseEntity<Object> findById(@RequestParam String id) {
 
         Optional<Game> game = gameService.findById(UUID.fromString(id));
         if (game.isPresent()) {
@@ -49,7 +49,7 @@ public class GameController {
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody GameDTO gameDTO, @RequestParam String id) {
+    public ResponseEntity<Object> update(@RequestBody GameDTO gameDTO, @RequestParam String id) {
         Optional<Game> optionalGame = gameService.findById(UUID.fromString(id));
 
         if (!optionalGame.isPresent()) {
@@ -69,7 +69,7 @@ public class GameController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteOne(@RequestParam String id) {
+    public ResponseEntity<Object> deleteOne(@RequestParam String id) {
         Optional<Game> optionalGame = gameService.findById(UUID.fromString(id));
         if (!optionalGame.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

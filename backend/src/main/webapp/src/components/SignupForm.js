@@ -11,7 +11,6 @@ class SignupForm extends React.Component {
     if ($('input[name="senha"]').val() !== $('input[name="confirmar_senha"]').val()) {
       $("#confirmar_senha_validation").show()
       return
-    } else {
     }
     for (let field of formData.filter((e) => e.name !== "confirmar_senha")) {
       userDTO[field.name] = field.value

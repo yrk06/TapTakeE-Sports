@@ -9,7 +9,6 @@ import axios from "axios";
 import LoginForm from "./components/LoginForm";
 import About from "./components/About";
 import HowItWorks from "./components/HowItWorks";
-import ViewRecoveryTeam from "./components/ViewRecoveryTeam";
 import ViewRecoveryGame from "./components/Game/ViewRecoveryGame";
 import SignupForm from './components/SignupForm';
 import NotFoundContent from "./components/NotFoundContent";
@@ -21,6 +20,7 @@ import UpdateChamp from "./components/Champ/UpdateChamp";
 import ViewRecoveryUserTeam from "./components/UserTeam/ViewRecoveryUserTeam";
 import ViewUserTeamForm from "./components/UserTeam/ViewUserTeamForm";
 import UpdateUserTeam from "./components/UserTeam/UpdateUserTeam";
+import TopRated from "./components/Rating/TopRated";
 
 
 function App() {
@@ -169,10 +169,19 @@ function App() {
             element: (
               <div>
                 <Header signed={signed} />
-                <ViewRecoveryTeam />
+                <TopRated />
               </div>
-            ),
+            )
           },
+          // {
+          //   path: "/teams",
+          //   element: (
+          //     <div>
+          //       <Header signed={signed} />
+          //       <ViewRecoveryTeam />
+          //     </div>
+          //   ),
+          // },
           {
             path: "*",
             element: (
